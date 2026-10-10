@@ -1,0 +1,450 @@
+[
+  {
+    "id": "37",
+    "variavel": "Produto Interno Bruto a preços correntes",
+    "unidade": "Mil Reais",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "919520"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "136531"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "945946483"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "354557"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "543",
+    "variavel": "Impostos, líquidos de subsídios, sobre produtos a preços correntes",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "498",
+    "variavel": "Valor adicionado bruto a preços correntes total",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "513",
+    "variavel": "Valor adicionado bruto a preços correntes da agropecuária",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "517",
+    "variavel": "Valor adicionado bruto a preços correntes da indústria",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "6575",
+    "variavel": "Valor adicionado bruto a preços correntes dos serviços, exclusive administração, defesa, educação e saúde públicas e seguridade social",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "525",
+    "variavel": "Valor adicionado bruto a preços correntes da administração, defesa, educação e saúde públicas e seguridade social",
+    "unidade": "",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2022": "..."
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

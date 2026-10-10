@@ -1,0 +1,514 @@
+[
+  {
+    "id": "706",
+    "variavel": "Número de unidades locais",
+    "unidade": "Unidades",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "644"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "38"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "599434"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "367",
+    "variavel": "Número de empresas e outras organizações atuantes",
+    "unidade": "Unidades",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "639"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "38"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "567772"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "707",
+    "variavel": "Pessoal ocupado total",
+    "unidade": "Pessoas",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "2895"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "515"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "6062016"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "708",
+    "variavel": "Pessoal ocupado assalariado",
+    "unidade": "Pessoas",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "2200"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "502"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "5239502"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "-"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "5944",
+    "variavel": "Pessoal assalariado médio",
+    "unidade": "Pessoas",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "2316.34"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "502.96"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "5196337.86"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "662",
+    "variavel": "Salários e outras remunerações",
+    "unidade": "Mil Reais",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "36227"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "6617"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "182963920"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1606",
+    "variavel": "Salário médio mensal",
+    "unidade": "Salários mínimos",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "1.9"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "1.6"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "4.4"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10143",
+    "variavel": "Salário médio mensal em reais",
+    "unidade": "Reais",
+    "resultados": [
+      {
+        "classificacoes": [],
+        "series": [
+          {
+            "localidade": {
+              "id": "1100015",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Alta Floresta D'Oeste - RO"
+            },
+            "serie": {
+              "2012": "1203.07"
+            }
+          },
+          {
+            "localidade": {
+              "id": "1200328",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Jordão - AC"
+            },
+            "serie": {
+              "2012": "1012.02"
+            }
+          },
+          {
+            "localidade": {
+              "id": "3550308",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "São Paulo - SP"
+            },
+            "serie": {
+              "2012": "2708.47"
+            }
+          },
+          {
+            "localidade": {
+              "id": "4220000",
+              "nivel": {
+                "id": "N6",
+                "nome": "Município"
+              },
+              "nome": "Balneário Rincão - SC"
+            },
+            "serie": {
+              "2012": "X"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

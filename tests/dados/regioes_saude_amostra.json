@@ -1,0 +1,69 @@
+{
+  "macrorregiao_regiao_saude_municipios": [
+    {
+      "codigo_regiao_pais": "1",
+      "regiao_pais": "Norte",
+      "codigo_uf": "12",
+      "uf": "Acre",
+      "codigo_macrorregiao_saude": "1201",
+      "macrorregiao_saude": "MACRO UNICA - AC",
+      "codigo_regiao_saude": "12002",
+      "regiao_saude": "BAIXO ACRE E PURUS",
+      "codigo_municipio": "120001",
+      "municipio": "AC - ACRELANDIA",
+      "populacao_estimada_ibge_2022": 14021
+    },
+    {
+      "codigo_regiao_pais": "1",
+      "regiao_pais": "Norte",
+      "codigo_uf": "12",
+      "uf": "Acre",
+      "codigo_macrorregiao_saude": "1201",
+      "macrorregiao_saude": "MACRO UNICA - AC",
+      "codigo_regiao_saude": "12001",
+      "regiao_saude": "ALTO ACRE",
+      "codigo_municipio": "120005",
+      "municipio": "AC - ASSIS BRASIL",
+      "populacao_estimada_ibge_2022": 7678
+    },
+    {
+      "codigo_regiao_pais": "1",
+      "regiao_pais": "Norte",
+      "codigo_uf": "12",
+      "uf": "Acre",
+      "codigo_macrorregiao_saude": "1201",
+      "macrorregiao_saude": "MACRO UNICA - AC",
+      "codigo_regiao_saude": "12001",
+      "regiao_saude": "ALTO ACRE",
+      "codigo_municipio": "120010",
+      "municipio": "AC - BRASILEIA",
+      "populacao_estimada_ibge_2022": 23640
+    },
+    {
+      "codigo_regiao_pais": "1",
+      "regiao_pais": "Norte",
+      "codigo_uf": "12",
+      "uf": "Acre",
+      "codigo_macrorregiao_saude": "1201",
+      "macrorregiao_saude": "MACRO UNICA - AC",
+      "codigo_regiao_saude": "12002",
+      "regiao_saude": "BAIXO ACRE E PURUS",
+      "codigo_municipio": "120013",
+      "municipio": "AC - BUJARI",
+      "populacao_estimada_ibge_2022": 13346
+    },
+    {
+      "codigo_regiao_pais": "1",
+      "regiao_pais": "Norte",
+      "codigo_uf": "12",
+      "uf": "Acre",
+      "codigo_macrorregiao_saude": "1201",
+      "macrorregiao_saude": "MACRO UNICA - AC",
+      "codigo_regiao_saude": "12002",
+      "regiao_saude": "BAIXO ACRE E PURUS",
+      "codigo_municipio": "120017",
+      "municipio": "AC - CAPIXABA",
+      "populacao_estimada_ibge_2022": 10582
+    }
+  ]
+}

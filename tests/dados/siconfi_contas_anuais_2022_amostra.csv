@@ -1,0 +1,923 @@
+Exercício: 2022
+Escopo: Municípios
+Tabela: Despesas por Função (Anexo I-E)
+Instituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";83970582803,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";897296759,15
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";560827890,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"01.032 - Controle Externo";"siconfi-cor_TotalDespesas";293017848,14
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"01.122 - Administração Geral";"siconfi-cor_TotalDespesas";34143895,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU01 - Demais Subfunções";"siconfi-cor_TotalDespesas";9307124,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"02 - Judiciária";"siconfi-cor_TotalDespesas";223605619,4
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"02.062 - Defesa do Interesse Público no Processo Judiciário";"siconfi-cor_TotalDespesas";4541947,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"02.122 - Administração Geral";"siconfi-cor_TotalDespesas";219048738,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU02 - Demais Subfunções";"siconfi-cor_TotalDespesas";14934,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04 - Administração";"siconfi-cor_TotalDespesas";2235901705,49
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";826959040,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";1176359771,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";176764,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.126 - Tecnologia da Informação";"siconfi-cor_TotalDespesas";202755875,44
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.128 - Formação de Recursos Humanos";"siconfi-cor_TotalDespesas";525463,46
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.129 - Administração de Receitas";"siconfi-cor_TotalDespesas";8592307,69
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.130 - Administração de Concessões";"siconfi-cor_TotalDespesas";15533171,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";4167959,18
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";831351,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"05 - Defesa Nacional";"siconfi-cor_TotalDespesas";72256,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"05.122 - Administração Geral";"siconfi-cor_TotalDespesas";72256,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";805934314,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";111441277,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"06.182 - Defesa Civil";"siconfi-cor_TotalDespesas";50273128,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"06.122 - Administração Geral";"siconfi-cor_TotalDespesas";629949798,54
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU06 - Demais Subfunções";"siconfi-cor_TotalDespesas";14270109,45
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"07 - Relações Exteriores";"siconfi-cor_TotalDespesas";3714187,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"07.212 - Cooperação Internacional";"siconfi-cor_TotalDespesas";3714187,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1862810759,55
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";96732170,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";54288325,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";639693405,19
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";904749338,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"08.122 - Administração Geral";"siconfi-cor_TotalDespesas";127465239,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU08 - Demais Subfunções";"siconfi-cor_TotalDespesas";39882279,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";12927548122,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";137547957,91
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"09.272 - Previdência do Regime Estatutário";"siconfi-cor_TotalDespesas";11930011374,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"09.122 - Administração Geral";"siconfi-cor_TotalDespesas";72486573,16
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU09 - Demais Subfunções";"siconfi-cor_TotalDespesas";787502217,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10 - Saúde";"siconfi-cor_TotalDespesas";17441205209,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";8071370953,94
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";6032512414,88
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";606924087,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";155596388,16
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";2351688761,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU10 - Demais Subfunções";"siconfi-cor_TotalDespesas";223112602,54
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"11 - Trabalho";"siconfi-cor_TotalDespesas";223919795,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"11.331 - Proteção e Benefícios ao Trabalhador";"siconfi-cor_TotalDespesas";3470746,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"11.333 - Empregabilidade";"siconfi-cor_TotalDespesas";52982469,23
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"11.334 - Fomento ao Trabalho";"siconfi-cor_TotalDespesas";137007991,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"11.122 - Administração Geral";"siconfi-cor_TotalDespesas";21329260,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU11 - Demais Subfunções";"siconfi-cor_TotalDespesas";9129327,8
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12 - Educação";"siconfi-cor_TotalDespesas";20756406439,41
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";5723335576,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.362 - Ensino Médio";"siconfi-cor_TotalDespesas";82671000,93
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.363 - Ensino Profissional";"siconfi-cor_TotalDespesas";24770747,18
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.364 - Ensino Superior";"siconfi-cor_TotalDespesas";4786,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";11005596374,35
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";34460344,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";135559039,1
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.368 - Educação Básica";"siconfi-cor_TotalDespesas";1410806389,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"12.122 - Administração Geral";"siconfi-cor_TotalDespesas";647453639,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";1691748541,31
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"13 - Cultura";"siconfi-cor_TotalDespesas";742525928,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"13.391 - Patrimônio Histórico, Artístico e Arqueológico";"siconfi-cor_TotalDespesas";36398515,17
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";569621884,43
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"13.122 - Administração Geral";"siconfi-cor_TotalDespesas";121770877,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU13 - Demais Subfunções";"siconfi-cor_TotalDespesas";14734652,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"14 - Direitos da Cidadania";"siconfi-cor_TotalDespesas";302987273,91
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"14.422 - Direitos Individuais, Coletivos e Difusos";"siconfi-cor_TotalDespesas";110917795,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"14.122 - Administração Geral";"siconfi-cor_TotalDespesas";131918974,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU14 - Demais Subfunções";"siconfi-cor_TotalDespesas";60150504,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";8048130061,15
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";1665006636,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";5103364197,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"15.122 - Administração Geral";"siconfi-cor_TotalDespesas";988856456,47
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU15 - Demais Subfunções";"siconfi-cor_TotalDespesas";290902770,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"16 - Habitação";"siconfi-cor_TotalDespesas";1898161449,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";986402571,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"16.122 - Administração Geral";"siconfi-cor_TotalDespesas";162897428,62
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU16 - Demais Subfunções";"siconfi-cor_TotalDespesas";748861449,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1850301943,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";369998735,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU17 - Demais Subfunções";"siconfi-cor_TotalDespesas";1480303207,65
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";416525329,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";314068579,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1885847,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"18.122 - Administração Geral";"siconfi-cor_TotalDespesas";84787587,48
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU18 - Demais Subfunções";"siconfi-cor_TotalDespesas";15783315,67
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";390162117,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";297344116,4
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"23.122 - Administração Geral";"siconfi-cor_TotalDespesas";92818000,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"24 - Comunicações";"siconfi-cor_TotalDespesas";307173025,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU24 - Demais Subfunções";"siconfi-cor_TotalDespesas";307173025,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"26 - Transporte";"siconfi-cor_TotalDespesas";8126230919,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"26.785 - Transportes Especiais";"siconfi-cor_TotalDespesas";117054960,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"26.122 - Administração Geral";"siconfi-cor_TotalDespesas";8717907,62
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU26 - Demais Subfunções";"siconfi-cor_TotalDespesas";8000458051,32
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";744810188,23
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"27.811 - Desporto de Rendimento";"siconfi-cor_TotalDespesas";21943132,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";403521247,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";231921189,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"27.122 - Administração Geral";"siconfi-cor_TotalDespesas";66123703,16
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU27 - Demais Subfunções";"siconfi-cor_TotalDespesas";21300914,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";3765159399,34
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"28.841 - Refinanciamento da Dívida Interna";"siconfi-cor_TotalDespesas";284587775,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";217803204,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"28.844 - Serviço da Dívida Externa";"siconfi-cor_TotalDespesas";42307339,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";3220159419,66
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"FU28 - Demais Subfunções";"siconfi-cor_TotalDespesas";301660,14
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Empenhadas";"Despesas Intraorçamentárias";"siconfi-cor_TotalDespesas";7117757399,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";74464163362,3
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";862083251,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";553286860,32
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"01.032 - Controle Externo";"siconfi-cor_TotalDespesas";273277400,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"01.122 - Administração Geral";"siconfi-cor_TotalDespesas";27880730,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU01 - Demais Subfunções";"siconfi-cor_TotalDespesas";7638259,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"02 - Judiciária";"siconfi-cor_TotalDespesas";221257755,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"02.062 - Defesa do Interesse Público no Processo Judiciário";"siconfi-cor_TotalDespesas";4096034,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"02.122 - Administração Geral";"siconfi-cor_TotalDespesas";217158771,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU02 - Demais Subfunções";"siconfi-cor_TotalDespesas";2950,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04 - Administração";"siconfi-cor_TotalDespesas";2131657477,27
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";801717327,67
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";1153917369,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";175738,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.126 - Tecnologia da Informação";"siconfi-cor_TotalDespesas";151633639,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.128 - Formação de Recursos Humanos";"siconfi-cor_TotalDespesas";179587,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.129 - Administração de Receitas";"siconfi-cor_TotalDespesas";6665523,44
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.130 - Administração de Concessões";"siconfi-cor_TotalDespesas";13712587,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";3351706,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";303996,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"05 - Defesa Nacional";"siconfi-cor_TotalDespesas";36390,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"05.122 - Administração Geral";"siconfi-cor_TotalDespesas";36390,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";758179270,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";81091264,02
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"06.182 - Defesa Civil";"siconfi-cor_TotalDespesas";37936832,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"06.122 - Administração Geral";"siconfi-cor_TotalDespesas";629014360,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU06 - Demais Subfunções";"siconfi-cor_TotalDespesas";10136813,12
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"07 - Relações Exteriores";"siconfi-cor_TotalDespesas";3714187,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"07.212 - Cooperação Internacional";"siconfi-cor_TotalDespesas";3714187,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1773462449,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";95120916,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";53684928,27
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";634648387,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";835080812,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"08.122 - Administração Geral";"siconfi-cor_TotalDespesas";119721835,37
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU08 - Demais Subfunções";"siconfi-cor_TotalDespesas";35205569,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";12799146117,09
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";123303923,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"09.272 - Previdência do Regime Estatutário";"siconfi-cor_TotalDespesas";11930011374,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"09.122 - Administração Geral";"siconfi-cor_TotalDespesas";55118280,86
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU09 - Demais Subfunções";"siconfi-cor_TotalDespesas";690712539,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10 - Saúde";"siconfi-cor_TotalDespesas";16712380276,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";7866941964,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";5741113701,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";480831383,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";127401638,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";2316997778,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU10 - Demais Subfunções";"siconfi-cor_TotalDespesas";179093808,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"11 - Trabalho";"siconfi-cor_TotalDespesas";204124877,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"11.331 - Proteção e Benefícios ao Trabalhador";"siconfi-cor_TotalDespesas";3427795,85
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"11.333 - Empregabilidade";"siconfi-cor_TotalDespesas";43991035,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"11.334 - Fomento ao Trabalho";"siconfi-cor_TotalDespesas";131381484,03
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"11.122 - Administração Geral";"siconfi-cor_TotalDespesas";17765697,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU11 - Demais Subfunções";"siconfi-cor_TotalDespesas";7558864,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12 - Educação";"siconfi-cor_TotalDespesas";16125803253,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";4572358006,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.362 - Ensino Médio";"siconfi-cor_TotalDespesas";76255493,94
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.363 - Ensino Profissional";"siconfi-cor_TotalDespesas";22152478,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.364 - Ensino Superior";"siconfi-cor_TotalDespesas";4786,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";9165406086,32
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";27624507,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";122248009,18
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.368 - Educação Básica";"siconfi-cor_TotalDespesas";463449661,49
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"12.122 - Administração Geral";"siconfi-cor_TotalDespesas";590246201,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";1086058022,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"13 - Cultura";"siconfi-cor_TotalDespesas";608928866,18
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"13.391 - Patrimônio Histórico, Artístico e Arqueológico";"siconfi-cor_TotalDespesas";30780645,74
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";447025770,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"13.122 - Administração Geral";"siconfi-cor_TotalDespesas";119637349,29
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU13 - Demais Subfunções";"siconfi-cor_TotalDespesas";11485100,43
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"14 - Direitos da Cidadania";"siconfi-cor_TotalDespesas";248698200,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"14.422 - Direitos Individuais, Coletivos e Difusos";"siconfi-cor_TotalDespesas";98240692,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"14.122 - Administração Geral";"siconfi-cor_TotalDespesas";99636873,73
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU14 - Demais Subfunções";"siconfi-cor_TotalDespesas";50820635,1
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";6213708708,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";816526982,27
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";4249202016,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"15.122 - Administração Geral";"siconfi-cor_TotalDespesas";917029650,16
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU15 - Demais Subfunções";"siconfi-cor_TotalDespesas";230950059,17
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"16 - Habitação";"siconfi-cor_TotalDespesas";1372534719,85
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";651951395,12
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"16.122 - Administração Geral";"siconfi-cor_TotalDespesas";144049345,37
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU16 - Demais Subfunções";"siconfi-cor_TotalDespesas";576533979,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1367026232,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";299865811,35
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU17 - Demais Subfunções";"siconfi-cor_TotalDespesas";1067160421,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";344590246,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";248603671,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1885847,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"18.122 - Administração Geral";"siconfi-cor_TotalDespesas";82400110,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU18 - Demais Subfunções";"siconfi-cor_TotalDespesas";11700616,75
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";337826710,34
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";259777305,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"23.122 - Administração Geral";"siconfi-cor_TotalDespesas";78049405,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"24 - Comunicações";"siconfi-cor_TotalDespesas";264398373,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU24 - Demais Subfunções";"siconfi-cor_TotalDespesas";264398373,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"26 - Transporte";"siconfi-cor_TotalDespesas";7794773989,48
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"26.785 - Transportes Especiais";"siconfi-cor_TotalDespesas";25364222,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"26.122 - Administração Geral";"siconfi-cor_TotalDespesas";7840350,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU26 - Demais Subfunções";"siconfi-cor_TotalDespesas";7761569415,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";563075127,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"27.811 - Desporto de Rendimento";"siconfi-cor_TotalDespesas";10038967,66
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";248426643,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";220728643,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"27.122 - Administração Geral";"siconfi-cor_TotalDespesas";64057377,03
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU27 - Demais Subfunções";"siconfi-cor_TotalDespesas";19823495,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";3756756881,29
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"28.841 - Refinanciamento da Dívida Interna";"siconfi-cor_TotalDespesas";284587775,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";217803204,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"28.844 - Serviço da Dívida Externa";"siconfi-cor_TotalDespesas";42307339,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";3211756901,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"FU28 - Demais Subfunções";"siconfi-cor_TotalDespesas";301660,14
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Liquidadas";"Despesas Intraorçamentárias";"siconfi-cor_TotalDespesas";6832585234,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";74082395377,48
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"01 - Legislativa";"siconfi-cor_TotalDespesas";851558498,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";546573639,54
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"01.032 - Controle Externo";"siconfi-cor_TotalDespesas";270543425,04
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"01.122 - Administração Geral";"siconfi-cor_TotalDespesas";26816918,93
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU01 - Demais Subfunções";"siconfi-cor_TotalDespesas";7624514,49
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"02 - Judiciária";"siconfi-cor_TotalDespesas";221110162,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"02.062 - Defesa do Interesse Público no Processo Judiciário";"siconfi-cor_TotalDespesas";4070418,34
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"02.122 - Administração Geral";"siconfi-cor_TotalDespesas";217036793,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU02 - Demais Subfunções";"siconfi-cor_TotalDespesas";2950,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04 - Administração";"siconfi-cor_TotalDespesas";2123915069,48
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";799689778,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";1153440899,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";175738,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.126 - Tecnologia da Informação";"siconfi-cor_TotalDespesas";146722931,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.128 - Formação de Recursos Humanos";"siconfi-cor_TotalDespesas";170367,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.129 - Administração de Receitas";"siconfi-cor_TotalDespesas";6391662,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.130 - Administração de Concessões";"siconfi-cor_TotalDespesas";13712587,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";3307106,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";303996,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"05 - Defesa Nacional";"siconfi-cor_TotalDespesas";36024,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"05.122 - Administração Geral";"siconfi-cor_TotalDespesas";36024,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";756989178,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";80782293,45
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"06.182 - Defesa Civil";"siconfi-cor_TotalDespesas";37646657,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"06.122 - Administração Geral";"siconfi-cor_TotalDespesas";628913548,09
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU06 - Demais Subfunções";"siconfi-cor_TotalDespesas";9646679,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"07 - Relações Exteriores";"siconfi-cor_TotalDespesas";2484577,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"07.212 - Cooperação Internacional";"siconfi-cor_TotalDespesas";2484577,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1765055058,82
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";94801786,82
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";53660927,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";634270994,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";832080363,65
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"08.122 - Administração Geral";"siconfi-cor_TotalDespesas";119543446,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU08 - Demais Subfunções";"siconfi-cor_TotalDespesas";30697538,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";12797977936,31
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";123303923,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"09.272 - Previdência do Regime Estatutário";"siconfi-cor_TotalDespesas";11929987577,15
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"09.122 - Administração Geral";"siconfi-cor_TotalDespesas";55042444,5
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU09 - Demais Subfunções";"siconfi-cor_TotalDespesas";689643991,45
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10 - Saúde";"siconfi-cor_TotalDespesas";16662263799,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";7857019454,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";5716742246,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";478558828,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";123103129,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";2314970146,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU10 - Demais Subfunções";"siconfi-cor_TotalDespesas";171869995,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"11 - Trabalho";"siconfi-cor_TotalDespesas";200361032,62
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"11.331 - Proteção e Benefícios ao Trabalhador";"siconfi-cor_TotalDespesas";3424951,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"11.333 - Empregabilidade";"siconfi-cor_TotalDespesas";43434599,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"11.334 - Fomento ao Trabalho";"siconfi-cor_TotalDespesas";128943148,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"11.122 - Administração Geral";"siconfi-cor_TotalDespesas";17690172,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU11 - Demais Subfunções";"siconfi-cor_TotalDespesas";6868160,5
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12 - Educação";"siconfi-cor_TotalDespesas";16061563990,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";4546578150,15
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.362 - Ensino Médio";"siconfi-cor_TotalDespesas";76177719,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.363 - Ensino Profissional";"siconfi-cor_TotalDespesas";21565392,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.364 - Ensino Superior";"siconfi-cor_TotalDespesas";4786,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";9152716680,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";27404580,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";122078622,19
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.368 - Educação Básica";"siconfi-cor_TotalDespesas";458371103,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"12.122 - Administração Geral";"siconfi-cor_TotalDespesas";588158990,84
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";1068507963,1
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"13 - Cultura";"siconfi-cor_TotalDespesas";589704285,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"13.391 - Patrimônio Histórico, Artístico e Arqueológico";"siconfi-cor_TotalDespesas";28511188,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";431946039,66
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"13.122 - Administração Geral";"siconfi-cor_TotalDespesas";119505617,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU13 - Demais Subfunções";"siconfi-cor_TotalDespesas";9741440,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"14 - Direitos da Cidadania";"siconfi-cor_TotalDespesas";243379002,64
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"14.422 - Direitos Individuais, Coletivos e Difusos";"siconfi-cor_TotalDespesas";93871633,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"14.122 - Administração Geral";"siconfi-cor_TotalDespesas";99604798,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU14 - Demais Subfunções";"siconfi-cor_TotalDespesas";49902570,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";6110343085,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";783226776,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";4213036580,94
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"15.122 - Administração Geral";"siconfi-cor_TotalDespesas";910593209,19
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU15 - Demais Subfunções";"siconfi-cor_TotalDespesas";203486519,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"16 - Habitação";"siconfi-cor_TotalDespesas";1323264476,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";612059228,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"16.122 - Administração Geral";"siconfi-cor_TotalDespesas";142671524,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU16 - Demais Subfunções";"siconfi-cor_TotalDespesas";568533723,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1338710265,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";293977279,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU17 - Demais Subfunções";"siconfi-cor_TotalDespesas";1044732986,44
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";343245982,29
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";247773780,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1885847,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"18.122 - Administração Geral";"siconfi-cor_TotalDespesas";82400110,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU18 - Demais Subfunções";"siconfi-cor_TotalDespesas";11186243,79
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";334202230,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";257252775,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"23.122 - Administração Geral";"siconfi-cor_TotalDespesas";76949454,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"24 - Comunicações";"siconfi-cor_TotalDespesas";264200572,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU24 - Demais Subfunções";"siconfi-cor_TotalDespesas";264200572,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"26 - Transporte";"siconfi-cor_TotalDespesas";7784845327,72
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"26.785 - Transportes Especiais";"siconfi-cor_TotalDespesas";23796695,73
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"26.122 - Administração Geral";"siconfi-cor_TotalDespesas";7500827,47
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU26 - Demais Subfunções";"siconfi-cor_TotalDespesas";7753547804,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";550427940,63
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"27.811 - Desporto de Rendimento";"siconfi-cor_TotalDespesas";7993220,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";242209713,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";216399941,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"27.122 - Administração Geral";"siconfi-cor_TotalDespesas";64047280,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU27 - Demais Subfunções";"siconfi-cor_TotalDespesas";19777783,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";3756756881,29
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"28.841 - Refinanciamento da Dívida Interna";"siconfi-cor_TotalDespesas";284587775,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";217803204,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"28.844 - Serviço da Dívida Externa";"siconfi-cor_TotalDespesas";42307339,42
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";3211756901,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"FU28 - Demais Subfunções";"siconfi-cor_TotalDespesas";301660,14
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Despesas Pagas";"Despesas Intraorçamentárias";"siconfi-cor_TotalDespesas";6800528946,91
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";9506419441,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"01 - Legislativa";"siconfi-cor_TotalDespesas";35213507,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";7541030,26
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"01.032 - Controle Externo";"siconfi-cor_TotalDespesas";19740447,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"01.122 - Administração Geral";"siconfi-cor_TotalDespesas";6263165,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU01 - Demais Subfunções";"siconfi-cor_TotalDespesas";1668864,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"02 - Judiciária";"siconfi-cor_TotalDespesas";2347863,63
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"02.062 - Defesa do Interesse Público no Processo Judiciário";"siconfi-cor_TotalDespesas";445912,44
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"02.122 - Administração Geral";"siconfi-cor_TotalDespesas";1889967,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU02 - Demais Subfunções";"siconfi-cor_TotalDespesas";11984,08
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04 - Administração";"siconfi-cor_TotalDespesas";104244228,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";25241712,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";22442401,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";1025,65
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.126 - Tecnologia da Informação";"siconfi-cor_TotalDespesas";51122235,8
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.128 - Formação de Recursos Humanos";"siconfi-cor_TotalDespesas";345875,5
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.129 - Administração de Receitas";"siconfi-cor_TotalDespesas";1926784,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.130 - Administração de Concessões";"siconfi-cor_TotalDespesas";1820584,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";816252,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";527354,93
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"05 - Defesa Nacional";"siconfi-cor_TotalDespesas";35865,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"05.122 - Administração Geral";"siconfi-cor_TotalDespesas";35865,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";47755043,74
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";30350013,54
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"06.182 - Defesa Civil";"siconfi-cor_TotalDespesas";12336295,94
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"06.122 - Administração Geral";"siconfi-cor_TotalDespesas";935437,93
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU06 - Demais Subfunções";"siconfi-cor_TotalDespesas";4133296,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08 - Assistência Social";"siconfi-cor_TotalDespesas";89348310,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";1611253,55
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";603397,29
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";5045018,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";69668526,09
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"08.122 - Administração Geral";"siconfi-cor_TotalDespesas";7743404,35
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU08 - Demais Subfunções";"siconfi-cor_TotalDespesas";4676710,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"09 - Previdência Social";"siconfi-cor_TotalDespesas";128402005,27
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";14244034,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"09.122 - Administração Geral";"siconfi-cor_TotalDespesas";17368292,3
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU09 - Demais Subfunções";"siconfi-cor_TotalDespesas";96789678,27
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";728824932,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";204428989,74
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";291398712,99
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";126092704,21
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";28194749,26
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";34690983,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU10 - Demais Subfunções";"siconfi-cor_TotalDespesas";44018793,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"11 - Trabalho";"siconfi-cor_TotalDespesas";19794917,88
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"11.331 - Proteção e Benefícios ao Trabalhador";"siconfi-cor_TotalDespesas";42950,4
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"11.333 - Empregabilidade";"siconfi-cor_TotalDespesas";8991433,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"11.334 - Fomento ao Trabalho";"siconfi-cor_TotalDespesas";5626507,48
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"11.122 - Administração Geral";"siconfi-cor_TotalDespesas";3563562,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU11 - Demais Subfunções";"siconfi-cor_TotalDespesas";1570463,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12 - Educação";"siconfi-cor_TotalDespesas";4630603186,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";1150977570,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.362 - Ensino Médio";"siconfi-cor_TotalDespesas";6415506,99
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.363 - Ensino Profissional";"siconfi-cor_TotalDespesas";2618269,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";1840190288,03
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";6835837,17
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";13311029,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.368 - Educação Básica";"siconfi-cor_TotalDespesas";947356728,04
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"12.122 - Administração Geral";"siconfi-cor_TotalDespesas";57207437,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";605690519,24
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"13 - Cultura";"siconfi-cor_TotalDespesas";133597062,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"13.391 - Patrimônio Histórico, Artístico e Arqueológico";"siconfi-cor_TotalDespesas";5617869,43
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";122596113,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"13.122 - Administração Geral";"siconfi-cor_TotalDespesas";2133527,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU13 - Demais Subfunções";"siconfi-cor_TotalDespesas";3249551,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"14 - Direitos da Cidadania";"siconfi-cor_TotalDespesas";54289073,02
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"14.422 - Direitos Individuais, Coletivos e Difusos";"siconfi-cor_TotalDespesas";12677102,94
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"14.122 - Administração Geral";"siconfi-cor_TotalDespesas";32282100,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU14 - Demais Subfunções";"siconfi-cor_TotalDespesas";9329869,1
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";1834421352,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";848479654,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";854162180,67
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"15.122 - Administração Geral";"siconfi-cor_TotalDespesas";71826806,31
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU15 - Demais Subfunções";"siconfi-cor_TotalDespesas";59952710,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"16 - Habitação";"siconfi-cor_TotalDespesas";525626729,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";334451176,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"16.122 - Administração Geral";"siconfi-cor_TotalDespesas";18848083,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU16 - Demais Subfunções";"siconfi-cor_TotalDespesas";172327469,84
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"17 - Saneamento";"siconfi-cor_TotalDespesas";483275710,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";70132924,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU17 - Demais Subfunções";"siconfi-cor_TotalDespesas";413142786,23
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";71935083,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";65464907,69
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"18.122 - Administração Geral";"siconfi-cor_TotalDespesas";2387476,95
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU18 - Demais Subfunções";"siconfi-cor_TotalDespesas";4082698,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";52335407,04
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"23.695 - Turismo";"siconfi-cor_TotalDespesas";37566811,34
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"23.122 - Administração Geral";"siconfi-cor_TotalDespesas";14768595,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"24 - Comunicações";"siconfi-cor_TotalDespesas";42774652,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU24 - Demais Subfunções";"siconfi-cor_TotalDespesas";42774652,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"26 - Transporte";"siconfi-cor_TotalDespesas";331456930,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"26.785 - Transportes Especiais";"siconfi-cor_TotalDespesas";91690737,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"26.122 - Administração Geral";"siconfi-cor_TotalDespesas";877556,7
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU26 - Demais Subfunções";"siconfi-cor_TotalDespesas";238888635,74
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";181735060,67
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"27.811 - Desporto de Rendimento";"siconfi-cor_TotalDespesas";11904165,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";155094604,37
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"27.813 - Lazer";"siconfi-cor_TotalDespesas";11192545,69
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"27.122 - Administração Geral";"siconfi-cor_TotalDespesas";2066326,13
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"FU27 - Demais Subfunções";"siconfi-cor_TotalDespesas";1477419,37
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";8402518,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";8402518,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Não Processados";"Despesas Intraorçamentárias";"siconfi-cor_TotalDespesas";285172165,61
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";381767984,82
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"01 - Legislativa";"siconfi-cor_TotalDespesas";10524753,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";6713220,78
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"01.032 - Controle Externo";"siconfi-cor_TotalDespesas";2733975,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"01.122 - Administração Geral";"siconfi-cor_TotalDespesas";1063811,63
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU01 - Demais Subfunções";"siconfi-cor_TotalDespesas";13745,1
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"02 - Judiciária";"siconfi-cor_TotalDespesas";147593,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"02.062 - Defesa do Interesse Público no Processo Judiciário";"siconfi-cor_TotalDespesas";25616,3
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"02.122 - Administração Geral";"siconfi-cor_TotalDespesas";121977,23
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04 - Administração";"siconfi-cor_TotalDespesas";7742407,79
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";2027548,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";476469,84
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.126 - Tecnologia da Informação";"siconfi-cor_TotalDespesas";4910708,59
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.128 - Formação de Recursos Humanos";"siconfi-cor_TotalDespesas";9220,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.129 - Administração de Receitas";"siconfi-cor_TotalDespesas";273860,46
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";44600,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"05 - Defesa Nacional";"siconfi-cor_TotalDespesas";366,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"05.122 - Administração Geral";"siconfi-cor_TotalDespesas";366,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";1190092,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";308970,57
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"06.182 - Defesa Civil";"siconfi-cor_TotalDespesas";290175,18
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"06.122 - Administração Geral";"siconfi-cor_TotalDespesas";100812,52
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU06 - Demais Subfunções";"siconfi-cor_TotalDespesas";490134,01
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"07 - Relações Exteriores";"siconfi-cor_TotalDespesas";1229610,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"07.212 - Cooperação Internacional";"siconfi-cor_TotalDespesas";1229610,00
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08 - Assistência Social";"siconfi-cor_TotalDespesas";8407390,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";319130,05
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";24000,35
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";377392,44
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";3000449,03
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"08.122 - Administração Geral";"siconfi-cor_TotalDespesas";178388,41
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU08 - Demais Subfunções";"siconfi-cor_TotalDespesas";4508030,23
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"09 - Previdência Social";"siconfi-cor_TotalDespesas";1168180,78
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"09.272 - Previdência do Regime Estatutário";"siconfi-cor_TotalDespesas";23796,86
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"09.122 - Administração Geral";"siconfi-cor_TotalDespesas";75836,36
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU09 - Demais Subfunções";"siconfi-cor_TotalDespesas";1068547,56
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";50116476,67
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";9922510,09
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";24371455,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";2272554,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";4298509,77
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";2027632,32
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU10 - Demais Subfunções";"siconfi-cor_TotalDespesas";7223813,91
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"11 - Trabalho";"siconfi-cor_TotalDespesas";3763844,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"11.331 - Proteção e Benefícios ao Trabalhador";"siconfi-cor_TotalDespesas";2844,79
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"11.333 - Empregabilidade";"siconfi-cor_TotalDespesas";556436,16
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"11.334 - Fomento ao Trabalho";"siconfi-cor_TotalDespesas";2438335,2
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"11.122 - Administração Geral";"siconfi-cor_TotalDespesas";75524,65
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU11 - Demais Subfunções";"siconfi-cor_TotalDespesas";690703,71
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12 - Educação";"siconfi-cor_TotalDespesas";64239262,58
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";25779855,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.362 - Ensino Médio";"siconfi-cor_TotalDespesas";77774,37
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.363 - Ensino Profissional";"siconfi-cor_TotalDespesas";587085,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";12689405,55
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";219926,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";169386,99
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.368 - Educação Básica";"siconfi-cor_TotalDespesas";5078557,62
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"12.122 - Administração Geral";"siconfi-cor_TotalDespesas";2087210,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";17550058,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"13 - Cultura";"siconfi-cor_TotalDespesas";19224581,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"13.391 - Patrimônio Histórico, Artístico e Arqueológico";"siconfi-cor_TotalDespesas";2269457,53
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";15079731,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"13.122 - Administração Geral";"siconfi-cor_TotalDespesas";131732,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU13 - Demais Subfunções";"siconfi-cor_TotalDespesas";1743660,3
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"14 - Direitos da Cidadania";"siconfi-cor_TotalDespesas";5319198,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"14.422 - Direitos Individuais, Coletivos e Difusos";"siconfi-cor_TotalDespesas";4369058,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"14.122 - Administração Geral";"siconfi-cor_TotalDespesas";32074,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU14 - Demais Subfunções";"siconfi-cor_TotalDespesas";918064,51
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";103365622,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";33300205,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";36165436,03
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"15.122 - Administração Geral";"siconfi-cor_TotalDespesas";6436440,97
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU15 - Demais Subfunções";"siconfi-cor_TotalDespesas";27463539,92
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"16 - Habitação";"siconfi-cor_TotalDespesas";49270243,8
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";39892166,87
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"16.122 - Administração Geral";"siconfi-cor_TotalDespesas";1377820,79
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU16 - Demais Subfunções";"siconfi-cor_TotalDespesas";8000256,14
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"17 - Saneamento";"siconfi-cor_TotalDespesas";28315966,81
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";5888531,83
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU17 - Demais Subfunções";"siconfi-cor_TotalDespesas";22427434,98
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";1344264,07
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";829891,11
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU18 - Demais Subfunções";"siconfi-cor_TotalDespesas";514372,96
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";3624480,28
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"23.695 - Turismo";"siconfi-cor_TotalDespesas";2524529,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"23.122 - Administração Geral";"siconfi-cor_TotalDespesas";1099950,9
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"24 - Comunicações";"siconfi-cor_TotalDespesas";197800,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU24 - Demais Subfunções";"siconfi-cor_TotalDespesas";197800,33
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"26 - Transporte";"siconfi-cor_TotalDespesas";9928661,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"26.785 - Transportes Especiais";"siconfi-cor_TotalDespesas";1567527,25
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"26.122 - Administração Geral";"siconfi-cor_TotalDespesas";339523,45
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU26 - Demais Subfunções";"siconfi-cor_TotalDespesas";8021611,06
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";12647186,93
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"27.811 - Desporto de Rendimento";"siconfi-cor_TotalDespesas";2045746,68
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";6216929,76
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"27.813 - Lazer";"siconfi-cor_TotalDespesas";4328702,38
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"27.122 - Administração Geral";"siconfi-cor_TotalDespesas";10096,22
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"FU27 - Demais Subfunções";"siconfi-cor_TotalDespesas";45711,89
+Prefeitura Municipal de São Paulo - SP;3550308;SP;12396372;"Inscrição de Restos a Pagar Processados";"Despesas Intraorçamentárias";"siconfi-cor_TotalDespesas";32056287,16
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";34692059,01
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"04 - Administração";"siconfi-cor_TotalDespesas";3845339,76
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"04.121 - Planejamento e Orçamento";"siconfi-cor_TotalDespesas";157576,38
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";3141764,96
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";393278,1
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";152720,32
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1523030,39
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";55301,76
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";16260,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";270895,47
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";1180572,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10 - Saúde";"siconfi-cor_TotalDespesas";7082903,73
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";4201201,98
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";2334850,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";177930,35
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";61422,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";307499,4
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"12 - Educação";"siconfi-cor_TotalDespesas";5582830,26
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";4214965,62
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";1148733,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";128813,88
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";90317,73
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"13 - Cultura";"siconfi-cor_TotalDespesas";796130,27
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";796130,27
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";3906868,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";3906868,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";331599,11
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"17.511 - Saneamento Básico Rural";"siconfi-cor_TotalDespesas";101789,51
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";229809,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"20 - Agricultura";"siconfi-cor_TotalDespesas";3058974,75
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"20.608 - Promoção da Produção Agropecuária";"siconfi-cor_TotalDespesas";3058974,75
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";84768,84
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"23.691 - Promoção Comercial";"siconfi-cor_TotalDespesas";79228,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";5540,5
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"26 - Transporte";"siconfi-cor_TotalDespesas";5269752,53
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";5269752,53
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";1517517,63
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";1517517,63
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Empenhadas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";32587381,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"04 - Administração";"siconfi-cor_TotalDespesas";3844392,43
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"04.121 - Planejamento e Orçamento";"siconfi-cor_TotalDespesas";157576,38
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";3140817,63
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";393278,1
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";152720,32
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1519446,83
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";55301,76
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";16260,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";270895,47
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";1176989,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10 - Saúde";"siconfi-cor_TotalDespesas";7073453,73
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";4191751,98
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";2334850,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";177930,35
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";61422,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";307499,4
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"12 - Educação";"siconfi-cor_TotalDespesas";5279945,84
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";4214749,62
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";846064,61
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";128813,88
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";90317,73
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"13 - Cultura";"siconfi-cor_TotalDespesas";743954,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";743954,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";3280693,98
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";3280693,98
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";331599,11
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"17.511 - Saneamento Básico Rural";"siconfi-cor_TotalDespesas";101789,51
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";229809,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"20 - Agricultura";"siconfi-cor_TotalDespesas";3056645,95
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"20.608 - Promoção da Produção Agropecuária";"siconfi-cor_TotalDespesas";3056645,95
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";84768,84
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"23.691 - Promoção Comercial";"siconfi-cor_TotalDespesas";79228,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";5540,5
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"26 - Transporte";"siconfi-cor_TotalDespesas";5262752,53
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";5262752,53
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";417384,67
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";417384,67
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Liquidadas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";32478764,31
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"01 - Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";721291,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"04 - Administração";"siconfi-cor_TotalDespesas";3841792,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"04.121 - Planejamento e Orçamento";"siconfi-cor_TotalDespesas";157576,38
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";3138217,23
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";393278,1
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";152720,32
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";1519446,83
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"08.241 - Assistência ao Idoso";"siconfi-cor_TotalDespesas";55301,76
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"08.242 - Assistência ao Portador de Deficiência";"siconfi-cor_TotalDespesas";16260,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";270895,47
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";1176989,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10 - Saúde";"siconfi-cor_TotalDespesas";7071708,39
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";4190560,44
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";2334850,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";177930,35
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";60868,2
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"10.122 - Administração Geral";"siconfi-cor_TotalDespesas";307499,4
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"12 - Educação";"siconfi-cor_TotalDespesas";5277648,65
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";4212999,62
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";846064,61
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";128813,88
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";89770,54
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"13 - Cultura";"siconfi-cor_TotalDespesas";743954,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";743954,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";3259095,42
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";3259095,42
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"17 - Saneamento";"siconfi-cor_TotalDespesas";331599,11
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"17.511 - Saneamento Básico Rural";"siconfi-cor_TotalDespesas";101789,51
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";229809,6
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";14660,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"20 - Agricultura";"siconfi-cor_TotalDespesas";3056645,95
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"20.608 - Promoção da Produção Agropecuária";"siconfi-cor_TotalDespesas";3056645,95
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"23 - Comércio e Serviços";"siconfi-cor_TotalDespesas";84768,84
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"23.691 - Promoção Comercial";"siconfi-cor_TotalDespesas";79228,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"23.695 - Turismo";"siconfi-cor_TotalDespesas";5540,5
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"26 - Transporte";"siconfi-cor_TotalDespesas";5182376,99
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";5182376,99
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";417384,67
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"27.813 - Lazer";"siconfi-cor_TotalDespesas";417384,67
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Despesas Pagas";"28.846 - Outros Encargos Especiais";"siconfi-cor_TotalDespesas";956391,04
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";2104677,67
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"04 - Administração";"siconfi-cor_TotalDespesas";947,33
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";947,33
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"08 - Assistência Social";"siconfi-cor_TotalDespesas";3583,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";3583,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";9450,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";9450,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"12 - Educação";"siconfi-cor_TotalDespesas";302884,42
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";216,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";302668,42
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"13 - Cultura";"siconfi-cor_TotalDespesas";52176,24
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";52176,24
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";626174,36
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";626174,36
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"20 - Agricultura";"siconfi-cor_TotalDespesas";2328,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"20.608 - Promoção da Produção Agropecuária";"siconfi-cor_TotalDespesas";2328,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"26 - Transporte";"siconfi-cor_TotalDespesas";7000,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";7000,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";1100132,96
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Não Processados";"27.813 - Lazer";"siconfi-cor_TotalDespesas";1100132,96
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";108617,03
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"04 - Administração";"siconfi-cor_TotalDespesas";2600,4
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";2600,4
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";1745,34
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";1191,54
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";553,8
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"12 - Educação";"siconfi-cor_TotalDespesas";2297,19
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";1750,00
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"FU12 - Demais Subfunções";"siconfi-cor_TotalDespesas";547,19
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";21598,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";21598,56
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"26 - Transporte";"siconfi-cor_TotalDespesas";80375,54
+Prefeitura Municipal de Sulina - PR;4126652;PR;2880;"Inscrição de Restos a Pagar Processados";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";80375,54
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";207378662,28
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";5279222,1
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";5279222,1
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"02 - Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"02.061 - Ação Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"04 - Administração";"siconfi-cor_TotalDespesas";28526530,23
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";26180933,17
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";2269780,28
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";63687,78
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";11700,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";429,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";6099681,04
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";559947,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";5539733,13
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10 - Saúde";"siconfi-cor_TotalDespesas";47060961,71
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";25676259,74
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";19612218,48
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";603040,07
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";796,5
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";1168646,92
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"12 - Educação";"siconfi-cor_TotalDespesas";77799279,89
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";71207863,58
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";6295292,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";149550,21
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";146573,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"13 - Cultura";"siconfi-cor_TotalDespesas";2519049,94
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";2519049,94
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";13302787,49
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";6486160,04
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";6816627,45
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"16 - Habitação";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1978361,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";1978361,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";1456470,97
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";17409,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1439061,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"20 - Agricultura";"siconfi-cor_TotalDespesas";992067,81
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"20.605 - Abastecimento";"siconfi-cor_TotalDespesas";290463,52
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"20.122 - Administração Geral";"siconfi-cor_TotalDespesas";697954,29
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"FU20 - Demais Subfunções";"siconfi-cor_TotalDespesas";3650,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"25 - Energia";"siconfi-cor_TotalDespesas";1422946,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"25.752 - Energia Elétrica";"siconfi-cor_TotalDespesas";1422946,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"26 - Transporte";"siconfi-cor_TotalDespesas";10055679,61
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";10055679,61
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";850596,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";850596,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Empenhadas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";206940168,45
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"01 - Legislativa";"siconfi-cor_TotalDespesas";5279222,1
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";5279222,1
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"02 - Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"02.061 - Ação Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"04 - Administração";"siconfi-cor_TotalDespesas";28492273,35
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";26146676,29
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";2269780,28
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";63687,78
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";11700,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";429,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";6095136,3
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";559947,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";5535188,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10 - Saúde";"siconfi-cor_TotalDespesas";46720932,53
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";25569045,61
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";19379403,43
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";603040,07
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";796,5
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";1168646,92
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"12 - Educação";"siconfi-cor_TotalDespesas";77759487,52
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";71168071,21
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";6295292,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";149550,21
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";146573,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"13 - Cultura";"siconfi-cor_TotalDespesas";2510049,94
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";2510049,94
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";13301789,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";6485349,16
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";6816440,59
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"16 - Habitação";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1978361,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";1978361,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";1448262,27
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";17409,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1430852,36
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"20 - Agricultura";"siconfi-cor_TotalDespesas";990711,59
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"20.605 - Abastecimento";"siconfi-cor_TotalDespesas";290463,52
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"20.122 - Administração Geral";"siconfi-cor_TotalDespesas";696598,07
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"FU20 - Demais Subfunções";"siconfi-cor_TotalDespesas";3650,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"25 - Energia";"siconfi-cor_TotalDespesas";1422638,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"25.752 - Energia Elétrica";"siconfi-cor_TotalDespesas";1422638,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"26 - Transporte";"siconfi-cor_TotalDespesas";10055679,61
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";10055679,61
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";850596,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";850596,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Liquidadas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";196780634,18
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"01 - Legislativa";"siconfi-cor_TotalDespesas";5213715,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";5213715,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"02 - Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"02.061 - Ação Judiciária";"siconfi-cor_TotalDespesas";2508856,33
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"04 - Administração";"siconfi-cor_TotalDespesas";26756612,24
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";24553542,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";2127252,8
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"04.124 - Controle Interno";"siconfi-cor_TotalDespesas";63687,78
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"04.131 - Comunicação Social";"siconfi-cor_TotalDespesas";11700,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"FU04 - Demais Subfunções";"siconfi-cor_TotalDespesas";429,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"06 - Segurança Pública";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"06.181 - Policiamento";"siconfi-cor_TotalDespesas";874,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"08 - Assistência Social";"siconfi-cor_TotalDespesas";5884669,8
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";556940,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";5327729,05
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"09 - Previdência Social";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"09.271 - Previdência Básica";"siconfi-cor_TotalDespesas";1653361,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10 - Saúde";"siconfi-cor_TotalDespesas";41814271,32
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";23670731,14
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";16694817,25
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";392002,44
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10.304 - Vigilância Sanitária";"siconfi-cor_TotalDespesas";796,5
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";1055923,99
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"12 - Educação";"siconfi-cor_TotalDespesas";75773941,63
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";69182525,32
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"12.365 - Educação Infantil";"siconfi-cor_TotalDespesas";6295292,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"12.366 - Educação de Jovens e Adultos";"siconfi-cor_TotalDespesas";149550,21
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"12.367 - Educação Especial";"siconfi-cor_TotalDespesas";146573,55
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"13 - Cultura";"siconfi-cor_TotalDespesas";2270306,6
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";2270306,6
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"15 - Urbanismo";"siconfi-cor_TotalDespesas";12835876,96
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";6376011,57
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";6459865,39
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"16 - Habitação";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"16.482 - Habitação Urbana";"siconfi-cor_TotalDespesas";149249,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"17 - Saneamento";"siconfi-cor_TotalDespesas";1913968,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";1913968,06
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";1271595,99
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"18.541 - Preservação e Conservação Ambiental";"siconfi-cor_TotalDespesas";17409,91
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";1254186,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"20 - Agricultura";"siconfi-cor_TotalDespesas";950004,87
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"20.605 - Abastecimento";"siconfi-cor_TotalDespesas";259141,9
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"20.122 - Administração Geral";"siconfi-cor_TotalDespesas";687212,97
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"FU20 - Demais Subfunções";"siconfi-cor_TotalDespesas";3650,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"25 - Energia";"siconfi-cor_TotalDespesas";1422638,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"25.752 - Energia Elétrica";"siconfi-cor_TotalDespesas";1422638,66
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"26 - Transporte";"siconfi-cor_TotalDespesas";9979265,63
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";9979265,63
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";658739,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";658739,08
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"28 - Encargos Especiais";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Despesas Pagas";"28.843 - Serviço da Dívida Interna";"siconfi-cor_TotalDespesas";5722685,75
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";438493,83
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"04 - Administração";"siconfi-cor_TotalDespesas";34256,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";34256,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"08 - Assistência Social";"siconfi-cor_TotalDespesas";4544,74
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";4544,74
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";340029,18
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";107214,13
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";232815,05
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"12 - Educação";"siconfi-cor_TotalDespesas";39792,37
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";39792,37
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"13 - Cultura";"siconfi-cor_TotalDespesas";9000,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";9000,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";997,74
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";810,88
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";186,86
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";8208,7
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";8208,7
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"20 - Agricultura";"siconfi-cor_TotalDespesas";1356,22
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"20.122 - Administração Geral";"siconfi-cor_TotalDespesas";1356,22
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"25 - Energia";"siconfi-cor_TotalDespesas";308,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Não Processados";"25.752 - Energia Elétrica";"siconfi-cor_TotalDespesas";308,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"Despesas Exceto Intraorçamentárias";"siconfi-cor_TotalDespesas";10159534,27
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"01 - Legislativa";"siconfi-cor_TotalDespesas";65506,19
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"01.031 - Ação Legislativa";"siconfi-cor_TotalDespesas";65506,19
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"04 - Administração";"siconfi-cor_TotalDespesas";1735661,11
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"04.122 - Administração Geral";"siconfi-cor_TotalDespesas";1593133,63
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"04.123 - Administração Financeira";"siconfi-cor_TotalDespesas";142527,48
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"08 - Assistência Social";"siconfi-cor_TotalDespesas";210466,5
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"08.243 - Assistência à Criança e ao Adolescente";"siconfi-cor_TotalDespesas";3007,16
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"08.244 - Assistência Comunitária";"siconfi-cor_TotalDespesas";207459,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"10 - Saúde";"siconfi-cor_TotalDespesas";4906661,21
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"10.301 - Atenção Básica";"siconfi-cor_TotalDespesas";1898314,47
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"10.302 - Assistência Hospitalar e Ambulatorial";"siconfi-cor_TotalDespesas";2684586,18
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"10.303 - Suporte Profilático e Terapêutico";"siconfi-cor_TotalDespesas";211037,63
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"10.305 - Vigilância Epidemiológica";"siconfi-cor_TotalDespesas";112722,93
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"12 - Educação";"siconfi-cor_TotalDespesas";1985545,89
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"12.361 - Ensino Fundamental";"siconfi-cor_TotalDespesas";1985545,89
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"13 - Cultura";"siconfi-cor_TotalDespesas";239743,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"13.392 - Difusão Cultural";"siconfi-cor_TotalDespesas";239743,34
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"15 - Urbanismo";"siconfi-cor_TotalDespesas";465912,79
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"15.451 - Infraestrutura Urbana";"siconfi-cor_TotalDespesas";109337,59
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"15.452 - Serviços Urbanos";"siconfi-cor_TotalDespesas";356575,2
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"17 - Saneamento";"siconfi-cor_TotalDespesas";64393,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"17.512 - Saneamento Básico Urbano";"siconfi-cor_TotalDespesas";64393,00
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"18 - Gestão Ambiental";"siconfi-cor_TotalDespesas";176666,28
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"18.542 - Controle Ambiental";"siconfi-cor_TotalDespesas";176666,28
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"20 - Agricultura";"siconfi-cor_TotalDespesas";40706,72
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"20.605 - Abastecimento";"siconfi-cor_TotalDespesas";31321,62
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"20.122 - Administração Geral";"siconfi-cor_TotalDespesas";9385,1
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"26 - Transporte";"siconfi-cor_TotalDespesas";76413,98
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"26.782 - Transporte Rodoviário";"siconfi-cor_TotalDespesas";76413,98
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"27 - Desporto e Lazer";"siconfi-cor_TotalDespesas";191857,26
+Prefeitura Municipal de Caetité - BA;2905206;BA;51184;"Inscrição de Restos a Pagar Processados";"27.812 - Desporto Comunitário";"siconfi-cor_TotalDespesas";191857,26

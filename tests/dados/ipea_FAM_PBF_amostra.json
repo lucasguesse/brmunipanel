@@ -1,0 +1,1005 @@
+{
+  "value": [
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 1609.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 165991.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 402.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 657099.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 28851.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2004-01-01T00:00:00-02:00",
+      "VALVALOR": 6571839.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 167038.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 2015.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 863799.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 742.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 8700445.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2005-01-01T00:00:00-02:00",
+      "VALVALOR": 38908.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 1909.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 224817.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 779.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 10965810.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 53404.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2006-01-01T00:00:00-02:00",
+      "VALVALOR": 1114328.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 1085233.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 57354.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 11043076.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 932.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 2061.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2007-01-01T00:00:00-02:00",
+      "VALVALOR": 204127.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 2038.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 974803.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 968.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 201664.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 55037.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2008-01-01T00:00:00-02:00",
+      "VALVALOR": 10557996.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 1138129.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 12370915.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 62600.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 1068.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 171278.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2009-01-01T00:00:00-02:00",
+      "VALVALOR": 2059.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 1174844.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 1033.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 59779.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 12778220.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 166137.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2010-01-01T00:00:00-02:00",
+      "VALVALOR": 1979.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 56272.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 13352306.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 1209819.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 202879.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 937.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2011-01-01T00:00:00-02:00",
+      "VALVALOR": 1851.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 2089.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 228078.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 1254284.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 1510.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 70769.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2012-01-01T00:00:00-02:00",
+      "VALVALOR": 13902155.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 19808.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 1377082.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 1757.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 78050.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 325.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2013-01-01T00:00:00-02:00",
+      "VALVALOR": 14080293.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 2096.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 379645.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 1333129.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 1826.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 265.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 14054243.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2014-01-01T00:00:00-02:00",
+      "VALVALOR": 78724.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 80987.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 13980491.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 1861.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 368.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 1926.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 1457650.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2015-01-01T00:00:00-02:00",
+      "VALVALOR": 457146.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 1789.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 22882.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 331.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 13563768.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 82795.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2016-01-01T00:00:00-02:00",
+      "VALVALOR": 1477705.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 86360.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 13905348.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 402.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 1682.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 1542425.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 488608.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2017-01-01T00:00:00-02:00",
+      "VALVALOR": 1585.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 491716.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 1581737.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 1855.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 14195226.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 391.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 90534.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2018-01-01T00:00:00-02:00",
+      "VALVALOR": 1502.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 399906.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 381.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 1420.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 1625.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 1386845.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 87465.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2019-01-01T00:00:00-02:00",
+      "VALVALOR": 13238457.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 1524.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 90737.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 391.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 14274018.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 1600229.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 1785.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2020-01-01T00:00:00-03:00",
+      "VALVALOR": 480628.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 489119.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 1599678.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 1730.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 364.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 14184940.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 89118.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2021-01-01T00:00:00-03:00",
+      "VALVALOR": 1473.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 711715.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 1718.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 2539853.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 130972.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 617.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 20975152.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2022-01-01T00:00:00-03:00",
+      "VALVALOR": 2356.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 2360.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 20884006.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 554.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 130010.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 2585412.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 1707.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2023-01-01T00:00:00-03:00",
+      "VALVALOR": 704872.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 1629.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 2431528.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 131747.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 628.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 20444419.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 672433.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2024-01-01T00:00:00-03:00",
+      "VALVALOR": 2293.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 18618236.0,
+      "NIVNOME": "Brasil",
+      "TERCODIGO": "0"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 123535.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "12"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 589.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "4212650"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 2163208.0,
+      "NIVNOME": "Estados",
+      "TERCODIGO": "35"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 2069.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1200013"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 1470.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "1100015"
+    },
+    {
+      "SERCODIGO": "FAM_PBF",
+      "VALDATA": "2025-01-01T00:00:00-03:00",
+      "VALVALOR": 619496.0,
+      "NIVNOME": "Municípios",
+      "TERCODIGO": "3550308"
+    }
+  ]
+}

@@ -1,0 +1,842 @@
+{
+  "UF": [
+    35,
+    11,
+    11
+  ],
+  "Cod Mun": [
+    5030,
+    9,
+    13
+  ],
+  "Despesas por Função": [
+    164691558620000,
+    212703090200,
+    260931836000
+  ],
+  "Legislativa": [
+    2837805073000,
+    9228680700,
+    8080038500
+  ],
+  "Ação Legislativa": [
+    1921300000000,
+    9228680700,
+    8080038500
+  ],
+  "Controle Externo": [
+    797630072800,
+    0,
+    0
+  ],
+  "Demais Subfunções  1": [
+    118875000000,
+    0,
+    0
+  ],
+  "Judiciária": [
+    1064242853000,
+    0,
+    0
+  ],
+  "Ação Judiciária": [
+    0,
+    0,
+    0
+  ],
+  "Defesa do Interesse Público": [
+    38287921400,
+    0,
+    0
+  ],
+  "Demais Subfunções 2": [
+    1025954932000,
+    0,
+    0
+  ],
+  "Essencial à Justiça": [
+    0,
+    0,
+    0
+  ],
+  "Defesa da Ordem Jurídica": [
+    0,
+    0,
+    0
+  ],
+  "Representação Juridica": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 3": [
+    0,
+    0,
+    0
+  ],
+  "Administração": [
+    4148173439000,
+    63463053600,
+    23618065600
+  ],
+  "Planejamento e Orçamento": [
+    0,
+    402406800,
+    0
+  ],
+  "Administração Geral": [
+    2183368721000,
+    58556898000,
+    23290065600
+  ],
+  "Administração Financeira": [
+    276843929700,
+    0,
+    0
+  ],
+  "Controle Interno": [
+    0,
+    0,
+    0
+  ],
+  "Normatização e Fiscalização": [
+    0,
+    0,
+    0
+  ],
+  "Tecnologia da Informação": [
+    1367795359000,
+    1687248000,
+    0
+  ],
+  "Ordenamento Territorial": [
+    0,
+    0,
+    0
+  ],
+  "Formação de Recursos Humanos": [
+    14578111100,
+    0,
+    0
+  ],
+  "Administração de Receitas": [
+    186560013200,
+    0,
+    0
+  ],
+  "Administração de Concessões": [
+    0,
+    0,
+    0
+  ],
+  "Comunicação Social": [
+    100473069600,
+    2816500800,
+    328000000
+  ],
+  "Demais Subfunções 4": [
+    18554235900,
+    0,
+    0
+  ],
+  "Defesa Nacional": [
+    42435829200,
+    0,
+    0
+  ],
+  "Defesa Aérea": [
+    0,
+    0,
+    0
+  ],
+  "Defesa Naval": [
+    0,
+    0,
+    0
+  ],
+  "Defesa Terrestre": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 5": [
+    42435829200,
+    0,
+    0
+  ],
+  "Segurança Pública": [
+    1642387245000,
+    429280000,
+    0
+  ],
+  "Policiamento": [
+    1374928432000,
+    0,
+    0
+  ],
+  "Defesa Civil": [
+    181750088700,
+    429280000,
+    0
+  ],
+  "Informação e Inteligência": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 6": [
+    85708724500,
+    0,
+    0
+  ],
+  "Relações Exteriores": [
+    20035402100,
+    0,
+    0
+  ],
+  "Relações Diplomáticas": [
+    0,
+    0,
+    0
+  ],
+  "Cooperação Internacional": [
+    3072960000,
+    0,
+    0
+  ],
+  "Demais Subfunções 7": [
+    16962442100,
+    0,
+    0
+  ],
+  "Assistência Social": [
+    2321221360000,
+    8282824400,
+    7881547300
+  ],
+  "Assistência ao Idoso": [
+    42350103900,
+    595270000,
+    0
+  ],
+  "Assistência ao Deficiência": [
+    24739843600,
+    568748200,
+    0
+  ],
+  "Assistência à Criança": [
+    1168004720000,
+    3482912500,
+    4461151100
+  ],
+  "Assistência Comunitária": [
+    892466006600,
+    464395800,
+    247000000
+  ],
+  "Demais Subfunções 8": [
+    193660686500,
+    3171497900,
+    3173396200
+  ],
+  "Previdência Social": [
+    16953198120000,
+    5494478700,
+    3714321600
+  ],
+  "Previdência Básica": [
+    7114491186000,
+    2424191300,
+    0
+  ],
+  "Previdência do Regime Estatutário": [
+    7817377148000,
+    3070287400,
+    3714321600
+  ],
+  "Previdência Complementar": [
+    324935534800,
+    0,
+    0
+  ],
+  "Previdência Especial": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 9": [
+    1696394250000,
+    0,
+    0
+  ],
+  "Saúde": [
+    29882746580000,
+    46296175900,
+    54035817500
+  ],
+  "Atenção Básica": [
+    4785332980000,
+    1906355100,
+    4178477500
+  ],
+  "Assistência Hospitalar": [
+    15549816860000,
+    42375288500,
+    8017174600
+  ],
+  "Suporte Profilático": [
+    0,
+    0,
+    3223030100
+  ],
+  "Vigilância Sanitária": [
+    0,
+    79670000,
+    54550000
+  ],
+  "Vigilância Epidemiológica": [
+    0,
+    1400482600,
+    5903343400
+  ],
+  "Alimentação e Nutrição": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 10": [
+    9547596742000,
+    534379700,
+    32659241900
+  ],
+  "Trabalho": [
+    474475832700,
+    0,
+    0
+  ],
+  "Proteção ao Trabalhador": [
+    15558356200,
+    0,
+    0
+  ],
+  "Relações de Trabalho": [
+    120520000000,
+    0,
+    0
+  ],
+  "Empregabilidade": [
+    96436021500,
+    0,
+    0
+  ],
+  "Fomento ao Trabalho": [
+    188909636700,
+    0,
+    0
+  ],
+  "Demais Subfunções 11": [
+    53051818300,
+    0,
+    0
+  ],
+  "Educação": [
+    37050780280000,
+    56670438700,
+    112739216400
+  ],
+  "Ensino Fundamental": [
+    17338126000000,
+    50399182400,
+    102648255800
+  ],
+  "Ensino Médio": [
+    109095433400,
+    0,
+    0
+  ],
+  "Ensino Profissional": [
+    27332842700,
+    0,
+    0
+  ],
+  "Ensino Superior": [
+    0,
+    0,
+    0
+  ],
+  "Educação Infantil": [
+    11685290450000,
+    4977318400,
+    3105393200
+  ],
+  "Educação de Jovens e Adultos": [
+    91410872400,
+    270343100,
+    87760000
+  ],
+  "Educação Especial": [
+    164059715000,
+    0,
+    0
+  ],
+  "Demais Subfunções 12": [
+    7635464965000,
+    1023594800,
+    6897807400
+  ],
+  "Cultura": [
+    1641675202000,
+    0,
+    0
+  ],
+  "Patrimônio Cultural": [
+    50873476300,
+    0,
+    0
+  ],
+  "Difusão Cultural": [
+    836621360000,
+    0,
+    0
+  ],
+  "Demais Subfunções 13": [
+    754180366000,
+    0,
+    0
+  ],
+  "Direitos da Cidadania": [
+    232643572000,
+    0,
+    0
+  ],
+  "Custódia e Reintegração Social": [
+    0,
+    0,
+    0
+  ],
+  "Direitos Humanos": [
+    124979961300,
+    0,
+    0
+  ],
+  "Assistência Povos Indígenas": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 14": [
+    107663610700,
+    0,
+    0
+  ],
+  "Urbanismo": [
+    22886977970000,
+    7430086900,
+    25842101300
+  ],
+  "Infra-Estrutura Urbana": [
+    5782959655000,
+    5235460500,
+    8742480000
+  ],
+  "Serviços Urbanos": [
+    11030910960000,
+    2103162800,
+    5644462100
+  ],
+  "Transportes Coletivos Urbanos": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 15": [
+    6073107358000,
+    91463600,
+    11455159200
+  ],
+  "Habitação": [
+    1955991159000,
+    171319000,
+    0
+  ],
+  "Habitação Rural": [
+    0,
+    75680000,
+    0
+  ],
+  "Habitação Urbana": [
+    1532550170000,
+    95639000,
+    0
+  ],
+  "Demais Subfunções 16": [
+    423440989200,
+    0,
+    0
+  ],
+  "Saneamento": [
+    1289827164000,
+    0,
+    0
+  ],
+  "Saneamento Básico Rural": [
+    0,
+    0,
+    0
+  ],
+  "Saneamento Básico Urbano": [
+    725248937000,
+    0,
+    0
+  ],
+  "Demais Subfunções 17": [
+    564578226500,
+    0,
+    0
+  ],
+  "Gestão Ambiental": [
+    928258422700,
+    0,
+    0
+  ],
+  "Preservação Ambiental": [
+    508384955200,
+    0,
+    0
+  ],
+  "Controle Ambiental": [
+    1034601600,
+    0,
+    0
+  ],
+  "Recuperação Areas Degradadas": [
+    0,
+    0,
+    0
+  ],
+  "Recursos Hídricos": [
+    0,
+    0,
+    0
+  ],
+  "Meteorologia": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 18": [
+    418838865900,
+    0,
+    0
+  ],
+  "Ciência e Tecnologia": [
+    0,
+    0,
+    0
+  ],
+  "Desenvolvimento Científico": [
+    0,
+    0,
+    0
+  ],
+  "Desenvolvimento Tecnológico": [
+    0,
+    0,
+    0
+  ],
+  "Difusão do Conhecimento Científico": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 19": [
+    0,
+    0,
+    0
+  ],
+  "Agricultura": [
+    7811484600,
+    4787107600,
+    9515117800
+  ],
+  "Promoção da Produção Vegetal": [
+    0,
+    0,
+    148670000
+  ],
+  "Promoção da Produção Animal": [
+    0,
+    1293533000,
+    0
+  ],
+  "Defesa Sanitária Vegetal": [
+    0,
+    0,
+    0
+  ],
+  "Defesa Sanitária Animal": [
+    0,
+    0,
+    0
+  ],
+  "Abastecimento": [
+    7709484600,
+    623594800,
+    0
+  ],
+  "Extensão Rural": [
+    102000000,
+    0,
+    7180154600
+  ],
+  "Irrigação": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 20": [
+    0,
+    2869979800,
+    2186293200
+  ],
+  "Organização Agrária": [
+    0,
+    0,
+    0
+  ],
+  "Reforma Agrária": [
+    0,
+    0,
+    0
+  ],
+  "Colonização": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 21": [
+    0,
+    0,
+    0
+  ],
+  "Indústria": [
+    0,
+    0,
+    0
+  ],
+  "Promoção Industrial": [
+    0,
+    0,
+    0
+  ],
+  "Produção Industrial": [
+    0,
+    0,
+    0
+  ],
+  "Mineração": [
+    0,
+    0,
+    0
+  ],
+  "Propriedade Industrial": [
+    0,
+    0,
+    0
+  ],
+  "Normalização e Qualidade": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 22": [
+    0,
+    0,
+    0
+  ],
+  "Comércio e Serviços": [
+    264762568600,
+    0,
+    0
+  ],
+  "Promoção Comercial": [
+    0,
+    0,
+    0
+  ],
+  "Comercialização": [
+    0,
+    0,
+    0
+  ],
+  "Comércio Exterior": [
+    0,
+    0,
+    0
+  ],
+  "Serviços Financeiros": [
+    6500000000,
+    0,
+    0
+  ],
+  "Turismo": [
+    258262568600,
+    0,
+    0
+  ],
+  "Demais Subfunções 23": [
+    0,
+    0,
+    0
+  ],
+  "Comunicações": [
+    343505806000,
+    0,
+    0
+  ],
+  "Comunicações Postais": [
+    0,
+    0,
+    0
+  ],
+  "Telecomunicações": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 24": [
+    343505806000,
+    0,
+    0
+  ],
+  "Energia": [
+    1554355290000,
+    0,
+    0
+  ],
+  "Conservação de Energia": [
+    0,
+    0,
+    0
+  ],
+  "Energia Elétrica": [
+    1554355290000,
+    0,
+    0
+  ],
+  "Petróleo": [
+    0,
+    0,
+    0
+  ],
+  "Álcool": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 25": [
+    0,
+    0,
+    0
+  ],
+  "Transporte": [
+    13160787880000,
+    7824490300,
+    15505610000
+  ],
+  "Transporte Aéreo": [
+    0,
+    0,
+    0
+  ],
+  "Transporte Rodoviário": [
+    4152164668000,
+    7824490300,
+    11811110000
+  ],
+  "Transporte Ferroviário": [
+    0,
+    0,
+    0
+  ],
+  "Transporte Hidroviário": [
+    0,
+    0,
+    0
+  ],
+  "Transportes Especiais": [
+    0,
+    0,
+    0
+  ],
+  "Demais Subfunções 26": [
+    9008623210000,
+    0,
+    3694500000
+  ],
+  "Desporto e Lazer": [
+    834419377200,
+    2083946400,
+    0
+  ],
+  "Desporto de Rendimento": [
+    0,
+    0,
+    0
+  ],
+  "Desporto Comunitário": [
+    315256247700,
+    2083946400,
+    0
+  ],
+  "Lazer": [
+    317571057300,
+    0,
+    0
+  ],
+  "Demais Subfunções 27": [
+    201592072200,
+    0,
+    0
+  ],
+  "Encargos Especiais": [
+    23153040720000,
+    541208000,
+    0
+  ],
+  "Refinanciamento da Dívida Interna": [
+    13668518500000,
+    0,
+    0
+  ],
+  "Refinanciamento da Dívida Externa": [
+    0,
+    0,
+    0
+  ],
+  "Serviço da Dívida Interna": [
+    3809052738000,
+    541208000,
+    0
+  ],
+  "Serviço da Dívida Externa": [
+    1304573018000,
+    0,
+    0
+  ],
+  "Transferências": [
+    0,
+    0,
+    0
+  ],
+  "Outros Encargos Especiais": [
+    678540900,
+    0,
+    0
+  ],
+  "Demais Subfunções 28": [
+    4370217925000,
+    0,
+    0
+  ]
+}
