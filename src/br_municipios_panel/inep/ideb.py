@@ -1,0 +1,114 @@
+import pandas as pd
+import polars as pl
+from pathlib import Path
+import re
+from typing import Union
+
+def _encontrar_linha_cabecalho(caminho: Path) -> int:
+    """Encontra a linha de cabeçalho varrendo as primeiras 20 linhas."""
+    df_head = pd.read_excel(caminho, nrows=20, header=None)
+    for i, row in df_head.iterrows():
+        if "SG_UF" in row.values:
+            return i
+    raise ValueError(f"Cabeçalho não encontrado em {caminho}")
+
+def _ler_planilha(caminho: Path, etapa_sufixo: str, valid_municipios: set) -> pl.DataFrame:
+    linha_cab = _encontrar_linha_cabecalho(caminho)
+    # Ler com o cabeçalho correto, dtype=str previne inferência mista e conversões indevidas
+    df_pd = pd.read_excel(caminho, header=linha_cab, dtype=str)
+    df = pl.from_pandas(df_pd)
+    
+    colunas_obrigatorias = ["CO_MUNICIPIO", "REDE"]
+    for col in colunas_obrigatorias:
+        if col not in df.columns:
+            raise ValueError(f"Coluna {col} ausente em {caminho}")
+            
+    df = df.filter(pl.col("REDE").is_not_null() & pl.col("CO_MUNICIPIO").is_not_null())
+    df = df.with_columns(pl.col("REDE").cast(pl.Utf8).str.strip_chars())
+    df = df.filter(pl.col("REDE") == "Pública")
+    if df.height == 0:
+        raise ValueError(f"Rede 'Pública' não encontrada em {caminho}")
+        
+    df = df.with_columns(pl.col("CO_MUNICIPIO").str.strip_chars())
+        
+    codigos_invalidos = df.filter(~pl.col("CO_MUNICIPIO").is_in(valid_municipios))
+    if codigos_invalidos.height > 0:
+        raise ValueError(f"Existem códigos fora do cadastro municipal em {caminho}")
+        
+    colunas_obs = [c for c in df.columns if re.match(r"^VL_OBSERVADO_\d{4}$", c)]
+    if not colunas_obs:
+        raise ValueError(f"Nenhuma coluna VL_OBSERVADO_AAAA encontrada em {caminho}")
+        
+    df_sel = df.select(["CO_MUNICIPIO"] + colunas_obs)
+    
+    df_long = df_sel.unpivot(
+        index="CO_MUNICIPIO",
+        on=colunas_obs,
+        variable_name="coluna_ano",
+        value_name=f"ideb_{etapa_sufixo}_publica"
+    )
+    
+    df_long = df_long.with_columns(
+        pl.col("coluna_ano").str.replace("VL_OBSERVADO_", "").cast(pl.Int16).alias("ano")
+    ).drop("coluna_ano")
+    
+    val_col = f"ideb_{etapa_sufixo}_publica"
+    # Valores originais '-' e 'ND' falharão no cast(strict=False) e retornarão nulo, o que é o comportamento desejado.
+    # Trocamos vírgula por ponto para evitar que notas sejam lidas como string inválida.
+    df_long = df_long.with_columns(
+        pl.col(val_col).str.strip_chars().str.replace(",", ".").cast(pl.Float64, strict=False)
+    )
+        
+    df_long = df_long.rename({"CO_MUNICIPIO": "cod_municipio"})
+    
+    duplicatas = df_long.group_by(["cod_municipio", "ano"]).len().filter(pl.col("len") > 1)
+    if duplicatas.height > 0:
+        raise ValueError(f"Chave cod_municipio-ano duplicada encontrada em {caminho}")
+    
+    return df_long
+
+def harmonizar(pasta: Union[Path, str], municipios: pl.DataFrame) -> pl.DataFrame:
+    pasta = Path(pasta)
+    valid_municipios = set(municipios["cod_municipio"].to_list())
+    
+    etapas = {
+        "anos_iniciais": "anos_iniciais",
+        "anos_finais": "anos_finais",
+        "ensino_medio": "ensino_medio"
+    }
+    
+    dfs = []
+    for pasta_etapa, sufixo in etapas.items():
+        caminho_dir = pasta / pasta_etapa
+        if not caminho_dir.exists():
+            raise FileNotFoundError(f"Pasta da etapa não encontrada: {caminho_dir}")
+            
+        arquivos_xlsx = list(caminho_dir.rglob("*.xlsx"))
+        if not arquivos_xlsx:
+            raise FileNotFoundError(f"Nenhum .xlsx encontrado para etapa {pasta_etapa}")
+        if len(arquivos_xlsx) > 1:
+            raise ValueError(f"Mais de um arquivo .xlsx encontrado para etapa {pasta_etapa}: {arquivos_xlsx}")
+            
+        caminho_xlsx = arquivos_xlsx[0]
+        df_etapa = _ler_planilha(caminho_xlsx, sufixo, valid_municipios)
+        dfs.append(df_etapa)
+        
+    df_final = dfs[0]
+    for df_next in dfs[1:]:
+        df_final = df_final.join(df_next, on=["cod_municipio", "ano"], how="full", coalesce=True)
+        
+    df_final = df_final.sort(["cod_municipio", "ano"])
+    
+    df_final = df_final.select([
+        "cod_municipio",
+        "ano",
+        "ideb_anos_iniciais_publica",
+        "ideb_anos_finais_publica",
+        "ideb_ensino_medio_publica"
+    ])
+    
+    duplicatas_finais = df_final.group_by(["cod_municipio", "ano"]).len().filter(pl.col("len") > 1)
+    if duplicatas_finais.height > 0:
+        raise ValueError("Chave cod_municipio-ano duplicada encontrada no painel final harmonizado")
+    
+    return df_final
