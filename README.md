@@ -1,9 +1,9 @@
-# br-municipios-panel (Nome Provisório)
+# br-municipios-base (Nome Provisório)
 
-**A Python ETL library and data access tool for the Harmonized Panel of Socioeconomic, Fiscal, Territorial, and Social Protection Indicators for Brazilian Municipalities (2006–2023).**
+**A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, and Social Protection Indicators for Brazilian Municipalities (2006–2023).**
 
 ## Overview
-`br-municipios-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
+`br-municipios-base` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
 By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six tables: two territorial ones and four longitudinal thematic ones (Demographics/Economy/Social, Public Finances, Health, and Education).
 
@@ -22,7 +22,7 @@ You can install the library directly from PyPI (once published) or from the sour
 
 ```bash
 # Recommended via pip
-pip install br-municipios-panel
+pip install br-municipios-base
 ```
 
 ## Quick Start (Usage Example)
