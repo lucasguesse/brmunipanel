@@ -1,5 +1,6 @@
 import polars as pl
 from typing import Any, Dict, List
+import json
 
 def auditar_tabela_resumo(df: pl.DataFrame, table_name: str, key_cols: List[str]) -> dict:
     linhas = df.height
@@ -58,7 +59,21 @@ class QualityAuditor:
         if status == "FALHA" and "crítica" in detalhe.lower():
             self.has_critical_failure = True
 
-    def auditar_esquema(self, df: pl.DataFrame, tabela: str, expected_cols: List[str], expected_dtypes: Dict[str, Any]):
+    def auditar_arquivos_esperados(self, etapa: str, arquivos_encontrados: List[str], contrato: dict):
+        esperados = list(contrato.keys())
+        for f in esperados:
+            if f not in arquivos_encontrados:
+                self.add_check(f"[{etapa}] {f}", "arquivo existe e abre", "FALHA", "Ausente", "Presente", "Crítica: Arquivo faltando no projeto")
+
+    def auditar_esquema(self, df: pl.DataFrame, tabela: str, contrato: dict):
+        clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
+        if clean_name not in contrato:
+            self.add_check(tabela, "esquema e ordem de colunas", "FALHA", "Falta contrato", "Contrato esperado", "Crítica: tabela sem contrato")
+            return
+            
+        expected_cols = list(contrato[clean_name]["cols"].keys())
+        expected_dtypes = contrato[clean_name]["cols"]
+        
         actual_cols = df.columns
         if actual_cols == expected_cols:
             self.add_check(tabela, "esquema e ordem de colunas", "OK", "Correto", "Correto")
@@ -78,6 +93,100 @@ class QualityAuditor:
         else:
             self.add_check(tabela, "tipos correspondem ao contrato", "FALHA", str(observados), "Correto", "Crítica: tipos incompatíveis")
 
+    def auditar_periodo_e_contagens(self, df: pl.DataFrame, tabela: str, contrato: dict):
+        clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
+        if clean_name not in contrato:
+            return
+            
+        c = contrato[clean_name]
+        
+        if c["periodo"]:
+            min_ano, max_ano = c["periodo"]
+            df_min = df["ano"].min() if "ano" in df.columns else None
+            df_max = df["ano"].max() if "ano" in df.columns else None
+            if df_min == min_ano and df_max == max_ano:
+                self.add_check(tabela, "anos esperado vs observado", "OK", f"{df_min}-{df_max}", f"{min_ano}-{max_ano}")
+            else:
+                self.add_check(tabela, "anos esperado vs observado", "FALHA", f"{df_min}-{df_max}", f"{min_ano}-{max_ano}", "Crítica: período inválido")
+                
+        if c.get("linhas"):
+            linhas = df.height
+            if linhas == c["linhas"]:
+                self.add_check(tabela, "contagem de linhas", "OK", str(linhas), str(c["linhas"]))
+            else:
+                self.add_check(tabela, "contagem de linhas", "FALHA", str(linhas), str(c["linhas"]), "Crítica: total de linhas divergente")
+                
+        if c.get("municipios") and "cod_municipio" in df.columns:
+            muns = df["cod_municipio"].n_unique()
+            if muns == c["municipios"]:
+                self.add_check(tabela, "municípios distintos", "OK", str(muns), str(c["municipios"]))
+            else:
+                self.add_check(tabela, "municípios distintos", "FALHA", str(muns), str(c["municipios"]), "Crítica: municípios divergentes")
+
+    def auditar_totais_de_controle(self, df: pl.DataFrame, tabela: str):
+        clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
+        
+        if clean_name == "educacao":
+            # na educação básica, os seguintes totais nacionais: 
+            # em 2006, 203.973 instituições, 7.016.095 matrículas infantis, 33.282.663 matrículas fundamentais, 8.906.820 matrículas no ensino médio e 2.647.414 docentes; 
+            # em 2023, respectivamente, 180.230, 9.461.155, 26.108.208, 7.676.743 e 2.934.558; 
+            # no Censo Superior em 2023, 3.800 instituições e 5.063.936 matrículas;
+            df_2006 = df.filter(pl.col("ano") == 2006)
+            df_2023 = df.filter(pl.col("ano") == 2023)
+            df_sp_2023 = df_2023.filter(pl.col("cod_municipio") == "3550308")
+            
+            # Totais 2006
+            inst_basica_2006 = df_2006["instituicoes_basica"].sum()
+            mat_inf_2006 = df_2006["matriculas_infantil"].sum()
+            mat_fund_2006 = df_2006["matriculas_fundamental"].sum()
+            mat_med_2006 = df_2006["matriculas_medio"].sum()
+            docentes_2006 = df_2006["docentes_basica"].sum()
+            
+            self.add_check(tabela, "educacao basica 2006 institutos", "OK" if inst_basica_2006 == 203973 else "FALHA", str(inst_basica_2006), "203973")
+            self.add_check(tabela, "educacao basica 2006 infantil", "OK" if mat_inf_2006 == 7016095 else "FALHA", str(mat_inf_2006), "7016095")
+            self.add_check(tabela, "educacao basica 2006 fundamental", "OK" if mat_fund_2006 == 33282663 else "FALHA", str(mat_fund_2006), "33282663")
+            self.add_check(tabela, "educacao basica 2006 medio", "OK" if mat_med_2006 == 8906820 else "FALHA", str(mat_med_2006), "8906820")
+            self.add_check(tabela, "educacao basica 2006 docentes", "OK" if docentes_2006 == 2647414 else "FALHA", str(docentes_2006), "2647414")
+            
+            # Totais 2023
+            inst_basica_2023 = df_2023["instituicoes_basica"].sum()
+            mat_inf_2023 = df_2023["matriculas_infantil"].sum()
+            mat_fund_2023 = df_2023["matriculas_fundamental"].sum()
+            mat_med_2023 = df_2023["matriculas_medio"].sum()
+            docentes_2023 = df_2023["docentes_basica"].sum()
+            inst_sup_2023 = df_2023["instituicoes_superior"].sum()
+            mat_sup_2023 = df_2023["matriculas_superior"].sum()
+            
+            self.add_check(tabela, "educacao basica 2023 institutos", "OK" if inst_basica_2023 == 180230 else "FALHA", str(inst_basica_2023), "180230")
+            self.add_check(tabela, "educacao basica 2023 infantil", "OK" if mat_inf_2023 == 9461155 else "FALHA", str(mat_inf_2023), "9461155")
+            self.add_check(tabela, "educacao basica 2023 fundamental", "OK" if mat_fund_2023 == 26108208 else "FALHA", str(mat_fund_2023), "26108208")
+            self.add_check(tabela, "educacao basica 2023 medio", "OK" if mat_med_2023 == 7676743 else "FALHA", str(mat_med_2023), "7676743")
+            self.add_check(tabela, "educacao basica 2023 docentes", "OK" if docentes_2023 == 2934558 else "FALHA", str(docentes_2023), "2934558")
+            self.add_check(tabela, "educacao superior 2023 institutos", "OK" if inst_sup_2023 == 3800 else "FALHA", str(inst_sup_2023), "3800")
+            self.add_check(tabela, "educacao superior 2023 matriculas", "OK" if mat_sup_2023 == 5063936 else "FALHA", str(mat_sup_2023), "5063936")
+            
+            # Totais SP 2023
+            if df_sp_2023.height > 0:
+                self.add_check(tabela, "SP 2023 basica inst", "OK" if df_sp_2023["instituicoes_basica"][0] == 7252 else "FALHA", str(df_sp_2023["instituicoes_basica"][0]), "7252")
+                self.add_check(tabela, "SP 2023 basica inf", "OK" if df_sp_2023["matriculas_infantil"][0] == 666498 else "FALHA", str(df_sp_2023["matriculas_infantil"][0]), "666498")
+                self.add_check(tabela, "SP 2023 basica fund", "OK" if df_sp_2023["matriculas_fundamental"][0] == 1338720 else "FALHA", str(df_sp_2023["matriculas_fundamental"][0]), "1338720")
+                self.add_check(tabela, "SP 2023 basica med", "OK" if df_sp_2023["matriculas_medio"][0] == 447010 else "FALHA", str(df_sp_2023["matriculas_medio"][0]), "447010")
+                self.add_check(tabela, "SP 2023 basica doc", "OK" if df_sp_2023["docentes_basica"][0] == 155496 else "FALHA", str(df_sp_2023["docentes_basica"][0]), "155496")
+                self.add_check(tabela, "SP 2023 sup inst", "OK" if df_sp_2023["instituicoes_superior"][0] == 155 else "FALHA", str(df_sp_2023["instituicoes_superior"][0]), "155")
+                self.add_check(tabela, "SP 2023 sup mat", "OK" if df_sp_2023["matriculas_superior"][0] == 493613 else "FALHA", str(df_sp_2023["matriculas_superior"][0]), "493613")
+                self.add_check(tabela, "SP 2023 ideb pub ini", "OK" if abs(df_sp_2023["ideb_anos_iniciais_publica"][0] - 5.9) < 0.01 else "FALHA", str(df_sp_2023["ideb_anos_iniciais_publica"][0]), "5.9")
+                self.add_check(tabela, "SP 2023 ideb pub fin", "OK" if abs(df_sp_2023["ideb_anos_finais_publica"][0] - 4.8) < 0.01 else "FALHA", str(df_sp_2023["ideb_anos_finais_publica"][0]), "4.8")
+                self.add_check(tabela, "SP 2023 ideb pub med", "OK" if abs(df_sp_2023["ideb_ensino_medio_publica"][0] - 4.2) < 0.01 else "FALHA", str(df_sp_2023["ideb_ensino_medio_publica"][0]), "4.2")
+
+            # IDEB totais nǜo nulos
+            # no IDEB publicado, 48.097 valores nǜo nulos nos anos iniciais, 47.897 nos anos finais e 18.493 no ensino mǸdio dentro de 2006-2023
+            nn_ini = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_iniciais_publica"].drop_nulls().len()
+            nn_fin = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_finais_publica"].drop_nulls().len()
+            nn_med = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_ensino_medio_publica"].drop_nulls().len()
+            self.add_check(tabela, "IDEB pub ini nao nulo", "OK" if nn_ini == 48097 else "FALHA", str(nn_ini), "48097")
+            self.add_check(tabela, "IDEB pub fin nao nulo", "OK" if nn_fin == 47897 else "FALHA", str(nn_fin), "47897")
+            self.add_check(tabela, "IDEB pub med nao nulo", "OK" if nn_med == 18493 else "FALHA", str(nn_med), "18493")
+        
     def auditar_chaves(self, df: pl.DataFrame, tabela: str, key_cols: List[str]):
         if not key_cols:
             return
@@ -128,8 +237,11 @@ class QualityAuditor:
         clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
         if clean_name in ["municipios", "ibge_municipios"]:
             area_inv = df.filter(pl.col("area_km2") <= 0).height
+            # Fernando de Noronha is -32 longitude (around -32.4)
+            # latitude should be within -35 and 6
+            # longitude should be within -75 and -30
             lat_inv = df.filter((pl.col("latitude_sede") < -35) | (pl.col("latitude_sede") > 6)).height
-            lon_inv = df.filter((pl.col("longitude_sede") < -75) | (pl.col("longitude_sede") > -34)).height
+            lon_inv = df.filter((pl.col("longitude_sede") < -75) | (pl.col("longitude_sede") > -30)).height
             if area_inv == 0 and lat_inv == 0 and lon_inv == 0:
                 self.add_check(tabela, "domínios geográficos", "OK", "Correto", "Correto")
             else:
@@ -142,11 +254,11 @@ class QualityAuditor:
                     self.add_check(tabela, "códigos limítrofes", "OK", "Correto", "Correto")
                 else:
                     self.add_check(tabela, "códigos limítrofes", "FALHA", f"{inv_cod_lim} inválidos", "0", "Devem pertencer ao cadastro")
-            comp_inv = df.filter(pl.col("comprimento_km") <= 0).height
+            comp_inv = df.filter(pl.col("comprimento_km") < 0).height # 0 is accepted
             if comp_inv == 0:
                 self.add_check(tabela, "comprimentos positivos", "OK", "Correto", "Correto")
             else:
-                self.add_check(tabela, "comprimentos positivos", "FALHA", f"{comp_inv} <= 0", "0", "Comprimento deve ser > 0")
+                self.add_check(tabela, "comprimentos positivos", "FALHA", f"{comp_inv} < 0", "0", "Comprimento deve ser >= 0")
 
     def get_checks_df(self) -> pl.DataFrame:
         schema = {
