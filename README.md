@@ -5,16 +5,16 @@
 ## Overview
 `br-municipios-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
-By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural panel of 5,571 municipalities. 
+By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six tables: two territorial ones and four longitudinal thematic ones (Demographics/Economy/Social, Public Finances, Health, and Education).
 
 This library is the official scientific protocol and companion codebase to the dataset published in our *Data in Brief* Data Article.
 
 ## Key Features
 - **Fully Reproducible ETL:** Transparent code that downloads raw data directly from official sources (IBGE, Tesouro Nacional/SICONFI, DATASUS, IPEA Data, INEP) and processes it systematically.
 - **Harmonized Joins:** Automatically aligns historical data (2006–2023) against the most recent and stable territorial division grid (DTB 2025).
+- **Thematic Modularity:** Provides six standardized tables. The non-educational longitudinal tables share a complete grid of municipalities and years (can be joined or consumed in isolation). The educational table aggregates micro-data from School Census, Higher Education Census and public school IDEB scores, only storing observed combinations.
 - **Extensive Metadada & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
 - **Highly Performant:** Built with `duckdb` and `polars`/`pyarrow` for blazing fast in-memory analytics of large municipal microdata.
-- **Modular Data Sources:** Access data by domain (e.g., Demographics, Health, Education, Finance) or consume the fully joined consolidated panel.
 
 ## Installation
 
@@ -29,14 +29,6 @@ pip install br-municipios-panel
 
 ```python
 import br_municipios_panel as bmp
-
-# 1. Access the completely consolidated panel (all sources joined)
-panel = bmp.load_consolidated_panel(years=[2010, 2022])
-print(panel.head())
-
-# 2. Or, access specific raw/harmonized data sources on demand:
-# Fetch IBGE population estimates
-pop_df = bmp.ibge.get_population(years=[2023])
 
 # Fetch municipal public finance data from SICONFI
 finance_df = bmp.tesouro.get_siconfi_despesas(years=[2022])
