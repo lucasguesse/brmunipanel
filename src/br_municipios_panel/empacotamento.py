@@ -54,44 +54,44 @@ def montar_pacote_final(
     final_dir = data_dir / "final"
     temp_dir = data_dir / "final_temp"
     backup_dir = data_dir / "final_backup"
-    
+
     quality_checks_path = results_dir / "quality_checks.csv"
     quality_summary_path = results_dir / "quality_summary.csv"
-    
+
     if not validar_auditoria_critica(quality_checks_path):
         raise RuntimeError("A auditoria crítica não está integralmente aprovada.")
-        
+
     if temp_dir.exists():
         shutil.rmtree(temp_dir)
     temp_dir.mkdir(parents=True)
-    
+
     try:
         tabelas_esperadas = [
             "municipios", "demografia_economia_social", "financas_publicas",
             "saude", "municipios_limitrofes", "educacao"
         ]
-        
+
         arquivos_manifesto = []
-        
+
         for tabela in tabelas_esperadas:
             parquet_nome = f"{tabela}.parquet"
             csv_nome = f"{tabela}.csv.gz"
-            
+
             origem = processed_dir / parquet_nome
             if not origem.exists():
                 raise FileNotFoundError(f"Arquivo esperado não encontrado: {origem}")
-            
+
             destino_parquet = temp_dir / parquet_nome
             shutil.copy2(origem, destino_parquet)
-            
+
             destino_csv = temp_dir / csv_nome
             gerar_csv_gz(origem, destino_csv)
-            
+
             df = pl.read_parquet(destino_parquet)
-            
+
             if calcular_sha256(origem) != calcular_sha256(destino_parquet):
                 raise RuntimeError(f"Falha na cópia: {parquet_nome} não é idêntico byte a byte ao original.")
-            
+
             schema_overrides = df.schema
             df_csv = pl.read_csv(destino_csv, null_values=[""], schema_overrides=schema_overrides)
             if not df.equals(df_csv, null_equal=True):
@@ -107,7 +107,7 @@ def montar_pacote_final(
                 "colunas": df.width,
                 "sha256": calcular_sha256(destino_parquet)
             })
-            
+
             arquivos_manifesto.append({
                 "nome": csv_nome,
                 "formato": "csv.gz",
@@ -128,7 +128,7 @@ def montar_pacote_final(
             "tamanho_bytes": dict_destino.stat().st_size,
             "sha256": calcular_sha256(dict_destino)
         })
-        
+
         qsum_destino = temp_dir / "quality_summary.csv"
         shutil.copy2(quality_summary_path, qsum_destino)
         arquivos_manifesto.append({
@@ -146,7 +146,7 @@ def montar_pacote_final(
             "tamanho_bytes": qchk_destino.stat().st_size,
             "sha256": calcular_sha256(qchk_destino)
         })
-        
+
         readme_content = """# Painel de Dados Municipais Brasileiros (2006-2023)
 
 ## Overview
@@ -216,7 +216,7 @@ License: [Pending License]
         with open(datasets_json_path, "r", encoding="utf-8") as f:
             datasets = json.load(f)
         fontes = [{"id": ds["id"], "nome": ds["nome"], "periodo": ds["periodo"]} for ds in datasets]
-        
+
         manifest = {
             "versao_dataset": versao_dataset,
             "data_geracao": data_geracao,
@@ -229,12 +229,12 @@ License: [Pending License]
             "arquivos": arquivos_manifesto,
             "fontes_brutas": fontes
         }
-        
+
         manifest_destino = temp_dir / "manifest.json"
         with open(manifest_destino, "w", encoding="utf-8", newline="\n") as f:
             json.dump(manifest, f, ensure_ascii=False, indent=2)
             f.write("\n")
-            
+
         checksums_destino = temp_dir / "checksums.sha256"
         with open(checksums_destino, "w", encoding="utf-8", newline="\n") as f:
             for am in sorted(arquivos_manifesto + [{"nome": "manifest.json", "sha256": calcular_sha256(manifest_destino)}], key=lambda x: x["nome"]):
@@ -243,7 +243,7 @@ License: [Pending License]
         # Validação Programática do Manifesto
         with open(manifest_destino, "r", encoding="utf-8") as f:
             loaded_manifest = json.load(f)
-            
+
         for am in loaded_manifest["arquivos"]:
             file_path = temp_dir / am["nome"]
             if not file_path.exists():
@@ -260,7 +260,7 @@ License: [Pending License]
                     raise RuntimeError(f"Manifest janela_temporal mismatch for {am['nome']}.")
                 if set(am["chaves"]) != set(TABELAS_METADADOS[tabela]["chaves"]):
                     raise RuntimeError(f"Manifest chaves mismatch for {am['nome']}.")
-                
+
                 # Check lines and columns
                 df = pl.read_parquet(temp_dir / f"{tabela}.parquet")
                 if am["linhas"] != df.height:
@@ -279,7 +279,7 @@ License: [Pending License]
             "manifest.json", "checksums.sha256", "README.md"
         ])
         arquivos_temp = set([p.name for p in temp_dir.iterdir() if p.is_file()])
-        
+
         if arquivos_esperados != arquivos_temp:
             raise RuntimeError(f"Pasta temporária inválida. Faltam: {arquivos_esperados - arquivos_temp}. Sobram: {arquivos_temp - arquivos_esperados}")
 
@@ -289,13 +289,13 @@ License: [Pending License]
                 h_expected, fname = line.strip().split(" *")
                 if calcular_sha256(temp_dir / fname) != h_expected:
                     raise RuntimeError(f"Checksum mismatch for {fname}")
-        
+
         # Atomicidade na troca
         if final_dir.exists():
             if backup_dir.exists():
                 shutil.rmtree(backup_dir)
             shutil.move(str(final_dir), str(backup_dir))
-            
+
         # Simulate move
         try:
             shutil.move(str(temp_dir), str(final_dir))
@@ -303,10 +303,10 @@ License: [Pending License]
             if final_dir.exists():
                 shutil.rmtree(final_dir)
             raise e
-        
+
         if backup_dir.exists():
             shutil.rmtree(backup_dir)
-            
+
     except Exception as e:
         if temp_dir.exists():
             shutil.rmtree(temp_dir)
