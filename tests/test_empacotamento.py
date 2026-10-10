@@ -1,4 +1,4 @@
-﻿import json
+import json
 import os
 import shutil
 import tempfile
@@ -136,10 +136,12 @@ def test_falha_atomica(fake_environment):
     final_dir = data_dir / "final"
     hash_antes = empacotamento.calcular_sha256(final_dir / "municipios.parquet")
     
-    # Simula erro durante a troca substituindo shutil.move por algo que quebra no meio
+    # Simula erro durante a troca substituindo shutil.move por algo que cria parcialmente e quebra no meio
     orig_move = shutil.move
     def move_mock(src, dst):
-        if src.endswith("final_temp") and dst.endswith("final"):
+        if str(src).endswith("final_temp") and str(dst).endswith("final"):
+            # Partial move
+            Path(dst).mkdir(parents=True, exist_ok=True)
             raise OSError("Erro simulado durante a substituição")
         return orig_move(src, dst)
         
@@ -152,3 +154,20 @@ def test_falha_atomica(fake_environment):
     assert empacotamento.calcular_sha256(final_dir / "municipios.parquet") == hash_antes
     assert not (data_dir / "final_backup").exists()
     assert not (data_dir / "final_temp").exists()
+
+def test_manifest_validation_rejects_changes(fake_environment):
+    data_dir, results_dir, dj = fake_environment
+    # Test validation by monkeypatching json.load right when it is called for the programmatic validation
+    
+    orig_json_load = json.load
+    
+    def json_load_mock(f, **kwargs):
+        loaded_manifest = orig_json_load(f, **kwargs)
+        if "arquivos" in loaded_manifest:
+            # Change sha256 to break validation
+            loaded_manifest["arquivos"][0]["sha256"] = "xxx"
+        return loaded_manifest
+        
+    with mock.patch("json.load", side_effect=json_load_mock):
+        with pytest.raises(RuntimeError, match="Manifest sha256 mismatch"):
+            empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)

@@ -1,19 +1,18 @@
-﻿import csv
+import csv
 import gzip
 import hashlib
 import json
 import shutil
 from pathlib import Path
-from typing import Dict, Any
 
 import polars as pl
 
 TABELAS_METADADOS = {
-    "municipios": {"janela_temporal": "2025", "chaves": ["cod_municipio"]},
+    "municipios": {"janela_temporal": "DTB 2025, Área 2025, Coordenadas 2022", "chaves": ["cod_municipio"]},
     "demografia_economia_social": {"janela_temporal": "2006-2023", "chaves": ["cod_municipio", "ano"]},
     "financas_publicas": {"janela_temporal": "2006-2023", "chaves": ["cod_municipio", "ano"]},
     "saude": {"janela_temporal": "2006-2023", "chaves": ["cod_municipio", "ano"]},
-    "municipios_limitrofes": {"janela_temporal": "2024", "chaves": ["cod_municipio", "cod_municipio_vizinho"]},
+    "municipios_limitrofes": {"janela_temporal": "2024", "chaves": ["cod_municipio", "cod_municipio_limitrofe"]},
     "educacao": {"janela_temporal": "2006-2023", "chaves": ["cod_municipio", "ano"]},
 }
 
@@ -90,12 +89,9 @@ def montar_pacote_final(
             
             df = pl.read_parquet(destino_parquet)
             
-            # Validação 1: Igualdade byte a byte do parquet com processed
             if calcular_sha256(origem) != calcular_sha256(destino_parquet):
                 raise RuntimeError(f"Falha na cópia: {parquet_nome} não é idêntico byte a byte ao original.")
             
-            # Validação 2: releitura do CSV e igualdade célula a célula
-            # We use schema from parquet to read the CSV back
             schema_overrides = df.schema
             df_csv = pl.read_csv(destino_csv, null_values=[""], schema_overrides=schema_overrides)
             if not df.equals(df_csv, null_equal=True):
@@ -158,12 +154,20 @@ This dataset provides a harmonized panel of Brazilian municipalities, covering t
 
 ## Files and Formats
 The dataset includes 6 canonical tables, provided in both Parquet (canonical) and compressed CSV (gzip) formats:
-- `municipios`: Territorial base, coordinates, and geographic relationships (Keys: cod_municipio; Period: 2025 division).
+- `municipios`: Territorial base and coordinates (Keys: cod_municipio; Period: DTB 2025, Area 2025, Coordinates 2022).
 - `demografia_economia_social`: Population, GDP, formal employment, and Bolsa Família beneficiaries (Keys: cod_municipio, ano; Period: 2006-2023).
 - `financas_publicas`: Municipal budgetary expenses by function (Keys: cod_municipio, ano; Period: 2006-2023).
 - `saude`: Installed health capacity and basic mortality indicators (Keys: cod_municipio, ano; Period: 2006-2023).
 - `educacao`: Basic and higher education aggregates, including IDEB (Keys: cod_municipio, ano; Period: 2006-2023).
-- `municipios_limitrofes`: Geographic adjacency matrix between municipalities (Keys: cod_municipio, cod_municipio_vizinho; Period: 2024 adjacency).
+- `municipios_limitrofes`: Geographic adjacency matrix between municipalities (Keys: cod_municipio, cod_municipio_limitrofe; Period: 2024 adjacency).
+
+Lines and Columns (Parquet/CSV):
+- `municipios`: 5,571 lines, 12 columns
+- `demografia_economia_social`: 100,278 lines, 11 columns
+- `financas_publicas`: 100,278 lines, 30 columns
+- `saude`: 100,278 lines, 11 columns
+- `educacao`: 100,222 lines, 12 columns
+- `municipios_limitrofes`: 32,952 lines, 3 columns
 
 Files are encoded in UTF-8. CSV files use `,` as delimiter and empty strings for missing (null) values.
 Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the documentation for specific indicators).
@@ -171,13 +175,17 @@ Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the docum
 ## Documentation and Quality
 - `dictionary.csv`: Variable dictionary with data types, descriptions, and source information.
 - `quality_summary.csv` and `quality_checks.csv`: Results of automated quality and consistency checks.
-- `manifest.json` and `checksums.sha256`: Metadata artifacts and SHA-256 integrity checksums. Note: `manifest.json` does not include its own hash inside its arrays to avoid impossible self-reference, but it is covered by `checksums.sha256`.
+- `manifest.json` and `checksums.sha256`: Metadata artifacts and SHA-256 integrity checksums. Note: `manifest.json` and `checksums.sha256` are meta-artifacts.
 
 ## Reproducibility
 This dataset is deterministically generated via the `br_municipios_panel` Python package.
-To reproduce from raw data:
+To reproduce from processed data:
 ```bash
 python scripts/run_pipeline.py --step data --etapa finalizar --dataset_version <version> --date <YYYY-MM-DD>
+```
+To reproduce from raw data:
+```bash
+python scripts/run_pipeline.py --step data --etapa tudo --dataset_version <version> --date <YYYY-MM-DD>
 ```
 Source code repository: [Pending publication]
 
@@ -196,7 +204,7 @@ URL: [Pending DOI/URL]
 License: [Pending License]
 """
         readme_destino = temp_dir / "README.md"
-        with open(readme_destino, "w", encoding="utf-8") as f:
+        with open(readme_destino, "w", encoding="utf-8", newline="\n") as f:
             f.write(readme_content)
         arquivos_manifesto.append({
             "nome": "README.md",
@@ -223,17 +231,43 @@ License: [Pending License]
         }
         
         manifest_destino = temp_dir / "manifest.json"
-        with open(manifest_destino, "w", encoding="utf-8") as f:
+        with open(manifest_destino, "w", encoding="utf-8", newline="\n") as f:
             json.dump(manifest, f, ensure_ascii=False, indent=2)
             f.write("\n")
             
         checksums_destino = temp_dir / "checksums.sha256"
         with open(checksums_destino, "w", encoding="utf-8", newline="\n") as f:
-            # Checksums must cover all 17 other files, including manifest.json and README.md
             for am in sorted(arquivos_manifesto + [{"nome": "manifest.json", "sha256": calcular_sha256(manifest_destino)}], key=lambda x: x["nome"]):
                 f.write(f"{am['sha256']} *{am['nome']}\n")
 
-        # Validação 3: Ausência de arquivos extras
+        # Validação Programática do Manifesto
+        with open(manifest_destino, "r", encoding="utf-8") as f:
+            loaded_manifest = json.load(f)
+            
+        for am in loaded_manifest["arquivos"]:
+            file_path = temp_dir / am["nome"]
+            if not file_path.exists():
+                raise RuntimeError(f"Manifest claims {am['nome']} but it does not exist.")
+            if am["tamanho_bytes"] != file_path.stat().st_size:
+                raise RuntimeError(f"Manifest size mismatch for {am['nome']}.")
+            if am["sha256"] != calcular_sha256(file_path):
+                raise RuntimeError(f"Manifest sha256 mismatch for {am['nome']}.")
+            if am["formato"] not in ["parquet", "csv.gz", "csv", "md"]:
+                raise RuntimeError(f"Manifest unexpected format {am['formato']} for {am['nome']}.")
+            if "janela_temporal" in am:
+                tabela = am["nome"].split(".")[0]
+                if am["janela_temporal"] != TABELAS_METADADOS[tabela]["janela_temporal"]:
+                    raise RuntimeError(f"Manifest janela_temporal mismatch for {am['nome']}.")
+                if set(am["chaves"]) != set(TABELAS_METADADOS[tabela]["chaves"]):
+                    raise RuntimeError(f"Manifest chaves mismatch for {am['nome']}.")
+                
+                # Check lines and columns
+                df = pl.read_parquet(temp_dir / f"{tabela}.parquet")
+                if am["linhas"] != df.height:
+                    raise RuntimeError(f"Manifest linhas mismatch for {am['nome']}.")
+                if am["colunas"] != df.width:
+                    raise RuntimeError(f"Manifest colunas mismatch for {am['nome']}.")
+
         arquivos_esperados = set([
             "municipios.parquet", "municipios.csv.gz",
             "demografia_economia_social.parquet", "demografia_economia_social.csv.gz",
@@ -249,7 +283,6 @@ License: [Pending License]
         if arquivos_esperados != arquivos_temp:
             raise RuntimeError(f"Pasta temporária inválida. Faltam: {arquivos_esperados - arquivos_temp}. Sobram: {arquivos_temp - arquivos_esperados}")
 
-        # Validação 4: Coerência do manifesto e checksums
         with open(checksums_destino, "r", encoding="utf-8") as f:
             for line in f:
                 if not line.strip(): continue
@@ -262,8 +295,14 @@ License: [Pending License]
             if backup_dir.exists():
                 shutil.rmtree(backup_dir)
             shutil.move(str(final_dir), str(backup_dir))
-        
-        shutil.move(str(temp_dir), str(final_dir))
+            
+        # Simulate move
+        try:
+            shutil.move(str(temp_dir), str(final_dir))
+        except Exception as e:
+            if final_dir.exists():
+                shutil.rmtree(final_dir)
+            raise e
         
         if backup_dir.exists():
             shutil.rmtree(backup_dir)
@@ -272,8 +311,7 @@ License: [Pending License]
         if temp_dir.exists():
             shutil.rmtree(temp_dir)
         if backup_dir.exists():
-            # Restaurar backup se falhou após mover para backup
-            if not final_dir.exists():
-                shutil.move(str(backup_dir), str(final_dir))
+            if final_dir.exists():
+                shutil.rmtree(final_dir)
+            shutil.move(str(backup_dir), str(final_dir))
         raise e
-
