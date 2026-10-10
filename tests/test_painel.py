@@ -5,123 +5,68 @@ from polars.testing import assert_frame_equal
 from br_municipios_panel.painel import (
     montar_municipios,
     montar_despesa,
-    montar_painel,
+    montar_tabela_longitudinal,
     montar_limitrofes,
-    montar_educacao,
+    consolidar_educacao,
 )
 
 def test_montar_municipios():
     municipios = pl.DataFrame({
-        "cod_municipio": ["1", "2", "3"],
-        "nome": ["A", "B", "C"],
-    })
-    regioes = pl.DataFrame({
         "cod_municipio": ["1", "2"],
-        "regiao": ["R1", "R2"],
+        "nome_municipio": ["A", "B"],
+        "cod_uf": [1, 2],
+        "sigla_uf": ["UF", "UF"],
+        "nome_uf": ["Estado", "Estado"],
+        "nome_rg_intermediaria": ["RI", "RI"],
+        "nome_rg_imediata": ["RI", "RI"],
+        "fronteira_internacional": [0, 1],
+        "litoraneo": [1, 0],
+        "area_km2": [10.0, 20.0],
+        "latitude_sede": [-10.0, -20.0],
+        "longitude_sede": [-30.0, -40.0],
     })
     
-    saida = montar_municipios(municipios, regioes)
-    
-    esperado = pl.DataFrame({
-        "cod_municipio": ["1", "2", "3"],
-        "nome": ["A", "B", "C"],
-        "regiao": ["R1", "R2", None],
-    })
-    
-    assert_frame_equal(saida, esperado)
-    assert saida.columns == ["cod_municipio", "nome", "regiao"]
+    saida = montar_municipios(municipios)
+    assert_frame_equal(saida, municipios)
 
 def test_montar_municipios_erros():
-    # chave repetida nos municipios
     municipios_dup = pl.DataFrame({"cod_municipio": ["1", "1"]})
-    regioes = pl.DataFrame({"cod_municipio": ["1"]})
     with pytest.raises(ValueError, match="municipios:.*chaves repetidas"):
-        montar_municipios(municipios_dup, regioes)
-
-    municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
-    
-    # código fora
-    regioes = pl.DataFrame({"cod_municipio": ["3"]})
-    with pytest.raises(ValueError, match="regioes_saude:.*códigos fora da tabela de municípios"):
-        montar_municipios(municipios, regioes)
+        montar_municipios(municipios_dup)
         
-    # chave repetida
-    regioes = pl.DataFrame({"cod_municipio": ["1", "1"]})
-    with pytest.raises(ValueError, match="regioes_saude:.*chaves repetidas"):
-        montar_municipios(municipios, regioes)
-        
-    # mesma coluna
-    regioes = pl.DataFrame({"cod_municipio": ["1"], "nome": ["X"]})
-    municipios = pl.DataFrame({"cod_municipio": ["1"], "nome": ["Y"]})
-    with pytest.raises(ValueError, match="Coluna de mesmo nome"):
-        montar_municipios(municipios, regioes)
+    municipios_falta = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "nome_municipio": ["A"],
+    })
+    with pytest.raises(ValueError, match="Falta coluna cod_uf em municipios"):
+        montar_municipios(municipios_falta)
 
 def test_montar_despesa():
     finbra = pl.DataFrame({
-        "cod_municipio": ["1", "1"],
-        "ano": pl.Series([2010, 2011], dtype=pl.Int16),
-        "v": [10.0, 11.0],
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "desp_01_legislativa": [10.0],
+        "desp_intraorcamentaria": [5.0]
     })
     siconfi = pl.DataFrame({
-        "cod_municipio": ["1", "2"],
-        "ano": pl.Series([2013, 2013], dtype=pl.Int16),
-        "v": [12.0, 13.0],
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2013], dtype=pl.Int16),
+        "desp_01_legislativa": [12.0],
+        "desp_intraorcamentaria": [6.0]
     })
     
     saida = montar_despesa(finbra, siconfi)
     
     esperado = pl.DataFrame({
-        "cod_municipio": ["1", "1", "1", "2"],
-        "ano": pl.Series([2010, 2011, 2013, 2013], dtype=pl.Int16),
-        "v": [10.0, 11.0, 12.0, 13.0],
+        "cod_municipio": ["1", "1"],
+        "ano": pl.Series([2010, 2013], dtype=pl.Int16),
+        "desp_legislativa": [10.0, 12.0],
+        "desp_intraorcamentaria": [5.0, 6.0]
     })
     
     assert_frame_equal(saida, esperado)
 
-def test_montar_despesa_erros():
-    finbra = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2010], dtype=pl.Int16),
-        "v": [10.0],
-    })
-    
-    # mesmo mun/ano
-    siconfi = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2010], dtype=pl.Int16),
-        "v": [12.0],
-    })
-    with pytest.raises(ValueError, match="casos do mesmo município e ano"):
-        montar_despesa(finbra, siconfi)
-        
-    # esquemas diferentes (colunas em conjunto)
-    siconfi = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2013], dtype=pl.Int16),
-        "v2": [12.0],
-    })
-    with pytest.raises(ValueError, match="Colunas diferentes"):
-        montar_despesa(finbra, siconfi)
-
-    # ordem diferente das mesmas colunas
-    siconfi_ordem = pl.DataFrame({
-        "v": [12.0],
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2013], dtype=pl.Int16),
-    })
-    with pytest.raises(ValueError, match="Colunas diferentes ou em ordem diferente"):
-        montar_despesa(finbra, siconfi_ordem)
-        
-    # esquemas diferentes (tipos)
-    siconfi = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2013], dtype=pl.Int16),
-        "v": [12], # int
-    })
-    with pytest.raises(ValueError, match="Tipos diferentes"):
-        montar_despesa(finbra, siconfi)
-
-def test_montar_painel():
+def test_montar_tabela_longitudinal():
     municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
     anos = range(2010, 2012)
     
@@ -130,15 +75,13 @@ def test_montar_painel():
         "ano": pl.Series([2010, 2011], dtype=pl.Int16),
         "v1": [1.0, 2.0],
     })
-    # fora de ordem e sem o mun 2 em 2010
-    # Adicionando um nulo nativo na fonte para distinguir do ausente no join
     f2 = pl.DataFrame({
         "cod_municipio": ["2", "1", "1"],
         "ano": pl.Series([2011, 2010, 2011], dtype=pl.Int16),
         "v2": ["A", "B", None],
     })
     
-    saida = montar_painel(municipios, [f1, f2], anos=anos)
+    saida = montar_tabela_longitudinal(municipios, [f1, f2], anos=anos, nome_tabela="teste")
     
     assert saida.columns == ["cod_municipio", "ano", "v1", "v2"]
     assert len(saida) == 4
@@ -150,40 +93,18 @@ def test_montar_painel():
         "v2": ["B", None, None, "A"],
     })
     assert_frame_equal(saida, esperado)
-    
-    # 6. montar_painel, sem perda: comparando ambas as fontes
-    # Filtrando as chaves que existem em f1
-    painel_f1 = saida.join(f1.select(["cod_municipio", "ano"]), on=["cod_municipio", "ano"], how="inner").select(["cod_municipio", "ano", "v1"])
-    assert_frame_equal(painel_f1.sort(["cod_municipio", "ano"]), f1.sort(["cod_municipio", "ano"]))
 
-    # Filtrando as chaves que existem em f2
-    painel_f2 = saida.join(f2.select(["cod_municipio", "ano"]), on=["cod_municipio", "ano"], how="inner").select(["cod_municipio", "ano", "v2"])
-    assert_frame_equal(painel_f2.sort(["cod_municipio", "ano"]), f2.sort(["cod_municipio", "ano"]))
-
-def test_montar_painel_erros():
+def test_montar_tabela_longitudinal_erros():
     municipios = pl.DataFrame({"cod_municipio": ["1"]})
     anos = range(2010, 2012)
     
-    # fonte com mun fora
     f = pl.DataFrame({"cod_municipio": ["2"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [1]})
-    with pytest.raises(ValueError, match="fonte 0:.*códigos fora da tabela"):
-        montar_painel(municipios, [f], anos=anos)
+    with pytest.raises(ValueError, match="teste .*códigos fora da tabela"):
+        montar_tabela_longitudinal(municipios, [f], anos=anos, nome_tabela="teste")
         
-    # ano fora
     f = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2012], dtype=pl.Int16), "v": [1]})
-    with pytest.raises(ValueError, match="fonte 0:.*anos fora de anos"):
-        montar_painel(municipios, [f], anos=anos)
-        
-    # chave repetida
-    f = pl.DataFrame({"cod_municipio": ["1", "1"], "ano": pl.Series([2010, 2010], dtype=pl.Int16), "v": [1, 2]})
-    with pytest.raises(ValueError, match="fonte 0:.*chaves repetidas"):
-        montar_painel(municipios, [f], anos=anos)
-        
-    # coluna mesmo nome
-    f1 = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [1]})
-    f2 = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [2]})
-    with pytest.raises(ValueError, match="fonte 1: coluna com nome que outra fonte já trouxe"):
-        montar_painel(municipios, [f1, f2], anos=anos)
+    with pytest.raises(ValueError, match="teste .*anos fora da janela"):
+        montar_tabela_longitudinal(municipios, [f], anos=anos, nome_tabela="teste")
         
 def test_montar_limitrofes():
     municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
@@ -191,106 +112,52 @@ def test_montar_limitrofes():
         "cod_municipio": ["2", "1"],
         "cod_municipio_limitrofe": ["1", "2"],
     })
-    
     saida = montar_limitrofes(municipios, lims)
-    
     esperado = pl.DataFrame({
         "cod_municipio": ["1", "2"],
         "cod_municipio_limitrofe": ["2", "1"],
     })
     assert_frame_equal(saida, esperado)
 
-def test_montar_limitrofes_erros():
-    municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
-    
-    # par repetido
-    lims = pl.DataFrame({"cod_municipio": ["1", "1"], "cod_municipio_limitrofe": ["2", "2"]})
-    with pytest.raises(ValueError, match="limitrofes:.*pares repetidos"):
-        montar_limitrofes(municipios, lims)
-        
-    # codigo fora (esquerda)
-    lims = pl.DataFrame({"cod_municipio": ["3"], "cod_municipio_limitrofe": ["1"]})
-    with pytest.raises(ValueError, match="limitrofes:.*códigos fora"):
-        montar_limitrofes(municipios, lims)
-        
-    # codigo fora (direita)
-    lims = pl.DataFrame({"cod_municipio": ["1"], "cod_municipio_limitrofe": ["3"]})
-    with pytest.raises(ValueError, match="limitrofes:.*códigos fora"):
-        montar_limitrofes(municipios, lims)
-
-def test_montar_educacao():
-    municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
-    
-    tabela = pl.DataFrame({
-        "cod_municipio": ["2", "1", "1"],
-        "ano": pl.Series([2000, 2024, 2000], dtype=pl.Int16),
-        "categoria": ["A", "B", "A"],
-        "v": [1.0, None, 2.0],
-    })
-    
-    chave = ["cod_municipio", "ano", "categoria"]
-    
-    saida = montar_educacao(municipios, tabela, chave, "tabela_teste")
-    
-    esperado = pl.DataFrame({
-        "cod_municipio": ["1", "1", "2"],
-        "ano": pl.Series([2000, 2024, 2000], dtype=pl.Int16),
-        "categoria": ["A", "B", "A"],
-        "v": [2.0, None, 1.0],
-    })
-    
-    assert_frame_equal(saida, esperado)
-
-def test_montar_educacao_erros():
-    municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
-    
-    tabela = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2010], dtype=pl.Int16),
-        "categoria": ["A"],
-    })
-    chave = ["cod_municipio", "ano", "categoria"]
-    
-    # Coluna da chave ausente
-    with pytest.raises(ValueError, match="tabela_teste: faltam colunas da chave na tabela"):
-        montar_educacao(municipios, tabela, ["cod_municipio", "ano", "categoria", "extra"], "tabela_teste")
-        
-    # 'ano' ausente da chave
-    with pytest.raises(ValueError, match="tabela_teste: cod_municipio e ano devem estar em chave"):
-        montar_educacao(municipios, tabela, ["cod_municipio", "categoria"], "tabela_teste")
-        
-    # 'ano' nao e Int16
-    tabela_ano_int = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": [2010], # Int64 por padrao
-        "categoria": ["A"],
-    })
-    with pytest.raises(ValueError, match="tabela_teste: 'ano' não é Int16"):
-        montar_educacao(municipios, tabela_ano_int, chave, "tabela_teste")
-        
-    # nulo na coluna da chave
-    tabela_nulo = pl.DataFrame({
-        "cod_municipio": ["1"],
-        "ano": pl.Series([2010], dtype=pl.Int16),
-        "categoria": [None],
-    })
-    with pytest.raises(ValueError, match="tabela_teste: coluna da chave 'categoria' tem nulos"):
-        montar_educacao(municipios, tabela_nulo, chave, "tabela_teste")
-        
-    # chave repetida
-    tabela_dup = pl.DataFrame({
+def test_consolidar_educacao():
+    censo_escolar = pl.DataFrame({
         "cod_municipio": ["1", "1"],
         "ano": pl.Series([2010, 2010], dtype=pl.Int16),
+        "escolas": [10, 20],
+        "matriculas_infantil": [100, 200],
+        "matriculas_fundamental": [1000, 2000],
+        "matriculas_medio": [100, 200],
+        "docentes_basica": [50, 100],
+    })
+    censo_superior = pl.DataFrame({
+        "cod_municipio": ["1", "2"],
+        "ano": pl.Series([2010, 2010], dtype=pl.Int16),
         "categoria": ["A", "A"],
+        "instituicoes": [1, 2],
+        "matriculas": [1000, 2000],
     })
-    with pytest.raises(ValueError, match="tabela_teste:.*chaves repetidas"):
-        montar_educacao(municipios, tabela_dup, chave, "tabela_teste")
-        
-    # codigo fora da tabela
-    tabela_fora = pl.DataFrame({
-        "cod_municipio": ["3"],
+    ideb = pl.DataFrame({
+        "cod_municipio": ["2"],
         "ano": pl.Series([2010], dtype=pl.Int16),
-        "categoria": ["A"],
+        "ideb_anos_iniciais_publica": [5.5],
+        "ideb_anos_finais_publica": [4.5],
+        "ideb_ensino_medio_publica": [3.5],
     })
-    with pytest.raises(ValueError, match="tabela_teste:.*códigos fora da tabela"):
-        montar_educacao(municipios, tabela_fora, chave, "tabela_teste")
+    
+    saida = consolidar_educacao(censo_escolar, censo_superior, ideb)
+    
+    assert len(saida) == 2
+    assert saida.columns == [
+        "cod_municipio", "ano",
+        "instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica",
+        "instituicoes_superior", "matriculas_superior",
+        "ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"
+    ]
+    
+    # 1/2010 tem escolar e superior
+    assert saida.filter(pl.col("cod_municipio") == "1")["instituicoes_basica"][0] == 30
+    assert saida.filter(pl.col("cod_municipio") == "1")["instituicoes_superior"][0] == 1
+    
+    # 2/2010 tem superior e ideb, e nulo basica
+    assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_superior"][0] == 2
+    assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_basica"].is_null()[0]

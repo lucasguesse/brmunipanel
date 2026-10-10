@@ -1,8 +1,8 @@
-"""Consolidação da base em cinco tabelas.
+"""Consolidação da base em seis tabelas.
 
-A base consolidada tem cinco tabelas: a central de municípios, o painel com as séries
-por município e ano (onde a consolidação junta as fontes), a tabela
-de municípios limítrofes, e as duas de educação, que entram como vieram da harmonização.
+A base consolidada tem seis tabelas: a central de municípios, três tabelas longitudinais
+temáticas (demografia_economia_social, financas_publicas, saude), a tabela de 
+municipios_limitrofes, e a tabela de educacao.
 Nenhuma função aqui preenche nulo, tira linha, altera valor nem calcula coluna derivada.
 """
 
@@ -11,29 +11,26 @@ import polars as pl
 
 ANOS_PAINEL = tuple(range(2006, 2024))
 
-def montar_municipios(municipios: pl.DataFrame, regioes_saude: pl.DataFrame) -> pl.DataFrame:
-    if "cod_municipio" not in municipios.columns or "cod_municipio" not in regioes_saude.columns:
+def montar_municipios(municipios: pl.DataFrame) -> pl.DataFrame:
+    if "cod_municipio" not in municipios.columns:
         raise ValueError("Falta cod_municipio")
     
     dups_mun = municipios.filter(municipios["cod_municipio"].is_duplicated())["cod_municipio"]
     if not dups_mun.is_empty():
         raise ValueError(f"municipios: {dups_mun.n_unique()} chaves repetidas. Exemplos: {dups_mun.head(3).to_list()}")
         
-    dups_reg = regioes_saude.filter(regioes_saude["cod_municipio"].is_duplicated())["cod_municipio"]
-    if not dups_reg.is_empty():
-        raise ValueError(f"regioes_saude: {dups_reg.n_unique()} chaves repetidas. Exemplos: {dups_reg.head(3).to_list()}")
-        
-    codigos_validos = set(municipios["cod_municipio"])
-    invalidos = [c for c in regioes_saude["cod_municipio"] if c not in codigos_validos]
-    if invalidos:
-        raise ValueError(f"regioes_saude: {len(invalidos)} códigos fora da tabela de municípios. Exemplos: {invalidos[:3]}")
+    cols = [
+        "cod_municipio", "nome_municipio", "cod_uf", "sigla_uf", "nome_uf",
+        "nome_rg_intermediaria", "nome_rg_imediata", "fronteira_internacional",
+        "litoraneo", "area_km2", "latitude_sede", "longitude_sede"
+    ]
+    for c in cols:
+        if c not in municipios.columns:
+            raise ValueError(f"Falta coluna {c} em municipios")
+            
+    return municipios.select(cols).sort("cod_municipio")
 
-    colunas_comuns = set(municipios.columns) & set(regioes_saude.columns) - {"cod_municipio"}
-    if colunas_comuns:
-        raise ValueError(f"Coluna de mesmo nome nas duas tabelas além da chave: {colunas_comuns}")
-        
-    saida = municipios.join(regioes_saude, on="cod_municipio", how="left")
-    return saida.sort("cod_municipio")
+import re
 
 def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
     if list(finbra.columns) != list(siconfi.columns):
@@ -50,9 +47,17 @@ def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
         raise ValueError(f"{len(inter)} casos do mesmo município e ano nas duas tabelas. Exemplos: {list(inter)[:3]}")
         
     saida = pl.concat([finbra, siconfi])
-    return saida.sort(["cod_municipio", "ano"])
+    
+    # Renomear desp_XX_nome para desp_nome
+    rename_map = {}
+    for c in saida.columns:
+        m = re.match(r"desp_\d{2}_(.*)", c)
+        if m:
+            rename_map[c] = f"desp_{m.group(1)}"
+            
+    return saida.rename(rename_map).sort(["cod_municipio", "ano"])
 
-def montar_painel(municipios: pl.DataFrame, fontes: list[pl.DataFrame], anos: Sequence[int] = ANOS_PAINEL) -> pl.DataFrame:
+def montar_tabela_longitudinal(municipios: pl.DataFrame, fontes: list[pl.DataFrame], anos: Sequence[int] = ANOS_PAINEL, nome_tabela: str = "tabela_longitudinal") -> pl.DataFrame:
     codigos_validos = set(municipios["cod_municipio"])
     
     # Grade de municipios e anos
@@ -66,24 +71,24 @@ def montar_painel(municipios: pl.DataFrame, fontes: list[pl.DataFrame], anos: Se
     
     for i, fonte in enumerate(fontes):
         if "ano" not in fonte.columns or fonte["ano"].dtype != pl.Int16:
-            raise ValueError(f"fonte {i}: 'ano' não é Int16 ou está ausente")
+            raise ValueError(f"{nome_tabela} (fonte {i}): 'ano' não é Int16 ou está ausente")
             
         dups = fonte.filter(fonte.select(["cod_municipio", "ano"]).is_duplicated())
         if not dups.is_empty():
-            raise ValueError(f"fonte {i}: {dups.select(['cod_municipio', 'ano']).n_unique()} chaves repetidas. Exemplos: {dups.head(3).to_dicts()}")
+            raise ValueError(f"{nome_tabela} (fonte {i}): {dups.select(['cod_municipio', 'ano']).n_unique()} chaves repetidas. Exemplos: {dups.head(3).to_dicts()}")
             
         invalidos = [c for c in set(fonte["cod_municipio"]) if c not in codigos_validos]
         if invalidos:
-            raise ValueError(f"fonte {i}: {len(invalidos)} códigos fora da tabela de municípios. Exemplos: {invalidos[:3]}")
+            raise ValueError(f"{nome_tabela} (fonte {i}): {len(invalidos)} códigos fora da tabela de municípios. Exemplos: {invalidos[:3]}")
             
         anos_invalidos = [a for a in set(fonte["ano"]) if a not in anos]
         if anos_invalidos:
-            raise ValueError(f"fonte {i}: {len(anos_invalidos)} anos fora de anos. Exemplos: {anos_invalidos[:3]}")
+            raise ValueError(f"{nome_tabela} (fonte {i}): {len(anos_invalidos)} anos fora da janela permitida. Exemplos: {anos_invalidos[:3]}")
             
         novas = set(fonte.columns) - {"cod_municipio", "ano"}
         inter = novas & colunas_vistas
         if inter:
-            raise ValueError(f"fonte {i}: coluna com nome que outra fonte já trouxe: {inter}")
+            raise ValueError(f"{nome_tabela} (fonte {i}): coluna com nome que outra fonte já trouxe: {inter}")
             
         saida = saida.join(fonte, on=["cod_municipio", "ano"], how="left")
         colunas_vistas.update(novas)
@@ -102,28 +107,61 @@ def montar_limitrofes(municipios: pl.DataFrame, limitrofes: pl.DataFrame) -> pl.
         
     return limitrofes.sort(["cod_municipio", "cod_municipio_limitrofe"])
 
-def montar_educacao(municipios: pl.DataFrame, tabela: pl.DataFrame, chave: Sequence[str], nome: str) -> pl.DataFrame:
-    colunas_ausentes = [c for c in chave if c not in tabela.columns]
-    if colunas_ausentes:
-        raise ValueError(f"{nome}: faltam colunas da chave na tabela: {colunas_ausentes}")
+def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFrame, ideb: pl.DataFrame) -> pl.DataFrame:
+    # Censo Escolar
+    escolar_cols = ["cod_municipio", "ano", "escolas", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]
+    for c in escolar_cols:
+        if c not in censo_escolar.columns:
+            raise ValueError(f"Falta coluna {c} em censo_escolar")
+    escolar = censo_escolar.select(escolar_cols).group_by(["cod_municipio", "ano"]).sum().rename({"escolas": "instituicoes_basica"})
+    for c in ["instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]:
+        escolar = escolar.with_columns(pl.col(c).cast(pl.Int64))
         
-    if "cod_municipio" not in chave or "ano" not in chave:
-        raise ValueError(f"{nome}: cod_municipio e ano devem estar em chave")
-        
-    if tabela["ano"].dtype != pl.Int16:
-        raise ValueError(f"{nome}: 'ano' não é Int16")
-        
-    for c in chave:
-        if tabela[c].null_count() > 0:
-            raise ValueError(f"{nome}: coluna da chave '{c}' tem nulos")
-            
-    dups = tabela.filter(tabela.select(chave).is_duplicated())
+    # Censo Superior
+    superior_cols = ["cod_municipio", "ano", "categoria", "instituicoes", "matriculas"]
+    for c in superior_cols:
+        if c not in censo_superior.columns:
+            raise ValueError(f"Falta coluna {c} em censo_superior")
+    superior = censo_superior.select(superior_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
+    superior = superior.select(["cod_municipio", "ano", "instituicoes", "matriculas"]).group_by(["cod_municipio", "ano"]).sum().rename({"instituicoes": "instituicoes_superior", "matriculas": "matriculas_superior"})
+    for c in ["instituicoes_superior", "matriculas_superior"]:
+        superior = superior.with_columns(pl.col(c).cast(pl.Int64))
+
+    # IDEB
+    ideb_cols = ["cod_municipio", "ano", "ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"]
+    for c in ideb_cols:
+        if c not in ideb.columns:
+            raise ValueError(f"Falta coluna {c} em ideb")
+    ideb_filtrado = ideb.select(ideb_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
+    
+    # Drop rows where all three IDEB measures are null
+    ideb_filtrado = ideb_filtrado.filter(
+        pl.col("ideb_anos_iniciais_publica").is_not_null() |
+        pl.col("ideb_anos_finais_publica").is_not_null() |
+        pl.col("ideb_ensino_medio_publica").is_not_null()
+    )
+
+    for c in ["ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"]:
+        ideb_filtrado = ideb_filtrado.with_columns(pl.col(c).cast(pl.Float64))
+        nulos = ideb_filtrado.filter((pl.col(c).is_not_null()) & ((pl.col(c) < 0.0) | (pl.col(c) > 10.0)))
+        if not nulos.is_empty():
+            raise ValueError(f"ideb: valores fora de 0-10 em {c}")
+
+    # Join
+    saida = escolar.join(superior, on=["cod_municipio", "ano"], how="full", coalesce=True)
+    saida = saida.join(ideb_filtrado, on=["cod_municipio", "ano"], how="full", coalesce=True)
+    
+    # Validations
+    if saida.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+        raise ValueError("Chaves nulas na tabela de educação consolidad")
+    dups = saida.filter(saida.select(["cod_municipio", "ano"]).is_duplicated())
     if not dups.is_empty():
-        raise ValueError(f"{nome}: {dups.select(chave).n_unique()} chaves repetidas. Exemplos: {dups.head(3).to_dicts()}")
+        raise ValueError(f"educacao: chaves duplicadas")
         
-    codigos_validos = set(municipios["cod_municipio"])
-    invalidos = [c for c in set(tabela["cod_municipio"]) if c not in codigos_validos]
-    if invalidos:
-        raise ValueError(f"{nome}: {len(invalidos)} códigos fora da tabela de municípios. Exemplos: {invalidos[:3]}")
-        
-    return tabela.sort(chave)
+    ordem = [
+        "cod_municipio", "ano",
+        "instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica",
+        "instituicoes_superior", "matriculas_superior",
+        "ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"
+    ]
+    return saida.select(ordem).sort(["cod_municipio", "ano"])
