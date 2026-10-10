@@ -1,3 +1,11 @@
+import os
+import re
+import sys
+import importlib
+import tempfile
+import unittest.mock as mock
+from pathlib import Path
+
 import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
@@ -194,22 +202,16 @@ def test_consolidar_educacao():
         "ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"
     ]
     
-    # 1/2010 tem escolar e superior
     assert saida.filter(pl.col("cod_municipio") == "1")["instituicoes_basica"][0] == 30
     assert saida.filter(pl.col("cod_municipio") == "1")["instituicoes_superior"][0] == 1
     
-    # 2/2010 tem superior e ideb, e nulo basica
     assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_superior"][0] == 2
     assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_basica"].is_null()[0]
     
-    # 3/2010 escolar integralmente nulo mantido como nulo, not zero
     assert saida.filter(pl.col("cod_municipio") == "3")["instituicoes_basica"].is_null()[0]
 
-    # Município 4 (IDEB all nulls) was dropped during IDEB filtration, 
-    # and has no entry in escolar/superior, so it doesn't appear
     assert len(saida.filter(pl.col("cod_municipio") == "4")) == 0
 
-    # 5/2010 tem escolar
     assert saida.filter(pl.col("cod_municipio") == "5")["instituicoes_basica"][0] == 10
 
 def test_consolidar_educacao_erros():
@@ -225,11 +227,10 @@ def test_consolidar_educacao_erros():
         "categoria": ["A"], "instituicoes": [1], "matriculas": [1000]
     })
     
-    # Invalid IDEB value
     ideb = pl.DataFrame({
         "cod_municipio": ["1"],
         "ano": pl.Series([2010], dtype=pl.Int16),
-        "ideb_anos_iniciais_publica": [5.5], "ideb_anos_finais_publica": [4.5], "ideb_ensino_medio_publica": [11.0] # invalido
+        "ideb_anos_iniciais_publica": [5.5], "ideb_anos_finais_publica": [4.5], "ideb_ensino_medio_publica": [11.0]
     })
     with pytest.raises(ValueError, match="ideb: valores fora"):
         consolidar_educacao(censo_escolar, censo_superior, ideb)
@@ -261,13 +262,38 @@ def test_consolidar_educacao_erros():
         consolidar_educacao(escolar_dup, censo_superior, ideb)
         
     escolar_bad_type = pl.DataFrame({
-        "cod_municipio": [1], # inteiro em vez de string
+        "cod_municipio": [1],
         "ano": pl.Series([2010], dtype=pl.Int16),
         "dependencia": ["Estadual"], "localizacao": ["Urbana"],
         "escolas": [10], "matriculas_infantil": [100], "matriculas_fundamental": [1000], "matriculas_medio": [100], "docentes_basica": [50]
     })
     with pytest.raises(ValueError, match="censo_escolar: cod_municipio deve ser String"):
         consolidar_educacao(escolar_bad_type, censo_superior, ideb)
+        
+    escolar_bad_ano = censo_escolar.with_columns(pl.col("ano").cast(pl.Int32))
+    with pytest.raises(ValueError, match="censo_escolar: ano deve ser Int16"):
+        consolidar_educacao(escolar_bad_ano, censo_superior, ideb)
+        
+    escolar_bad_medida = censo_escolar.with_columns(pl.col("escolas").cast(pl.Float64))
+    with pytest.raises(ValueError, match="censo_escolar: escolas deve ser inteiro"):
+        consolidar_educacao(escolar_bad_medida, censo_superior, ideb)
+        
+    superior_bad_ano = censo_superior.with_columns(pl.col("ano").cast(pl.Int64))
+    with pytest.raises(ValueError, match="censo_superior: ano deve ser Int16"):
+        consolidar_educacao(censo_escolar, superior_bad_ano, ideb)
+        
+    superior_bad_medida = censo_superior.with_columns(pl.col("instituicoes").cast(pl.String))
+    with pytest.raises(ValueError, match="censo_superior: instituicoes deve ser inteiro"):
+        consolidar_educacao(censo_escolar, superior_bad_medida, ideb)
+        
+    ideb_bad_ano = ideb.with_columns(pl.col("ano").cast(pl.Int32))
+    with pytest.raises(ValueError, match="ideb: ano deve ser Int16"):
+        consolidar_educacao(censo_escolar, censo_superior, ideb_bad_ano)
+        
+    ideb_bad_medida = ideb.with_columns(pl.col("ideb_anos_iniciais_publica").cast(pl.Int64))
+    with pytest.raises(ValueError, match="ideb: ideb_anos_iniciais_publica deve ser Float64"):
+        consolidar_educacao(censo_escolar, censo_superior, ideb_bad_medida)
+
 
 def test_consolidar_educacao_filtros():
     censo_escolar = pl.DataFrame({
@@ -298,27 +324,66 @@ def test_consolidar_educacao_filtros():
     
     saida = consolidar_educacao(censo_escolar, censo_superior, ideb)
     
-    # 2000 is filtered out for superior and ideb (only 2006-2023)
-    # but escolar is not filtered explicitly in consolidar_educacao, 
-    # wait, escolar doesn't filter year in the function? Let's check `consolidar_educacao`. It doesn't. 
-    # But for superior and ideb it filters.
     assert len(saida.filter(pl.col("ano") == 2000).drop_nulls(subset=["instituicoes_superior"])) == 0
     assert len(saida.filter(pl.col("ano") == 2000).drop_nulls(subset=["ideb_anos_iniciais_publica"])) == 0
     
     assert saida.filter(pl.col("ano") == 2010)["instituicoes_superior"][0] == 2
     assert saida.filter(pl.col("ano") == 2010)["ideb_anos_iniciais_publica"][0] == 6.0
 
-import sys
-import importlib
-from pathlib import Path
-import tempfile
-import os
-import unittest.mock as mock
+def test_consolidar_educacao_agregacao_e_ideb():
+    censo_escolar = pl.DataFrame({
+        "cod_municipio": ["1", "1", "1", "2"],
+        "ano": pl.Series([2008, 2010, 2010, 2010], dtype=pl.Int16),
+        "dependencia": ["M", "E", "M", "E"],
+        "localizacao": ["U", "U", "U", "U"],
+        "escolas": [10, 20, 30, 40],
+        "matriculas_infantil": [1, 2, 3, 4],
+        "matriculas_fundamental": [1, 2, 3, 4],
+        "matriculas_medio": [1, 2, 3, 4],
+        "docentes_basica": [1, 2, 3, 4],
+    })
+    
+    # Censo superior has multiple categories for the same cod/ano
+    censo_superior = pl.DataFrame({
+        "cod_municipio": ["1", "1", "2"],
+        "ano": pl.Series([2010, 2010, 2010], dtype=pl.Int16),
+        "categoria": ["Pública", "Privada", "Privada"],
+        "instituicoes": [1, 2, 5],
+        "matriculas": [1000, 2000, 5000],
+    })
+    
+    # IDEB: we add 2008 (even year) with nulls in original table (not filtered out until consolidar filters if all null)
+    # Wait, 2008 has no ideb data but we pass nulls for all stages.
+    # We should add a valid IDEB year, say 2009, 2011, etc.
+    ideb = pl.DataFrame({
+        "cod_municipio": ["1", "1"],
+        "ano": pl.Series([2008, 2009], dtype=pl.Int16),
+        "ideb_anos_iniciais_publica": [None, 6.0],
+        "ideb_anos_finais_publica": [None, 5.0],
+        "ideb_ensino_medio_publica": [None, 4.0],
+    })
+    
+    saida = consolidar_educacao(censo_escolar, censo_superior, ideb)
+    
+    # Assert aggregation for superior
+    sup_mun1 = saida.filter((pl.col("cod_municipio") == "1") & (pl.col("ano") == 2010))
+    assert sup_mun1["instituicoes_superior"][0] == 3
+    assert sup_mun1["matriculas_superior"][0] == 3000
+    
+    # Assert even year null for IDEB (2008)
+    mun1_2008 = saida.filter((pl.col("cod_municipio") == "1") & (pl.col("ano") == 2008))
+    assert mun1_2008["ideb_anos_iniciais_publica"].is_null()[0]
+    
+    # Assert odd year IDEB separated correctly
+    mun1_2009 = saida.filter((pl.col("cod_municipio") == "1") & (pl.col("ano") == 2009))
+    assert mun1_2009["ideb_anos_iniciais_publica"][0] == 6.0
+    assert mun1_2009["ideb_anos_finais_publica"][0] == 5.0
+    assert mun1_2009["ideb_ensino_medio_publica"][0] == 4.0
 
 def test_consolidar_saidas(tmp_path):
-    # Mocking run_pipeline._consolidar
     scripts_dir = Path(__file__).resolve().parents[2] / "scripts"
     sys.path.insert(0, str(scripts_dir.parent))
+
     
     spec = importlib.util.spec_from_file_location("run_pipeline", scripts_dir / "run_pipeline.py")
     run_pipeline = importlib.util.module_from_spec(spec)
@@ -331,14 +396,18 @@ def test_consolidar_saidas(tmp_path):
     processado.mkdir()
     
     # Create required intermediate inputs
+    # Create 28 despesas columns for testing renaming
+    despesas_28 = {f"desp_{i:02d}_funcao{i}": [float(i)] for i in range(1, 29)}
+    despesas_28_siconfi = {f"desp_{i:02d}_funcao{i}": [float(i+1)] for i in range(1, 29)}
+    
     arquivos = {
         "ibge_municipios.parquet": pl.DataFrame({"cod_municipio": ["1", "2"], "nome_municipio": ["A", "B"], "cod_uf": [1, 2], "sigla_uf": ["UF", "UF"], "nome_uf": ["Estado", "Estado"], "nome_rg_intermediaria": ["RI", "RI"], "nome_rg_imediata": ["RI", "RI"], "fronteira_internacional": [0, 1], "litoraneo": [1, 0], "area_km2": [10.0, 20.0], "latitude_sede": [-10.0, -20.0], "longitude_sede": [-30.0, -40.0]}),
-        "ibge_municipios_limitrofes.parquet": pl.DataFrame({"cod_municipio": ["1"], "cod_municipio_limitrofe": ["2"]}),
+        "ibge_municipios_limitrofes.parquet": pl.DataFrame({"cod_municipio": ["1"], "cod_municipio_limitrofe": ["2"], "comprimento_km": [5.0]}),
         "ibge_populacao.parquet": pl.DataFrame({"cod_municipio": ["1", "2"], "ano": pl.Series([2010, 2010], dtype=pl.Int16), "populacao": [100, 200], "pop_origem": ["a", "b"]}),
         "ibge_pib.parquet": pl.DataFrame({"cod_municipio": ["1", "2"], "ano": pl.Series([2010, 2010], dtype=pl.Int16), "pib": [1.0, 2.0]}),
         "ibge_cempre.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "unidades_locais": [1], "pessoal_ocupado_total": [1], "pessoal_ocupado_assalariado": [1], "pessoal_assalariado_medio": [1.0], "salarios_mil_reais": [1.0]}),
-        "tesouro_despesa_funcao_finbra.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2006], dtype=pl.Int16), "desp_01_legislativa": [1.0]}),
-        "tesouro_despesa_funcao_siconfi.parquet": pl.DataFrame({"cod_municipio": ["2"], "ano": pl.Series([2014], dtype=pl.Int16), "desp_01_legislativa": [2.0]}),
+        "tesouro_despesa_funcao_finbra.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2006], dtype=pl.Int16), **despesas_28}),
+        "tesouro_despesa_funcao_siconfi.parquet": pl.DataFrame({"cod_municipio": ["2"], "ano": pl.Series([2014], dtype=pl.Int16), **despesas_28_siconfi}),
         "ipea_pbf.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "pbf_beneficios": [10], "pbf_valor_mil_reais": [100.0]}),
         "datasus_saude.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "leitos_internacao": [10], "leitos_uti": [1], "equipamentos_imagem": [1], "medicos": [10], "unidades_basicas": [1], "postos_saude": [1], "obitos_agressao": [1], "obitos_infantis": [1], "nascidos_vivos": [10]}),
         "inep_censo_escolar.parquet": pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "dependencia": ["E"], "localizacao": ["U"], "escolas": [1], "matriculas_infantil": [1], "matriculas_fundamental": [1], "matriculas_medio": [1], "docentes_basica": [1]}),
@@ -388,11 +457,54 @@ def test_consolidar_saidas(tmp_path):
     assert "censo_superior.parquet" not in saidas
     assert "assistencia_social.parquet" not in saidas
     
-    # Check schemas
-    financas = pl.read_parquet(processado / "financas_publicas.parquet")
-    assert "desp_legislativa" in financas.columns
-    assert "desp_01_legislativa" not in financas.columns
+    # Check schemas precisely
+    municipios = pl.read_parquet(processado / "municipios.parquet")
+    assert municipios.columns == [
+        "cod_municipio", "nome_municipio", "cod_uf", "sigla_uf", "nome_uf",
+        "nome_rg_intermediaria", "nome_rg_imediata", "fronteira_internacional",
+        "litoraneo", "area_km2", "latitude_sede", "longitude_sede"
+    ]
     
+    limitrofes = pl.read_parquet(processado / "municipios_limitrofes.parquet")
+    assert limitrofes.columns == ["cod_municipio", "cod_municipio_limitrofe", "comprimento_km"]
+
     demo = pl.read_parquet(processado / "demografia_economia_social.parquet")
-    assert "populacao" in demo.columns
+    assert demo.columns == [
+        "cod_municipio", "ano", "populacao", "pib", "unidades_locais",
+        "pessoal_ocupado_total", "pessoal_ocupado_assalariado",
+        "pessoal_assalariado_medio", "salarios_mil_reais",
+        "pbf_beneficios", "pbf_valor_mil_reais"
+    ]
     assert "pop_origem" not in demo.columns
+
+    saude = pl.read_parquet(processado / "saude.parquet")
+    assert saude.columns == [
+        "cod_municipio", "ano", "leitos_internacao", "leitos_uti", "equipamentos_imagem",
+        "medicos", "unidades_basicas", "postos_saude", "obitos_agressao", "obitos_infantis", "nascidos_vivos"
+    ]
+
+    educacao = pl.read_parquet(processado / "educacao.parquet")
+    assert educacao.columns == [
+        "cod_municipio", "ano",
+        "instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica",
+        "instituicoes_superior", "matriculas_superior",
+        "ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"
+    ]
+
+    financas = pl.read_parquet(processado / "financas_publicas.parquet")
+    # Must have exact 30 columns: cod_municipio, ano, and the 28 desp_funcaoX
+    expected_financas_cols = ["cod_municipio", "ano"] + [f"desp_funcao{i}" for i in range(1, 29)]
+    assert financas.columns == expected_financas_cols
+    
+    # Types for the 28 columns must be Float64
+    for i in range(1, 29):
+        assert financas[f"desp_funcao{i}"].dtype == pl.Float64
+        
+    # Values check
+    f2006 = financas.filter(pl.col("ano") == 2006)
+    f2014 = financas.filter(pl.col("ano") == 2014)
+    # the mock for 2006 has float(i), for 2014 has float(i+1)
+    for i in range(1, 29):
+        # We only inserted 1 row for 2006 and 1 row for 2014 in our mock
+        assert f2006.filter(pl.col("cod_municipio") == "1")[f"desp_funcao{i}"][0] == float(i)
+        assert f2014.filter(pl.col("cod_municipio") == "2")[f"desp_funcao{i}"][0] == float(i+1)
