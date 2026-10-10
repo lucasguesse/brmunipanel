@@ -1,8 +1,9 @@
-import json
+﻿import json
 import os
 import shutil
 import tempfile
 from pathlib import Path
+from unittest import mock
 
 import polars as pl
 import pytest
@@ -17,18 +18,16 @@ def fake_environment(tmp_path):
     processed_dir.mkdir(parents=True)
     results_dir.mkdir(parents=True)
     
-    # Create fake parquet files
     tabelas = [
         "municipios", "demografia_economia_social", "financas_publicas",
         "saude", "municipios_limitrofes", "educacao"
     ]
     
-    # Mock data
-    df = pl.DataFrame({"a": [1, 2], "b": ["x", "y"]})
+    # Mock data slightly realistic to test CSV typing
+    df = pl.DataFrame({"cod_municipio": [1, 2], "ano": [2020, 2021], "valor": [10.5, 20.0], "texto": ["x", "y"]})
     for t in tabelas:
         df.write_parquet(processed_dir / f"{t}.parquet")
         
-    # Mock results
     qc = results_dir / "quality_checks.csv"
     with open(qc, "w", encoding="utf-8") as f:
         f.write("status\nOK\nOK\n")
@@ -41,7 +40,6 @@ def fake_environment(tmp_path):
     with open(d, "w", encoding="utf-8") as f:
         f.write("col\n1\n")
         
-    # Mock datasets.json
     dj = tmp_path / "datasets.json"
     with open(dj, "w", encoding="utf-8") as f:
         f.write('[{"id": "t1", "nome": "T1", "periodo": "2020"}]')
@@ -50,17 +48,16 @@ def fake_environment(tmp_path):
 
 def test_empacotamento_falha_auditoria(fake_environment):
     data_dir, results_dir, dj = fake_environment
-    # Injete FALHA
     qc = results_dir / "quality_checks.csv"
     with open(qc, "a", encoding="utf-8") as f:
         f.write("FALHA\n")
         
-    with pytest.raises(RuntimeError, match="auditoria crítica não está integralmente aprovada"):
-        empacotamento.montar_pacote_final("1.0", "2026", "abc", data_dir, results_dir, dj)
+    with pytest.raises(RuntimeError, match="A auditoria crítica não está integralmente aprovada"):
+        empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
 
 def test_empacotamento_arquivos_e_manifesto(fake_environment):
     data_dir, results_dir, dj = fake_environment
-    empacotamento.montar_pacote_final("1.0", "2026-10-10", "abc", data_dir, results_dir, dj)
+    empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
     
     final_dir = data_dir / "final"
     assert final_dir.exists()
@@ -79,40 +76,79 @@ def test_empacotamento_arquivos_e_manifesto(fake_environment):
     arquivos_gerados = set([p.name for p in final_dir.iterdir() if p.is_file()])
     assert arquivos_gerados == arquivos_esperados
     
-    # Valida manifesto
     with open(final_dir / "manifest.json", "r", encoding="utf-8") as f:
         manifest = json.load(f)
-    assert manifest["versao"] == "1.0"
-    assert manifest["data"] == "2026-10-10"
-    assert len(manifest["arquivos"]) == 15 # 6 parquet + 6 csv + 3 docs
+    assert manifest["versao_dataset"] == "1.0.0"
+    assert manifest["data_geracao"] == "2026-10-10"
+    assert manifest["pacote_versao"] == "0.1.0"
+    assert manifest["git_commit_pacote"] == "hash1"
+    assert manifest["git_commit_projeto"] == "hash2"
+    assert len(manifest["arquivos"]) == 16 # 6 parquet + 6 csv + 3 docs + 1 readme
     
-    # Validar hashes e determinismo
-    # Vamos gerar novamente em outro lugar e comparar hashes
-    empacotamento.montar_pacote_final("1.0", "2026-10-10", "abc", data_dir, results_dir, dj)
-    with open(final_dir / "manifest.json", "r", encoding="utf-8") as f:
-        manifest2 = json.load(f)
+    # Metadata por tabela no manifesto
+    for item in manifest["arquivos"]:
+        if item["formato"] in ("parquet", "csv.gz"):
+            assert "janela_temporal" in item
+            assert "chaves" in item
+    
+    # Testar determinismo real
+    final2 = final_dir.parent / "final2"
+    final_dir.rename(final2)
+    empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
+    
+    # Todos os arquivos idênticos byte a byte
+    for f in arquivos_esperados:
+        b1 = (final_dir / f).read_bytes()
+        b2 = (final2 / f).read_bytes()
+        assert b1 == b2, f"{f} não é determinístico"
+
+    # Checar Parquet == Processed, CSV relido == Parquet
+    for t in [
+        "municipios", "demografia_economia_social", "financas_publicas",
+        "saude", "municipios_limitrofes", "educacao"
+    ]:
+        pq_final = final_dir / f"{t}.parquet"
+        pq_processed = data_dir / "processed" / f"{t}.parquet"
+        assert pq_final.read_bytes() == pq_processed.read_bytes()
         
-    assert manifest == manifest2
+        df_pq = pl.read_parquet(pq_final)
+        df_csv = pl.read_csv(final_dir / f"{t}.csv.gz", schema_overrides=df_pq.schema)
+        assert df_pq.equals(df_csv)
+
+    # Checar checksums
+    checksum_file = final_dir / "checksums.sha256"
+    assert checksum_file.exists()
+    linhas_chk = checksum_file.read_text("utf-8").strip().split("\n")
+    assert len(linhas_chk) == 17
     
-    # Checar Parquet == Processed
-    p1 = final_dir / "municipios.parquet"
-    p2 = data_dir / "processed" / "municipios.parquet"
-    assert p1.read_bytes() == p2.read_bytes()
+    for line in linhas_chk:
+        h, name = line.split(" *")
+        assert empacotamento.calcular_sha256(final_dir / name) == h
+
+    # Temporário apagado
+    assert not (data_dir / "final_temp").exists()
+
 
 def test_falha_atomica(fake_environment):
     data_dir, results_dir, dj = fake_environment
-    empacotamento.montar_pacote_final("1.0", "2026-10-10", "abc", data_dir, results_dir, dj)
+    empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
     
     final_dir = data_dir / "final"
-    marca = final_dir / "municipios.parquet"
-    hash_antes = empacotamento.calcular_sha256(marca)
+    hash_antes = empacotamento.calcular_sha256(final_dir / "municipios.parquet")
     
-    # Remove um processado para falhar
-    (data_dir / "processed" / "educacao.parquet").unlink()
-    
-    with pytest.raises(FileNotFoundError):
-        empacotamento.montar_pacote_final("1.0", "2026-10-10", "abc", data_dir, results_dir, dj)
+    # Simula erro durante a troca substituindo shutil.move por algo que quebra no meio
+    orig_move = shutil.move
+    def move_mock(src, dst):
+        if src.endswith("final_temp") and dst.endswith("final"):
+            raise OSError("Erro simulado durante a substituição")
+        return orig_move(src, dst)
         
-    # Pacote final não foi alterado
-    assert empacotamento.calcular_sha256(marca) == hash_antes
-    assert (final_dir / "educacao.parquet").exists()
+    with mock.patch("shutil.move", side_effect=move_mock):
+        with pytest.raises(OSError, match="Erro simulado durante a substituição"):
+            empacotamento.montar_pacote_final("2.0.0", "2026-10-11", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
+            
+    # O pacote não foi corrompido; backup foi restaurado
+    assert final_dir.exists()
+    assert empacotamento.calcular_sha256(final_dir / "municipios.parquet") == hash_antes
+    assert not (data_dir / "final_backup").exists()
+    assert not (data_dir / "final_temp").exists()
