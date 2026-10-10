@@ -178,8 +178,8 @@ class QualityAuditor:
                 self.add_check(tabela, "SP 2023 ideb pub fin", "OK" if abs(df_sp_2023["ideb_anos_finais_publica"][0] - 4.8) < 0.01 else "FALHA", str(df_sp_2023["ideb_anos_finais_publica"][0]), "4.8")
                 self.add_check(tabela, "SP 2023 ideb pub med", "OK" if abs(df_sp_2023["ideb_ensino_medio_publica"][0] - 4.2) < 0.01 else "FALHA", str(df_sp_2023["ideb_ensino_medio_publica"][0]), "4.2")
 
-            # IDEB totais nǜo nulos
-            # no IDEB publicado, 48.097 valores nǜo nulos nos anos iniciais, 47.897 nos anos finais e 18.493 no ensino mǸdio dentro de 2006-2023
+            # IDEB totais não nulos
+            # no IDEB publicado, 48.097 valores não nulos nos anos iniciais, 47.897 nos anos finais e 18.493 no ensino médio dentro de 2006-2023
             nn_ini = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_iniciais_publica"].drop_nulls().len()
             nn_fin = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_finais_publica"].drop_nulls().len()
             nn_med = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_ensino_medio_publica"].drop_nulls().len()
