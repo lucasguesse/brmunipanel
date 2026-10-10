@@ -109,12 +109,25 @@ def montar_limitrofes(municipios: pl.DataFrame, limitrofes: pl.DataFrame) -> pl.
 
 def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFrame, ideb: pl.DataFrame) -> pl.DataFrame:
     # Censo Escolar
-    escolar_cols = ["cod_municipio", "ano", "escolas", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]
+    escolar_cols = ["cod_municipio", "ano", "dependencia", "localizacao", "escolas", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]
     for c in escolar_cols:
         if c not in censo_escolar.columns:
             raise ValueError(f"Falta coluna {c} em censo_escolar")
-    if censo_escolar.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+            
+    if censo_escolar["cod_municipio"].dtype != pl.String:
+        raise ValueError("censo_escolar: cod_municipio deve ser String")
+    if censo_escolar["ano"].dtype != pl.Int16:
+        raise ValueError("censo_escolar: ano deve ser Int16")
+    for c in ["escolas", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]:
+        if not censo_escolar[c].dtype.is_integer():
+            raise ValueError(f"censo_escolar: {c} deve ser inteiro")
+
+    if censo_escolar.select(["cod_municipio", "ano", "dependencia", "localizacao"]).null_count().sum_horizontal().sum() > 0:
         raise ValueError("Chaves nulas na entrada censo_escolar")
+        
+    dups_escolar = censo_escolar.filter(censo_escolar.select(["cod_municipio", "ano", "dependencia", "localizacao"]).is_duplicated())
+    if not dups_escolar.is_empty():
+        raise ValueError("censo_escolar: chaves dimensionais duplicadas antes da agregação")
 
     escolar_aggs = [
         pl.when(pl.col(c).is_not_null().any()).then(pl.col(c).sum()).otherwise(None).alias(c)
@@ -129,8 +142,21 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     for c in superior_cols:
         if c not in censo_superior.columns:
             raise ValueError(f"Falta coluna {c} em censo_superior")
-    if censo_superior.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+            
+    if censo_superior["cod_municipio"].dtype != pl.String:
+        raise ValueError("censo_superior: cod_municipio deve ser String")
+    if censo_superior["ano"].dtype != pl.Int16:
+        raise ValueError("censo_superior: ano deve ser Int16")
+    for c in ["instituicoes", "matriculas"]:
+        if not censo_superior[c].dtype.is_integer():
+            raise ValueError(f"censo_superior: {c} deve ser inteiro")
+
+    if censo_superior.select(["cod_municipio", "ano", "categoria"]).null_count().sum_horizontal().sum() > 0:
         raise ValueError("Chaves nulas na entrada censo_superior")
+        
+    dups_superior = censo_superior.filter(censo_superior.select(["cod_municipio", "ano", "categoria"]).is_duplicated())
+    if not dups_superior.is_empty():
+        raise ValueError("censo_superior: chaves dimensionais duplicadas antes da agregação")
 
     superior = censo_superior.select(superior_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
     superior_aggs = [
@@ -146,6 +172,15 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     for c in ideb_cols:
         if c not in ideb.columns:
             raise ValueError(f"Falta coluna {c} em ideb")
+            
+    if ideb["cod_municipio"].dtype != pl.String:
+        raise ValueError("ideb: cod_municipio deve ser String")
+    if ideb["ano"].dtype != pl.Int16:
+        raise ValueError("ideb: ano deve ser Int16")
+    for c in ["ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"]:
+        if ideb[c].dtype != pl.Float64:
+            raise ValueError(f"ideb: {c} deve ser Float64")
+
     if ideb.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
         raise ValueError("Chaves nulas na entrada ideb")
     if not ideb.filter(ideb.select(["cod_municipio", "ano"]).is_duplicated()).is_empty():
@@ -154,7 +189,6 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     ideb_filtrado = ideb.select(ideb_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
     
     # Drop rows where all three IDEB measures are null
-    # To drop rows without any IDEB observation to avoid introducing a row that is entirely null.
     ideb_filtrado = ideb_filtrado.filter(
         pl.col("ideb_anos_iniciais_publica").is_not_null() |
         pl.col("ideb_anos_finais_publica").is_not_null() |
@@ -162,7 +196,6 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     )
 
     for c in ["ideb_anos_iniciais_publica", "ideb_anos_finais_publica", "ideb_ensino_medio_publica"]:
-        ideb_filtrado = ideb_filtrado.with_columns(pl.col(c).cast(pl.Float64))
         nulos = ideb_filtrado.filter((pl.col(c).is_not_null()) & ((pl.col(c) < 0.0) | (pl.col(c) > 10.0)))
         if not nulos.is_empty():
             raise ValueError(f"ideb: valores fora de 0-10 em {c}")
@@ -176,7 +209,7 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
         raise ValueError("Chaves nulas na tabela de educação consolidad")
     dups = saida.filter(saida.select(["cod_municipio", "ano"]).is_duplicated())
     if not dups.is_empty():
-        raise ValueError(f"educacao: chaves duplicadas")
+        raise ValueError("educacao: chaves duplicadas")
         
     ordem = [
         "cod_municipio", "ano",
