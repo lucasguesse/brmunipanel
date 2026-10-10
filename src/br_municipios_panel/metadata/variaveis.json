@@ -862,7 +862,7 @@
         "descricao_en": "IDEB - Early Years (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       },
       "ideb_anos_finais_publica": {
@@ -870,7 +870,7 @@
         "descricao_en": "IDEB - Final Years (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       },
       "ideb_ensino_medio_publica": {
@@ -878,7 +878,7 @@
         "descricao_en": "IDEB - High School (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       }
     },
@@ -1612,7 +1612,7 @@
         "descricao_en": "IDEB - Early Years (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       },
       "ideb_anos_finais_publica": {
@@ -1620,7 +1620,7 @@
         "descricao_en": "IDEB - Final Years (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       },
       "ideb_ensino_medio_publica": {
@@ -1628,7 +1628,7 @@
         "descricao_en": "IDEB - High School (Public)",
         "unidade": "Índice (0-10)",
         "fonte": "INEP - IDEB",
-        "periodo": "2005-2025",
+        "periodo": "2006-2023",
         "nota_metodologica": "Somente anos ímpares."
       }
     },
@@ -1880,7 +1880,7 @@
         "descricao_en": "Municipality Code (7 digits)",
         "unidade": "Código",
         "fonte": "IBGE",
-        "periodo": "2006-2023",
+        "periodo": "N/A",
         "nota_metodologica": "Código padrão IBGE de 7 dígitos."
       },
       "nome_municipio": {
@@ -1952,7 +1952,7 @@
         "descricao_en": "Territorial area",
         "unidade": "km²",
         "fonte": "IBGE",
-        "periodo": "N/A",
+        "periodo": "2025",
         "nota_metodologica": ""
       },
       "latitude_sede": {
@@ -1960,7 +1960,7 @@
         "descricao_en": "Headquarters latitude",
         "unidade": "Graus decimais",
         "fonte": "IBGE",
-        "periodo": "N/A",
+        "periodo": "2022",
         "nota_metodologica": ""
       },
       "longitude_sede": {
@@ -1968,7 +1968,7 @@
         "descricao_en": "Headquarters longitude",
         "unidade": "Graus decimais",
         "fonte": "IBGE",
-        "periodo": "N/A",
+        "periodo": "2022",
         "nota_metodologica": ""
       }
     },
@@ -1978,7 +1978,7 @@
         "descricao_en": "Municipality Code (7 digits)",
         "unidade": "Código",
         "fonte": "IBGE",
-        "periodo": "2006-2023",
+        "periodo": "2024",
         "nota_metodologica": "Código padrão IBGE de 7 dígitos."
       },
       "cod_municipio_limitrofe": {
@@ -1986,7 +1986,7 @@
         "descricao_en": "Bordering Municipality Code",
         "unidade": "Código",
         "fonte": "IBGE",
-        "periodo": "N/A",
+        "periodo": "2024",
         "nota_metodologica": ""
       },
       "comprimento_km": {
@@ -1994,7 +1994,7 @@
         "descricao_en": "Border length",
         "unidade": "km",
         "fonte": "IBGE",
-        "periodo": "N/A",
+        "periodo": "2024",
         "nota_metodologica": ""
       }
     },

@@ -55,7 +55,12 @@ def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Di
     for col_name in df.columns:
         if col_name not in table_metadata:
             raise ValueError(f"Metadado ausente para a coluna '{col_name}' na tabela '{table_name}'.")
-        
+    
+    for meta_col in table_metadata:
+        if meta_col not in df.columns:
+            raise ValueError(f"Metadado órfão para a coluna '{meta_col}' na tabela '{table_name}'.")
+
+    for col_name in df.columns:
         meta = table_metadata[col_name]
         stats = compute_statistics(df, col_name)
         

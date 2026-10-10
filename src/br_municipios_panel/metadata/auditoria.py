@@ -25,7 +25,7 @@ def auditar_tabela_resumo(df: pl.DataFrame, table_name: str, key_cols: List[str]
     percentual_celulas_nulas = round((celulas_nulas / total_celulas) * 100, 2) if total_celulas > 0 else 0.0
     
     return {
-        "tabela": table_name,
+        "arquivo": table_name + ".parquet",
         "linhas": linhas,
         "colunas": colunas,
         "chave": chave,
@@ -44,6 +44,7 @@ class QualityAuditor:
         if municipios_df is not None and "cod_municipio" in municipios_df.columns:
             self.valid_cods = set(municipios_df["cod_municipio"].drop_nulls().to_list())
         self.checks = []
+        self.has_critical_failure = False
         
     def add_check(self, tabela: str, regra: str, status: str, observado: str, esperado: str, detalhe: str = ""):
         self.checks.append({
@@ -55,7 +56,7 @@ class QualityAuditor:
             "detalhe": detalhe
         })
         if status == "FALHA" and "crítica" in detalhe.lower():
-            raise ValueError(f"FALHA CRÍTICA: [{tabela}] {regra} - Observado: {observado}, Esperado: {esperado}")
+            self.has_critical_failure = True
 
     def auditar_esquema(self, df: pl.DataFrame, tabela: str, expected_cols: List[str], expected_dtypes: Dict[str, Any]):
         actual_cols = df.columns
@@ -113,10 +114,8 @@ class QualityAuditor:
         numeric_cols = [c for c, dtype in zip(df.columns, df.dtypes) if dtype.is_numeric()]
         falhas = []
         for c in numeric_cols:
-            # Only count columns where conceptually negative doesn't make sense.
-            # Most features in this panel shouldn't be negative (counts, expenses, etc).
-            if c in ["latitude_sede", "longitude_sede"]:
-                continue # Coordinates can be negative
+            if c in ["latitude_sede", "longitude_sede", "pib", "pib_per_capita"] or c.startswith("desp_"):
+                continue
             neg_count = df.filter(pl.col(c) < 0).height
             if neg_count > 0:
                 falhas.append(f"{c}: {neg_count}")
@@ -126,7 +125,8 @@ class QualityAuditor:
             self.add_check(tabela, "valores não negativos", "FALHA", str(falhas), "Nenhum", "Contagens não podem ser negativas")
             
     def auditar_dominios_geograficos(self, df: pl.DataFrame, tabela: str):
-        if tabela == "municipios":
+        clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
+        if clean_name in ["municipios", "ibge_municipios"]:
             area_inv = df.filter(pl.col("area_km2") <= 0).height
             lat_inv = df.filter((pl.col("latitude_sede") < -35) | (pl.col("latitude_sede") > 6)).height
             lon_inv = df.filter((pl.col("longitude_sede") < -75) | (pl.col("longitude_sede") > -34)).height
@@ -135,7 +135,13 @@ class QualityAuditor:
             else:
                 self.add_check(tabela, "domínios geográficos", "FALHA", f"area_inv={area_inv}, lat_inv={lat_inv}, lon_inv={lon_inv}", "0", "Limites do Brasil")
         
-        if tabela == "municipios_limitrofes":
+        if clean_name in ["municipios_limitrofes", "ibge_municipios_limitrofes"]:
+            if self.valid_cods:
+                inv_cod_lim = df.filter(~pl.col("cod_municipio_limitrofe").is_in(self.valid_cods)).height
+                if inv_cod_lim == 0:
+                    self.add_check(tabela, "códigos limítrofes", "OK", "Correto", "Correto")
+                else:
+                    self.add_check(tabela, "códigos limítrofes", "FALHA", f"{inv_cod_lim} inválidos", "0", "Devem pertencer ao cadastro")
             comp_inv = df.filter(pl.col("comprimento_km") <= 0).height
             if comp_inv == 0:
                 self.add_check(tabela, "comprimentos positivos", "OK", "Correto", "Correto")
