@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import io
 import hashlib
@@ -218,8 +219,8 @@ def pasta_bruto_2006(tmp_path):
     pasta_inep.mkdir(parents=True, exist_ok=True)
     arquivo = pasta_inep / "censo-escolar_2006.zip"
     with zipfile.ZipFile(arquivo, "w") as z:
-        z.write("tests/dados/censo_escolar_2006_amostra.csv", "CENSOESC_2006.CSV")
-        z.write("tests/dados/censo_escolar_2006_educprof_amostra.csv", "EDUCPROF_2006.CSV")
+        z.write(os.path.join(os.path.dirname(__file__), "dados", "censo_escolar_2006_amostra.csv"), "CENSOESC_2006.CSV")
+        z.write(os.path.join(os.path.dirname(__file__), "dados", "censo_escolar_2006_educprof_amostra.csv"), "EDUCPROF_2006.CSV")
         
     return tmp_path
 

@@ -113,7 +113,14 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     for c in escolar_cols:
         if c not in censo_escolar.columns:
             raise ValueError(f"Falta coluna {c} em censo_escolar")
-    escolar = censo_escolar.select(escolar_cols).group_by(["cod_municipio", "ano"]).sum().rename({"escolas": "instituicoes_basica"})
+    if censo_escolar.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+        raise ValueError("Chaves nulas na entrada censo_escolar")
+
+    escolar_aggs = [
+        pl.when(pl.col(c).is_not_null().any()).then(pl.col(c).sum()).otherwise(None).alias(c)
+        for c in ["escolas", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]
+    ]
+    escolar = censo_escolar.select(escolar_cols).group_by(["cod_municipio", "ano"]).agg(escolar_aggs).rename({"escolas": "instituicoes_basica"})
     for c in ["instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica"]:
         escolar = escolar.with_columns(pl.col(c).cast(pl.Int64))
         
@@ -122,8 +129,15 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     for c in superior_cols:
         if c not in censo_superior.columns:
             raise ValueError(f"Falta coluna {c} em censo_superior")
+    if censo_superior.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+        raise ValueError("Chaves nulas na entrada censo_superior")
+
     superior = censo_superior.select(superior_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
-    superior = superior.select(["cod_municipio", "ano", "instituicoes", "matriculas"]).group_by(["cod_municipio", "ano"]).sum().rename({"instituicoes": "instituicoes_superior", "matriculas": "matriculas_superior"})
+    superior_aggs = [
+        pl.when(pl.col(c).is_not_null().any()).then(pl.col(c).sum()).otherwise(None).alias(c)
+        for c in ["instituicoes", "matriculas"]
+    ]
+    superior = superior.group_by(["cod_municipio", "ano"]).agg(superior_aggs).rename({"instituicoes": "instituicoes_superior", "matriculas": "matriculas_superior"})
     for c in ["instituicoes_superior", "matriculas_superior"]:
         superior = superior.with_columns(pl.col(c).cast(pl.Int64))
 
@@ -132,9 +146,15 @@ def consolidar_educacao(censo_escolar: pl.DataFrame, censo_superior: pl.DataFram
     for c in ideb_cols:
         if c not in ideb.columns:
             raise ValueError(f"Falta coluna {c} em ideb")
+    if ideb.select(["cod_municipio", "ano"]).null_count().sum_horizontal().sum() > 0:
+        raise ValueError("Chaves nulas na entrada ideb")
+    if not ideb.filter(ideb.select(["cod_municipio", "ano"]).is_duplicated()).is_empty():
+        raise ValueError("Chaves duplicadas na entrada ideb")
+
     ideb_filtrado = ideb.select(ideb_cols).filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))
     
     # Drop rows where all three IDEB measures are null
+    # To drop rows without any IDEB observation to avoid introducing a row that is entirely null.
     ideb_filtrado = ideb_filtrado.filter(
         pl.col("ideb_anos_iniciais_publica").is_not_null() |
         pl.col("ideb_anos_finais_publica").is_not_null() |

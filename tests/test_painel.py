@@ -66,6 +66,20 @@ def test_montar_despesa():
     
     assert_frame_equal(saida, esperado)
 
+def test_montar_despesa_erros():
+    finbra = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "v": [10.0],
+    })
+    siconfi = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "v": [12.0],
+    })
+    with pytest.raises(ValueError, match="casos do mesmo munic.*pio e ano"):
+        montar_despesa(finbra, siconfi)
+
 def test_montar_tabela_longitudinal():
     municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
     anos = range(2010, 2012)
@@ -94,17 +108,32 @@ def test_montar_tabela_longitudinal():
     })
     assert_frame_equal(saida, esperado)
 
+    painel_f1 = saida.join(f1.select(["cod_municipio", "ano"]), on=["cod_municipio", "ano"], how="inner").select(["cod_municipio", "ano", "v1"])
+    assert_frame_equal(painel_f1.sort(["cod_municipio", "ano"]), f1.sort(["cod_municipio", "ano"]))
+
+    painel_f2 = saida.join(f2.select(["cod_municipio", "ano"]), on=["cod_municipio", "ano"], how="inner").select(["cod_municipio", "ano", "v2"])
+    assert_frame_equal(painel_f2.sort(["cod_municipio", "ano"]), f2.sort(["cod_municipio", "ano"]))
+
 def test_montar_tabela_longitudinal_erros():
     municipios = pl.DataFrame({"cod_municipio": ["1"]})
     anos = range(2010, 2012)
     
     f = pl.DataFrame({"cod_municipio": ["2"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [1]})
-    with pytest.raises(ValueError, match="teste .*códigos fora da tabela"):
+    with pytest.raises(ValueError, match="teste .*c.*digos fora da tabela"):
         montar_tabela_longitudinal(municipios, [f], anos=anos, nome_tabela="teste")
         
     f = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2012], dtype=pl.Int16), "v": [1]})
     with pytest.raises(ValueError, match="teste .*anos fora da janela"):
         montar_tabela_longitudinal(municipios, [f], anos=anos, nome_tabela="teste")
+        
+    f = pl.DataFrame({"cod_municipio": ["1", "1"], "ano": pl.Series([2010, 2010], dtype=pl.Int16), "v": [1, 2]})
+    with pytest.raises(ValueError, match="teste .*chaves repetidas"):
+        montar_tabela_longitudinal(municipios, [f], anos=anos, nome_tabela="teste")
+        
+    f1 = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [1]})
+    f2 = pl.DataFrame({"cod_municipio": ["1"], "ano": pl.Series([2010], dtype=pl.Int16), "v": [2]})
+    with pytest.raises(ValueError, match="teste .*coluna com nome que outra fonte"):
+        montar_tabela_longitudinal(municipios, [f1, f2], anos=anos, nome_tabela="teste")
         
 def test_montar_limitrofes():
     municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
@@ -119,15 +148,24 @@ def test_montar_limitrofes():
     })
     assert_frame_equal(saida, esperado)
 
+def test_montar_limitrofes_erros():
+    municipios = pl.DataFrame({"cod_municipio": ["1", "2"]})
+    lims = pl.DataFrame({"cod_municipio": ["1", "1"], "cod_municipio_limitrofe": ["2", "2"]})
+    with pytest.raises(ValueError, match="limitrofes:.*pares repetidos"):
+        montar_limitrofes(municipios, lims)
+    lims = pl.DataFrame({"cod_municipio": ["3"], "cod_municipio_limitrofe": ["1"]})
+    with pytest.raises(ValueError, match="limitrofes:.*c.*digos fora"):
+        montar_limitrofes(municipios, lims)
+
 def test_consolidar_educacao():
     censo_escolar = pl.DataFrame({
-        "cod_municipio": ["1", "1"],
-        "ano": pl.Series([2010, 2010], dtype=pl.Int16),
-        "escolas": [10, 20],
-        "matriculas_infantil": [100, 200],
-        "matriculas_fundamental": [1000, 2000],
-        "matriculas_medio": [100, 200],
-        "docentes_basica": [50, 100],
+        "cod_municipio": ["1", "1", "3", "5"],
+        "ano": pl.Series([2010, 2010, 2010, 2010], dtype=pl.Int16),
+        "escolas": [10, 20, None, 10],
+        "matriculas_infantil": [100, 200, None, 100],
+        "matriculas_fundamental": [1000, 2000, None, 1000],
+        "matriculas_medio": [100, 200, None, 100],
+        "docentes_basica": [50, 100, None, 50],
     })
     censo_superior = pl.DataFrame({
         "cod_municipio": ["1", "2"],
@@ -137,16 +175,16 @@ def test_consolidar_educacao():
         "matriculas": [1000, 2000],
     })
     ideb = pl.DataFrame({
-        "cod_municipio": ["2"],
-        "ano": pl.Series([2010], dtype=pl.Int16),
-        "ideb_anos_iniciais_publica": [5.5],
-        "ideb_anos_finais_publica": [4.5],
-        "ideb_ensino_medio_publica": [3.5],
+        "cod_municipio": ["2", "4"],
+        "ano": pl.Series([2010, 2010], dtype=pl.Int16),
+        "ideb_anos_iniciais_publica": [5.5, None],
+        "ideb_anos_finais_publica": [4.5, None],
+        "ideb_ensino_medio_publica": [3.5, None],
     })
     
     saida = consolidar_educacao(censo_escolar, censo_superior, ideb)
     
-    assert len(saida) == 2
+    assert len(saida) == 4
     assert saida.columns == [
         "cod_municipio", "ano",
         "instituicoes_basica", "matriculas_infantil", "matriculas_fundamental", "matriculas_medio", "docentes_basica",
@@ -161,3 +199,50 @@ def test_consolidar_educacao():
     # 2/2010 tem superior e ideb, e nulo basica
     assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_superior"][0] == 2
     assert saida.filter(pl.col("cod_municipio") == "2")["instituicoes_basica"].is_null()[0]
+    
+    # 3/2010 escolar integralmente nulo mantido como nulo, not zero
+    assert saida.filter(pl.col("cod_municipio") == "3")["instituicoes_basica"].is_null()[0]
+
+    # Município 4 (IDEB all nulls) was dropped during IDEB filtration, 
+    # and has no entry in escolar/superior, so it doesn't appear
+    assert len(saida.filter(pl.col("cod_municipio") == "4")) == 0
+
+    # 5/2010 tem escolar
+    assert saida.filter(pl.col("cod_municipio") == "5")["instituicoes_basica"][0] == 10
+
+def test_consolidar_educacao_erros():
+    censo_escolar = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "escolas": [10], "matriculas_infantil": [100], "matriculas_fundamental": [1000], "matriculas_medio": [100], "docentes_basica": [50]
+    })
+    censo_superior = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "categoria": ["A"], "instituicoes": [1], "matriculas": [1000]
+    })
+    
+    # Invalid IDEB value
+    ideb = pl.DataFrame({
+        "cod_municipio": ["1"],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "ideb_anos_iniciais_publica": [5.5], "ideb_anos_finais_publica": [4.5], "ideb_ensino_medio_publica": [11.0] # invalido
+    })
+    with pytest.raises(ValueError, match="ideb: valores fora"):
+        consolidar_educacao(censo_escolar, censo_superior, ideb)
+
+    ideb_dup = pl.DataFrame({
+        "cod_municipio": ["1", "1"],
+        "ano": pl.Series([2010, 2010], dtype=pl.Int16),
+        "ideb_anos_iniciais_publica": [5.5, 5.5], "ideb_anos_finais_publica": [4.5, 4.5], "ideb_ensino_medio_publica": [3.5, 3.5]
+    })
+    with pytest.raises(ValueError, match="Chaves duplicadas na entrada ideb"):
+        consolidar_educacao(censo_escolar, censo_superior, ideb_dup)
+
+    escolar_null = pl.DataFrame({
+        "cod_municipio": [None],
+        "ano": pl.Series([2010], dtype=pl.Int16),
+        "escolas": [10], "matriculas_infantil": [100], "matriculas_fundamental": [1000], "matriculas_medio": [100], "docentes_basica": [50]
+    })
+    with pytest.raises(ValueError, match="Chaves nulas na entrada censo_escolar"):
+        consolidar_educacao(escolar_null, censo_superior, ideb_dup)
