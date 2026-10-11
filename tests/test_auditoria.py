@@ -1,7 +1,7 @@
 import pytest
 import polars as pl
-from br_municipios_panel.metadata.auditoria import QualityAuditor
-from br_municipios_panel.metadata.contratos import CONTRATOS
+from bra_municipalities_panel.metadata.auditoria import QualityAuditor
+from bra_municipalities_panel.metadata.contratos import CONTRATOS
 
 def test_auditoria_esquema_tipos():
     auditor = QualityAuditor(None)

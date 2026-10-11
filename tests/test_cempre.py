@@ -1,4 +1,4 @@
-"""Testes do módulo CEMPRE do IBGE/SIDRA (br_municipios_panel.ibge.cempre)."""
+"""Testes do módulo CEMPRE do IBGE/SIDRA (bra_municipalities_panel.ibge.cempre)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from br_municipios_panel.ibge import cempre, sidra
+from bra_municipalities_panel.ibge import cempre, sidra
 
 PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 

@@ -1,4 +1,4 @@
-"""Testes do módulo br_municipios_panel.ipea.pbf."""
+"""Testes do módulo bra_municipalities_panel.ipea.pbf."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from br_municipios_panel.ipea import pbf
-from br_municipios_panel.nucleo import RespostaInvalida
+from bra_municipalities_panel.ipea import pbf
+from bra_municipalities_panel.nucleo import RespostaInvalida
 
 PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 

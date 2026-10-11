@@ -8,7 +8,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from br_municipios_panel.datasus import saude
+from bra_municipalities_panel.datasus import saude
 
 
 def _criar_html(cabecalho: list[str], linhas: list[list[str]]) -> bytes:

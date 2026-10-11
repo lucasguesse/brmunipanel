@@ -10,7 +10,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from br_municipios_panel.painel import (
+from bra_municipalities_panel.painel import (
     montar_municipios,
     montar_despesa,
     montar_tabela_longitudinal,
@@ -424,7 +424,7 @@ def test_consolidar_saidas(tmp_path):
     (processado / "nao_gerenciado.txt").touch()
 
     # Mock ANOS_PAINEL to limit test duration and dimensions
-    with mock.patch("br_municipios_panel.painel.ANOS_PAINEL", [2006, 2010, 2014]):
+    with mock.patch("bra_municipalities_panel.painel.ANOS_PAINEL", [2006, 2010, 2014]):
         old_inter = run_pipeline.INTERMEDIARIO
         old_proc = run_pipeline.PROCESSADO
         old_proj = run_pipeline.PROJETO

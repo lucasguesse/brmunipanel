@@ -6,10 +6,10 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from br_municipios_panel.nucleo import RespostaInvalida
-from br_municipios_panel.tesouro import finbra
-from br_municipios_panel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, FUNCOES
-from br_municipios_panel.tesouro.finbra import (
+from bra_municipalities_panel.nucleo import RespostaInvalida
+from bra_municipalities_panel.tesouro import finbra
+from bra_municipalities_panel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, FUNCOES
+from bra_municipalities_panel.tesouro.finbra import (
     codigo_6,
     converter_moeda,
     processar_tabela,

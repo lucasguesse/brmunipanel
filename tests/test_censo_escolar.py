@@ -8,8 +8,8 @@ import tempfile
 import polars as pl
 import pytest
 
-from br_municipios_panel.inep import censo_escolar
-from br_municipios_panel.nucleo import RespostaInvalida, baixar_lote as baixar_lote_do_nucleo
+from bra_municipalities_panel.inep import censo_escolar
+from bra_municipalities_panel.nucleo import RespostaInvalida, baixar_lote as baixar_lote_do_nucleo
 
 DADOS = Path(__file__).parent / "dados"
 

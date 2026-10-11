@@ -9,7 +9,7 @@ import hashlib
 
 # Fix path to import modules
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from br_municipios_panel.metadata.contratos import CONTRATOS
+from bra_municipalities_panel.metadata.contratos import CONTRATOS
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from generate_dictionaries import generate_dictionaries
@@ -131,7 +131,7 @@ def test_run_pipeline_propaga_erro(monkeypatch):
         monkeypatch.setattr(pl, "read_parquet", lambda *a, **k: pl.DataFrame({"cod_municipio": [1], "pop_origem": [0]}))
         monkeypatch.setattr(pl.DataFrame, "write_parquet", lambda *a, **k: None)
         
-        from br_municipios_panel import painel
+        from bra_municipalities_panel import painel
         monkeypatch.setattr(painel, "montar_municipios", lambda *a: pl.DataFrame())
         monkeypatch.setattr(painel, "montar_despesa", lambda *a, **k: pl.DataFrame())
         monkeypatch.setattr(painel, "montar_tabela_longitudinal", lambda *a, **k: pl.DataFrame())

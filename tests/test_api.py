@@ -1,4 +1,4 @@
-"""Testes da interface pública da biblioteca br-municipios-panel.
+"""Testes da interface pública da biblioteca bra-municipalities-panel.
 
 Valida versão, __all__, namespaces de fontes e importabilidade de funções
 documentadas no README sem qualquer chamada de rede.
@@ -9,7 +9,7 @@ import subprocess
 import sys
 import types
 import pytest
-import br_municipios_panel as bmp
+import bra_municipalities_panel as bmp
 
 
 
@@ -40,15 +40,15 @@ def test_source_namespaces():
 
 def test_readme_quickstart_imports_and_callables():
     """Valida que todas as importações e funções documentadas no Quick Start do README são válidas e invocáveis."""
-    from br_municipios_panel.ibge import populacao, pib
-    from br_municipios_panel.ipea import pbf
-    from br_municipios_panel.inep import (
+    from bra_municipalities_panel.ibge import populacao, pib
+    from bra_municipalities_panel.ipea import pbf
+    from bra_municipalities_panel.inep import (
         harmonizar_censo_escolar,
         harmonizar_censo_superior,
         harmonizar_ideb,
     )
-    from br_municipios_panel.tesouro import siconfi, finbra
-    from br_municipios_panel.datasus import saude
+    from bra_municipalities_panel.tesouro import siconfi, finbra
+    from bra_municipalities_panel.datasus import saude
 
     # Funções de harmonização documentadas no README
     assert callable(populacao.harmonizar)
@@ -63,8 +63,8 @@ def test_readme_quickstart_imports_and_callables():
 
 
 def test_from_import_submodules():
-    """Valida que 'from br_municipios_panel import <namespace>' importa os submódulos corretamente."""
-    from br_municipios_panel import datasus, ibge, inep, ipea, tesouro
+    """Valida que 'from bra_municipalities_panel import <namespace>' importa os submódulos corretamente."""
+    from bra_municipalities_panel import datasus, ibge, inep, ipea, tesouro
 
     assert isinstance(datasus, types.ModuleType)
     assert isinstance(ibge, types.ModuleType)
@@ -74,16 +74,16 @@ def test_from_import_submodules():
 
 
 def test_lazy_imports_clean_subprocess():
-    """Valida que 'import br_municipios_panel' em processo limpo não carrega polars, pandas nem módulos pesados."""
+    """Valida que 'import bra_municipalities_panel' em processo limpo não carrega polars, pandas nem módulos pesados."""
     src_dir = str(Path(__file__).resolve().parent.parent / "src")
     code = (
         "import sys\n"
         f"if {src_dir!r} not in sys.path: sys.path.insert(0, {src_dir!r})\n"
-        "import br_municipios_panel\n"
-        "heavy_modules = {'polars', 'pandas', 'br_municipios_panel.nucleo', "
-        "'br_municipios_panel.inep.censo_escolar', "
-        "'br_municipios_panel.inep.censo_superior', "
-        "'br_municipios_panel.inep.ideb'}\n"
+        "import bra_municipalities_panel\n"
+        "heavy_modules = {'polars', 'pandas', 'bra_municipalities_panel.nucleo', "
+        "'bra_municipalities_panel.inep.censo_escolar', "
+        "'bra_municipalities_panel.inep.censo_superior', "
+        "'bra_municipalities_panel.inep.ideb'}\n"
         "loaded_heavy = heavy_modules.intersection(sys.modules)\n"
         "if loaded_heavy:\n"
         "    print(f'Módulos carregados indevidamente: {sorted(loaded_heavy)}')\n"

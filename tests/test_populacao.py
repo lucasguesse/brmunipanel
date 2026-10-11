@@ -1,4 +1,4 @@
-"""Testes do módulo de população do IBGE/SIDRA (br_municipios_panel.ibge.populacao)."""
+"""Testes do módulo de população do IBGE/SIDRA (bra_municipalities_panel.ibge.populacao)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from br_municipios_panel.ibge import populacao
+from bra_municipalities_panel.ibge import populacao
 
 PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 

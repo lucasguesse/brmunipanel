@@ -1,6 +1,6 @@
 import pytest
 import polars as pl
-from br_municipios_panel.metadata import dicionario, auditoria
+from bra_municipalities_panel.metadata import dicionario, auditoria
 
 def test_compute_statistics_tipos_nulos_vazios():
     df = pl.DataFrame({
