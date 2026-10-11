@@ -4,9 +4,13 @@ Valida versão, __all__, namespaces de fontes e importabilidade de funções
 documentadas no README sem qualquer chamada de rede.
 """
 
+from pathlib import Path
+import subprocess
+import sys
 import types
 import pytest
 import br_municipios_panel as bmp
+
 
 
 def test_package_version():
@@ -56,3 +60,40 @@ def test_readme_quickstart_imports_and_callables():
     assert callable(siconfi.harmonizar)
     assert callable(finbra.harmonizar)
     assert callable(saude.harmonizar)
+
+
+def test_from_import_submodules():
+    """Valida que 'from br_municipios_panel import <namespace>' importa os submódulos corretamente."""
+    from br_municipios_panel import datasus, ibge, inep, ipea, tesouro
+
+    assert isinstance(datasus, types.ModuleType)
+    assert isinstance(ibge, types.ModuleType)
+    assert isinstance(inep, types.ModuleType)
+    assert isinstance(ipea, types.ModuleType)
+    assert isinstance(tesouro, types.ModuleType)
+
+
+def test_lazy_imports_clean_subprocess():
+    """Valida que 'import br_municipios_panel' em processo limpo não carrega polars, pandas nem módulos pesados."""
+    src_dir = str(Path(__file__).resolve().parent.parent / "src")
+    code = (
+        "import sys\n"
+        f"if {src_dir!r} not in sys.path: sys.path.insert(0, {src_dir!r})\n"
+        "import br_municipios_panel\n"
+        "heavy_modules = {'polars', 'pandas', 'br_municipios_panel.nucleo', "
+        "'br_municipios_panel.inep.censo_escolar', "
+        "'br_municipios_panel.inep.censo_superior', "
+        "'br_municipios_panel.inep.ideb'}\n"
+        "loaded_heavy = heavy_modules.intersection(sys.modules)\n"
+        "if loaded_heavy:\n"
+        "    print(f'Módulos carregados indevidamente: {sorted(loaded_heavy)}')\n"
+        "    sys.exit(1)\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, f"Processo limpo falhou: stdout={result.stdout}, stderr={result.stderr}"
+
