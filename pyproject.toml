@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,9 +7,32 @@ name = "bra-municipalities-panel"
 version = "0.1.0"
 description = "ETL library for a harmonized panel of socioeconomic, fiscal, health, territorial and educational indicators for Brazilian municipalities (IBGE, Tesouro Nacional, IPEA Data, DATASUS, INEP)."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [{ name = "Lucas Guesse" }]
+keywords = [
+    "brazil",
+    "municipalities",
+    "panel",
+    "etl",
+    "indicators",
+    "ibge",
+    "inep",
+    "siconfi",
+    "datasus",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
 dependencies = [
     "duckdb>=1.0.0",
     "polars>=1.0.0",
@@ -27,6 +50,20 @@ dependencies = [
 
 [project.optional-dependencies]
 plots = ["matplotlib>=3.9.0", "seaborn>=0.13.0"]
+dev = [
+    "build>=1.2.0",
+    "pytest>=8.0.0",
+    "twine>=5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/lucasguesse/bra-municipalities-panel"
+Repository = "https://github.com/lucasguesse/bra-municipalities-panel"
+Issues = "https://github.com/lucasguesse/bra-municipalities-panel/issues"
+Documentation = "https://github.com/lucasguesse/bra-municipalities-panel#readme"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+bra_municipalities_panel = ["metadata/variaveis.json"]
