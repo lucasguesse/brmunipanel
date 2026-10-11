@@ -5,10 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "br-municipios-panel"
 version = "0.1.0"
-description = "ETL library for a harmonized panel of socioeconomic, fiscal, health and territorial indicators for Brazilian municipalities (IBGE, Tesouro Nacional, IPEA Data, DATASUS)."
+description = "ETL library for a harmonized panel of socioeconomic, fiscal, health, territorial and educational indicators for Brazilian municipalities (IBGE, Tesouro Nacional, IPEA Data, DATASUS, INEP)."
 readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.10"
-authors = [{ name = "Lucas" }]
+authors = [{ name = "Lucas Guesse" }]
 dependencies = [
     "duckdb>=1.0.0",
     "polars>=1.0.0",
