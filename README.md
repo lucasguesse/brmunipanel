@@ -1,9 +1,9 @@
-# br-municipios-panel
+# bra-municipalities-panel
 
 **A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023).**
 
 ## Overview
-`br-municipios-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
+`bra-municipalities-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
 By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six published tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
 
@@ -28,10 +28,10 @@ You can install the library directly from PyPI (once published) or from the sour
 
 ```bash
 # Recommended via pip (once published on PyPI)
-pip install br-municipios-panel
+pip install bra-municipalities-panel
 
 # From the GitHub repository
-pip install git+https://github.com/lucasguesse/br-municipios-panel.git
+pip install git+https://github.com/lucasguesse/bra-municipalities-panel.git
 ```
 
 ## Quick Start (Usage Example)
@@ -40,16 +40,16 @@ The library exposes version metadata and source namespaces at top level, along w
 
 ```python
 from pathlib import Path
-import br_municipios_panel as bmp
-from br_municipios_panel.ibge import populacao, pib
-from br_municipios_panel.ipea import pbf
-from br_municipios_panel.inep import (
+import bra_municipalities_panel as bmp
+from bra_municipalities_panel.ibge import populacao, pib
+from bra_municipalities_panel.ipea import pbf
+from bra_municipalities_panel.inep import (
     harmonizar_censo_escolar,
     harmonizar_censo_superior,
     harmonizar_ideb,
 )
-from br_municipios_panel.tesouro import siconfi, finbra
-from br_municipios_panel.datasus import saude
+from bra_municipalities_panel.tesouro import siconfi, finbra
+from bra_municipalities_panel.datasus import saude
 
 # Package version and source namespaces
 print(bmp.__version__)
@@ -91,8 +91,8 @@ The library currently wraps and harmonizes the following official sources:
 To set up the library for local development and run the test suite:
 
 ```bash
-git clone https://github.com/lucasguesse/br-municipios-panel.git
-cd br-municipios-panel
+git clone https://github.com/lucasguesse/bra-municipalities-panel.git
+cd bra-municipalities-panel
 pip install -e .
 pytest
 ```
