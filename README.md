@@ -87,15 +87,36 @@ The library currently wraps and harmonizes the following official sources:
   * Censo da Educação Superior: In-person higher education institutions and enrollments
   * IDEB: Observed public school scores across primary (anos iniciais), lower secondary (anos finais), and upper secondary (ensino médio) education
 
-## Development and Testing
-To set up the library for local development and run the test suite:
+## Development, Testing, and Building
+To set up the library for local development, run tests, and build verifiable distribution packages according to the Python Packaging User Guide:
 
 ```bash
+# 1. Clone repository and navigate to root
 git clone https://github.com/lucasguesse/bra-municipalities-panel.git
 cd bra-municipalities-panel
-pip install -e .
+
+# 2. Create and activate a dedicated virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# 3. Install in editable mode with development dependencies
+pip install -e ".[dev]"
+
+# 4. Run the full test suite
 pytest
+
+# 5. Build standard distribution artifacts (sdist and wheel)
+# Ensure dist/ is clean before building
+python -m build
+
+# 6. Validate distribution artifacts strictly with Twine
+python -m twine check --strict dist/*
+
+# 7. Test installation of the built wheel in an isolated environment
+pip install --no-deps dist/bra_municipalities_panel-0.1.0-py3-none-any.whl
 ```
+
+> **Note on Publishing:** Distribution packages are published to PyPI/TestPyPI through dedicated CI workflows using PyPA Trusted Publishing (OIDC). Never commit API tokens, credentials, or `.pypirc` files to version control.
 
 Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
 
