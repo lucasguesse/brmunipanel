@@ -256,14 +256,18 @@ def test_processar_limitrofes_df() -> None:
 
 
 def test_ler_sedes(tmp_path) -> None:
-    con = sqlite3.connect(":memory:")
-    con.execute('CREATE TABLE "BR_localidades_2022" (CD_MUN TEXT, NM_MUN TEXT, CT_LOCALIDADE TEXT, SCT_LOCALIDADE TEXT, LAT_LOCALIDADE REAL, LONG_LOCALIDADE REAL)')
-    con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("1100015", "Alta Floresta", "Cidade", "Sede", -11.932999610900879, -62.003700256347656))
-    con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("1100015", "Alta Floresta", "Povoado", "", -12.5, -62.5))
-    con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("2605459", "Fernando", "Distrito Estadual de Fernando de Noronha", "", -3.841300010681152, -32.4109001159668))
+    db_path = tmp_path / "teste_localidades.gpkg"
+    con = sqlite3.connect(db_path)
+    try:
+        con.execute('CREATE TABLE "BR_localidades_2022" (CD_MUN TEXT, NM_MUN TEXT, CT_LOCALIDADE TEXT, SCT_LOCALIDADE TEXT, LAT_LOCALIDADE REAL, LONG_LOCALIDADE REAL)')
+        con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("1100015", "Alta Floresta", "Cidade", "Sede", -11.932999610900879, -62.003700256347656))
+        con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("1100015", "Alta Floresta", "Povoado", "", -12.5, -62.5))
+        con.execute('INSERT INTO "BR_localidades_2022" VALUES (?, ?, ?, ?, ?, ?)', ("2605459", "Fernando", "Distrito Estadual de Fernando de Noronha", "", -3.841300010681152, -32.4109001159668))
+        con.commit()
+    finally:
+        con.close()
     
-    banco = con.serialize()
-    con.close()
+    banco = db_path.read_bytes()
     
     with zipfile.ZipFile(tmp_path / "Localidades_Brasil_gpkg.zip", "w") as zf:
         zf.writestr("BR_localidades_2022.gpkg", banco)

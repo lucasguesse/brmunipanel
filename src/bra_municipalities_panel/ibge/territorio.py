@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import io
 import sqlite3
+import tempfile
 import time
 import zipfile
 from pathlib import Path
@@ -244,14 +245,26 @@ def ler_sedes(pasta: Path) -> dict[str, tuple[float, float]]:
     conteudo = nucleo.ler_bruto(pasta, ARQUIVO_LOCALIDADES)
     with zipfile.ZipFile(io.BytesIO(conteudo)) as zf:
         banco = zf.read(NOME_GPKG_LOCALIDADES)
-    con = sqlite3.connect(":memory:")
-    try:
-        con.deserialize(banco)
-        linhas = con.execute(
-            'SELECT CD_MUN, CT_LOCALIDADE, LAT_LOCALIDADE, LONG_LOCALIDADE FROM "BR_localidades_2022"'
-        ).fetchall()
-    finally:
-        con.close()
+    if hasattr(sqlite3.Connection, "deserialize"):
+        con = sqlite3.connect(":memory:")
+        try:
+            con.deserialize(banco)
+            linhas = con.execute(
+                'SELECT CD_MUN, CT_LOCALIDADE, LAT_LOCALIDADE, LONG_LOCALIDADE FROM "BR_localidades_2022"'
+            ).fetchall()
+        finally:
+            con.close()
+    else:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir) / "localidades.gpkg"
+            tmp_path.write_bytes(banco)
+            con = sqlite3.connect(tmp_path)
+            try:
+                linhas = con.execute(
+                    'SELECT CD_MUN, CT_LOCALIDADE, LAT_LOCALIDADE, LONG_LOCALIDADE FROM "BR_localidades_2022"'
+                ).fetchall()
+            finally:
+                con.close()
     df = pd.DataFrame(linhas, columns=["CD_MUN", "CT_LOCALIDADE", "LAT_LOCALIDADE", "LONG_LOCALIDADE"])
     return processar_sedes_df(df)
 
