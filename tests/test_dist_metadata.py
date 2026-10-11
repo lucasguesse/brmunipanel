@@ -1,7 +1,10 @@
 import importlib.resources
 import json
 from pathlib import Path
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 
 def test_pyproject_build_system():
@@ -56,6 +59,7 @@ def test_pyproject_project_metadata():
     assert any(dep.startswith("build") for dep in dev_deps)
     assert any(dep.startswith("pytest") for dep in dev_deps)
     assert any(dep.startswith("twine") for dep in dev_deps)
+    assert any(dep.startswith("tomli") for dep in dev_deps)
 
     package_data = data.get("tool", {}).get("setuptools", {}).get("package-data", {})
     assert "metadata/variaveis.json" in package_data.get("bra_municipalities_panel", [])
