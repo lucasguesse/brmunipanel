@@ -1,5 +1,7 @@
 # bra-municipalities-panel
 
+[![CI](https://github.com/lucasguesse/bra-municipalities-panel/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasguesse/bra-municipalities-panel/actions/workflows/ci.yml)
+
 **A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023).**
 
 ## Overview
