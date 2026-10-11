@@ -1,68 +1,103 @@
-# br-municipios-base (Nome Provisório)
+# br-municipios-panel
 
-**A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, and Social Protection Indicators for Brazilian Municipalities (2006–2023).**
+**A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023).**
 
 ## Overview
-`br-municipios-base` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
+`br-municipios-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
-By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six tables: two territorial ones and four longitudinal thematic ones (Demographics/Economy/Social, Public Finances, Health, and Education).
+By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six published tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
 
 This library is the official scientific protocol and companion codebase to the dataset published in our *Data in Brief* Data Article.
 
 ## Key Features
 - **Fully Reproducible ETL:** Transparent code that downloads raw data directly from official sources (IBGE, Tesouro Nacional/SICONFI, DATASUS, IPEA Data, INEP) and processes it systematically.
 - **Harmonized Joins:** Automatically aligns historical data (2006–2023) against the most recent and stable territorial division grid (DTB 2025).
-- **Thematic Modularity:** Provides six standardized tables. The non-educational longitudinal tables share a complete grid of municipalities and years (can be joined or consumed in isolation). The educational table aggregates micro-data from School Census, Higher Education Census and public school IDEB scores, only storing observed combinations.
-- **Extensive Metadada & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
+- **Thematic Modularity:** Provides six standardized tables:
+  - `municipios`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators).
+  - `demografia_economia_social`: Longitudinal panel covering population estimates, municipal GDP, formal employment from CEMPRE, and Bolsa Família beneficiaries and transfers.
+  - `financas_publicas`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) combining FINBRA (2006–2012) and SICONFI (2013–2023).
+  - `saude`: Longitudinal panel covering health infrastructure, human resources, mortality, and live births from DATASUS (CNES, SIM, Sinasc).
+  - `municipios_limitrofes`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
+  - `educacao`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.
+- **Extensive Metadata & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
 - **Highly Performant:** Built with `duckdb` and `polars`/`pyarrow` for blazing fast in-memory analytics of large municipal microdata.
 
 ## Installation
 
-You can install the library directly from PyPI (once published) or from the source repository.
+You can install the library directly from PyPI (once published) or from the source repository:
 
 ```bash
-# Recommended via pip
-pip install br-municipios-base
+# Recommended via pip (once published on PyPI)
+pip install br-municipios-panel
+
+# From the GitHub repository
+pip install git+https://github.com/lucasguesse/br-municipios-panel.git
 ```
 
 ## Quick Start (Usage Example)
 
+The library exposes version metadata and source namespaces at top level, along with modular ETL and harmonization routines in each submodule:
+
 ```python
+from pathlib import Path
 import br_municipios_panel as bmp
+from br_municipios_panel.ibge import populacao, pib
+from br_municipios_panel.ipea import pbf
+from br_municipios_panel.inep import (
+    harmonizar_censo_escolar,
+    harmonizar_censo_superior,
+    harmonizar_ideb,
+)
+from br_municipios_panel.tesouro import siconfi, finbra
+from br_municipios_panel.datasus import saude
 
-# Fetch municipal public finance data from SICONFI
-finance_df = bmp.tesouro.get_siconfi_despesas(years=[2022])
+# Package version and source namespaces
+print(bmp.__version__)
+# Available namespaces: bmp.ibge, bmp.tesouro, bmp.ipea, bmp.datasus, bmp.inep
 
-# Fetch health infrastructure from DATASUS
-health_df = bmp.datasus.get_health_infrastructure(years=[2020])
+# Example: Harmonize population estimates from a local SIDRA raw folder
+# df_pop = populacao.harmonizar(Path("raw/bases-de-dados/ibge/populacao"))
+
+# Example: Harmonize Bolsa Família records from an IPEA Data raw folder
+# df_pbf = pbf.harmonizar(Path("raw/bases-de-dados/ipea"))
+
+# Example: Harmonize public school IDEB scores with municipal crosswalk
+# df_ideb = harmonizar_ideb(Path("raw/bases-de-dados/ideb"), municipios_df)
 ```
 
 ## Data Sources Handled
 The library currently wraps and harmonizes the following official sources:
 * **IBGE (Instituto Brasileiro de Geografia e Estatística):**
-  * Population estimates
-  * Municipal GDP (PIB Municipal)
-  * Central Register of Enterprises (CEMPRE)
-  * Territorial grids (DTB, Area, Geolocation, Adjacency matrices)
+  * Population estimates (SIDRA Table 6579)
+  * Municipal GDP (PIB Municipal, SIDRA Table 5938)
+  * Central Register of Enterprises (CEMPRE, SIDRA Tables 1685 and 9509)
+  * Territorial grids (DTB 2025, Area, Municipal Seat Coordinates, Adjacency matrices)
 * **Tesouro Nacional (STN):**
-  * FINBRA (2006-2012)
-  * SICONFI (2013-2023)
+  * FINBRA (2006–2012, budgetary expenditure by function)
+  * SICONFI (2013–2023, budgetary expenditure by function)
 * **IPEA Data (MDS):**
-  * Bolsa Família numbers and financial volume
+  * Programa Bolsa Família (beneficiaries and financial transfers, FAM_PBF / VAL_PBF)
 * **Ministério da Saúde (DATASUS):**
-  * Hospital beds, ICU capacity, diagnostics equipment, and physicians per municipality.
-* **INEP:**
-  * School Census and Higher Education Census (general numbers).
+  * CNES: Hospital beds, ICU capacity, diagnostic imaging equipment, and physicians per municipality
+  * SIM: Violent deaths and infant mortality
+  * Sinasc: Live births
+  * Health Regions and Macro-regions
+* **INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira):**
+  * Censo Escolar: Active schools, enrollments, and teachers across basic education stages
+  * Censo da Educação Superior: In-person higher education institutions and enrollments
+  * IDEB: Observed public school scores across primary (anos iniciais), lower secondary (anos finais), and upper secondary (ensino médio) education
 
-## Reproducing the Full Pipeline
-If you wish to re-run the entire pipeline from the raw datasets to the final parquet artifacts:
+## Development and Testing
+To set up the library for local development and run the test suite:
 
 ```bash
-git clone https://github.com/your-org/artigo-01-base-clusterizacao.git
-cd artigo-01-base-clusterizacao
+git clone https://github.com/lucasguesse/br-municipios-panel.git
+cd br-municipios-panel
 pip install -e .
-python scripts/run_pipeline.py --all
+pytest
 ```
+
+Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
 
 ## How to Cite
 If you use this library or the generated dataset in your research, please cite our Data Paper:
@@ -71,3 +106,4 @@ If you use this library or the generated dataset in your research, please cite o
 
 ## License
 MIT License. See [LICENSE](LICENSE) for details.
+
