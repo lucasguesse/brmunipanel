@@ -122,7 +122,7 @@ python -c "import brmunipanel as bmp; print(bmp.__version__)"
 deactivate
 ```
 
-> **Note on Publishing:** Distribution packages should be published to PyPI/TestPyPI through dedicated CI workflows using PyPA Trusted Publishing (OIDC). Official publishing will occur only after dedicated release workflows and trusted publisher environments are configured. Never commit API tokens, credentials, or `.pypirc` files to version control.
+> **Note on Publishing:** Distribution packages are published to TestPyPI and PyPI via GitHub Actions using PyPA Trusted Publishing (OIDC) without persistent tokens or secrets. Publishing to TestPyPI is triggered manually via `workflow_dispatch`, while official publishing to PyPI is triggered strictly upon a published GitHub Release (`v*`). The initial release (`0.1.0`) is pending the configuration of pending publishers and the creation of the first official release. Never commit API tokens, credentials, or `.pypirc` files to version control.
 
 Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
 
