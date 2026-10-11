@@ -7,9 +7,9 @@
 ## Overview
 `brmunipanel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
-By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six published tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
+By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six standardized tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
 
-This library is the official scientific protocol and companion codebase to the dataset published in our *Data in Brief* Data Article.
+This library provides the reproducible scientific protocol and supporting codebase for building the harmonized dataset of Brazilian municipal indicators.
 
 ## Key Features
 - **Fully Reproducible ETL:** Transparent code that downloads raw data directly from official sources (IBGE, Tesouro Nacional/SICONFI, DATASUS, IPEA Data, INEP) and processes it systematically.
@@ -122,14 +122,17 @@ python -c "import brmunipanel as bmp; print(bmp.__version__)"
 deactivate
 ```
 
-> **Note on Publishing:** Distribution packages are published to TestPyPI and PyPI via GitHub Actions using PyPA Trusted Publishing (OIDC) without persistent tokens or secrets. Publishing to TestPyPI is triggered manually via `workflow_dispatch`, while official publishing to PyPI is triggered strictly upon a published GitHub Release (`v*`). The initial release (`0.1.0`) is pending the configuration of pending publishers and the creation of the first official release. Never commit API tokens, credentials, or `.pypirc` files to version control.
+> **Note on Publishing:** Distribution packages are published to TestPyPI and PyPI via GitHub Actions using PyPA Trusted Publishing (OIDC) without persistent tokens or secrets. Publishing to TestPyPI is triggered manually via `workflow_dispatch`, while official publishing to PyPI is triggered strictly upon a published GitHub Release (`v*`). Version `0.1.0` has been published and validated on TestPyPI, while official publication to PyPI remains pending the first official GitHub Release. Never commit API tokens, credentials, or `.pypirc` files to version control.
 
 Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
 
 ## How to Cite
-If you use this library or the generated dataset in your research, please cite our Data Paper:
+If you use this library or its data routines in your research, please cite this software repository and specify the release version used while a definitive academic citation is not yet available:
 
-> **[Citação a ser preenchida após aceitação na Data in Brief]**
+- **Repository:** [https://github.com/lucasguesse/brmunipanel](https://github.com/lucasguesse/brmunipanel)
+- **Release:** Specify the release tag or version used in your analysis.
+
+A formal academic citation will be provided here once available.
 
 ## License
 MIT License. See [LICENSE](LICENSE) for details.
