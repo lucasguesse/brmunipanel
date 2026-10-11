@@ -112,11 +112,15 @@ python -m build
 # 6. Validate distribution artifacts strictly with Twine
 python -m twine check --strict dist/*
 
-# 7. Test installation of the built wheel in an isolated environment
+# 7. Test installation of the built wheel in a separate, clean virtual environment
+python -m venv .venv-clean
+source .venv-clean/bin/activate  # On Windows: .venv-clean\Scripts\activate
 pip install --no-deps dist/bra_municipalities_panel-0.1.0-py3-none-any.whl
+python -c "import bra_municipalities_panel as bmp; print(bmp.__version__)"
+deactivate
 ```
 
-> **Note on Publishing:** Distribution packages are published to PyPI/TestPyPI through dedicated CI workflows using PyPA Trusted Publishing (OIDC). Never commit API tokens, credentials, or `.pypirc` files to version control.
+> **Note on Publishing:** Distribution packages should be published to PyPI/TestPyPI through dedicated CI workflows using PyPA Trusted Publishing (OIDC). Official publishing will occur only after dedicated release workflows and trusted publisher environments are configured. Never commit API tokens, credentials, or `.pypirc` files to version control.
 
 Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
 
