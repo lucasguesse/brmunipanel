@@ -20,7 +20,7 @@ from typing import Callable, Iterable
 import requests
 
 MANIFESTO = "manifest.json"
-AGENTE = "Mozilla/5.0 (compatible; bra-municipalities-panel/0.1)"
+AGENTE = "Mozilla/5.0 (compatible; brmunipanel/0.1)"
 
 
 class RespostaInvalida(Exception):

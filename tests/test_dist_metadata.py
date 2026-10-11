@@ -28,7 +28,7 @@ def test_pyproject_project_metadata():
         data = tomllib.load(f)
 
     project = data.get("project", {})
-    assert project.get("name") == "bra-municipalities-panel"
+    assert project.get("name") == "brmunipanel"
     assert project.get("version") == "0.1.0"
     assert project.get("license") == "MIT"
     assert project.get("license-files") == ["LICENSE"]
@@ -46,10 +46,10 @@ def test_pyproject_project_metadata():
     assert "Programming Language :: Python :: 3.10" in classifiers
 
     urls = project.get("urls", {})
-    assert urls.get("Homepage") == "https://github.com/lucasguesse/bra-municipalities-panel"
-    assert urls.get("Repository") == "https://github.com/lucasguesse/bra-municipalities-panel"
-    assert urls.get("Issues") == "https://github.com/lucasguesse/bra-municipalities-panel/issues"
-    assert urls.get("Documentation") == "https://github.com/lucasguesse/bra-municipalities-panel#readme"
+    assert urls.get("Homepage") == "https://github.com/lucasguesse/brmunipanel"
+    assert urls.get("Repository") == "https://github.com/lucasguesse/brmunipanel"
+    assert urls.get("Issues") == "https://github.com/lucasguesse/brmunipanel/issues"
+    assert urls.get("Documentation") == "https://github.com/lucasguesse/brmunipanel#readme"
 
     opts = project.get("optional-dependencies", {})
     assert "dev" in opts
@@ -62,12 +62,12 @@ def test_pyproject_project_metadata():
     assert any(dep.startswith("tomli") for dep in dev_deps)
 
     package_data = data.get("tool", {}).get("setuptools", {}).get("package-data", {})
-    assert "metadata/variaveis.json" in package_data.get("bra_municipalities_panel", [])
+    assert "metadata/variaveis.json" in package_data.get("brmunipanel", [])
 
 
 def test_variaveis_json_data_asset():
     root = Path(__file__).resolve().parent.parent
-    var_json = root / "src" / "bra_municipalities_panel" / "metadata" / "variaveis.json"
+    var_json = root / "src" / "brmunipanel" / "metadata" / "variaveis.json"
     assert var_json.exists(), "metadata/variaveis.json deve existir no pacote fonte"
 
     with open(var_json, "r", encoding="utf-8") as f:
@@ -76,7 +76,7 @@ def test_variaveis_json_data_asset():
     assert len(meta_dict) > 0
 
     # Resource loading through importlib.resources
-    resource = importlib.resources.files("bra_municipalities_panel.metadata") / "variaveis.json"
+    resource = importlib.resources.files("brmunipanel.metadata") / "variaveis.json"
     assert resource.is_file()
     loaded = json.loads(resource.read_text(encoding="utf-8"))
     assert isinstance(loaded, dict)
@@ -93,4 +93,4 @@ def test_manifest_in_declarations():
     assert "include README.md" in content
     assert "include pyproject.toml" in content
     assert "graft tests" in content
-    assert "recursive-include src/bra_municipalities_panel/metadata *.json" in content
+    assert "recursive-include src/brmunipanel/metadata *.json" in content

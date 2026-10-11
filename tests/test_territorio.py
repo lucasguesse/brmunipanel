@@ -1,4 +1,4 @@
-"""Testes do módulo bra_municipalities_panel.ibge.territorio."""
+"""Testes do módulo brmunipanel.ibge.territorio."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ import pandas as pd
 import polars as pl
 import pytest
 
-from bra_municipalities_panel.ibge import territorio
-from bra_municipalities_panel.nucleo import RespostaInvalida
+from brmunipanel.ibge import territorio
+from brmunipanel.nucleo import RespostaInvalida
 
 
 def test_validar_dtb() -> None:

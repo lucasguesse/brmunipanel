@@ -3,7 +3,7 @@ requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bra-municipalities-panel"
+name = "brmunipanel"
 version = "0.1.0"
 description = "ETL library for a harmonized panel of socioeconomic, fiscal, health, territorial and educational indicators for Brazilian municipalities (IBGE, Tesouro Nacional, IPEA Data, DATASUS, INEP)."
 readme = "README.md"
@@ -58,13 +58,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/lucasguesse/bra-municipalities-panel"
-Repository = "https://github.com/lucasguesse/bra-municipalities-panel"
-Issues = "https://github.com/lucasguesse/bra-municipalities-panel/issues"
-Documentation = "https://github.com/lucasguesse/bra-municipalities-panel#readme"
+Homepage = "https://github.com/lucasguesse/brmunipanel"
+Repository = "https://github.com/lucasguesse/brmunipanel"
+Issues = "https://github.com/lucasguesse/brmunipanel/issues"
+Documentation = "https://github.com/lucasguesse/brmunipanel#readme"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-bra_municipalities_panel = ["metadata/variaveis.json"]
+brmunipanel = ["metadata/variaveis.json"]

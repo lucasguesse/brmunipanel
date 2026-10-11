@@ -2,7 +2,7 @@ import pytest
 import polars as pl
 import pandas as pd
 from pathlib import Path
-from bra_municipalities_panel.inep.ideb import harmonizar, _ler_planilha, _encontrar_linha_cabecalho
+from brmunipanel.inep.ideb import harmonizar, _ler_planilha, _encontrar_linha_cabecalho
 import hashlib
 
 def test_encontrar_cabecalho(tmp_path):

@@ -1,11 +1,11 @@
-# bra-municipalities-panel
+# BRMuniPanel
 
-[![CI](https://github.com/lucasguesse/bra-municipalities-panel/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasguesse/bra-municipalities-panel/actions/workflows/ci.yml)
+[![CI](https://github.com/lucasguesse/brmunipanel/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasguesse/brmunipanel/actions/workflows/ci.yml)
 
 **A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023).**
 
 ## Overview
-`bra-municipalities-panel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
+`brmunipanel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
 By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six published tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
 
@@ -30,10 +30,10 @@ You can install the library directly from PyPI (once published) or from the sour
 
 ```bash
 # Recommended via pip (once published on PyPI)
-pip install bra-municipalities-panel
+pip install brmunipanel
 
 # From the GitHub repository
-pip install git+https://github.com/lucasguesse/bra-municipalities-panel.git
+pip install git+https://github.com/lucasguesse/brmunipanel.git
 ```
 
 ## Quick Start (Usage Example)
@@ -42,16 +42,16 @@ The library exposes version metadata and source namespaces at top level, along w
 
 ```python
 from pathlib import Path
-import bra_municipalities_panel as bmp
-from bra_municipalities_panel.ibge import populacao, pib
-from bra_municipalities_panel.ipea import pbf
-from bra_municipalities_panel.inep import (
+import brmunipanel as bmp
+from brmunipanel.ibge import populacao, pib
+from brmunipanel.ipea import pbf
+from brmunipanel.inep import (
     harmonizar_censo_escolar,
     harmonizar_censo_superior,
     harmonizar_ideb,
 )
-from bra_municipalities_panel.tesouro import siconfi, finbra
-from bra_municipalities_panel.datasus import saude
+from brmunipanel.tesouro import siconfi, finbra
+from brmunipanel.datasus import saude
 
 # Package version and source namespaces
 print(bmp.__version__)
@@ -94,8 +94,8 @@ To set up the library for local development, run tests, and build verifiable dis
 
 ```bash
 # 1. Clone repository and navigate to root
-git clone https://github.com/lucasguesse/bra-municipalities-panel.git
-cd bra-municipalities-panel
+git clone https://github.com/lucasguesse/brmunipanel.git
+cd brmunipanel
 
 # 2. Create and activate a dedicated virtual environment
 python -m venv .venv
@@ -117,8 +117,8 @@ python -m twine check --strict dist/*
 # 7. Test installation of the built wheel in a separate, clean virtual environment
 python -m venv .venv-clean
 source .venv-clean/bin/activate  # On Windows: .venv-clean\Scripts\activate
-pip install --no-deps dist/bra_municipalities_panel-0.1.0-py3-none-any.whl
-python -c "import bra_municipalities_panel as bmp; print(bmp.__version__)"
+pip install --no-deps dist/brmunipanel-0.1.0-py3-none-any.whl
+python -c "import brmunipanel as bmp; print(bmp.__version__)"
 deactivate
 ```
 

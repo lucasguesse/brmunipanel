@@ -1,4 +1,4 @@
-"""Testes do módulo do Produto Interno Bruto (bra_municipalities_panel.ibge.pib)."""
+"""Testes do módulo do Produto Interno Bruto (brmunipanel.ibge.pib)."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from bra_municipalities_panel.ibge import pib
-from bra_municipalities_panel.ibge import sidra
+from brmunipanel.ibge import pib
+from brmunipanel.ibge import sidra
 
 
 @pytest.fixture

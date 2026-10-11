@@ -7,7 +7,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from bra_municipalities_panel.painel import (
+from brmunipanel.painel import (
     montar_municipios,
     montar_despesa,
     montar_tabela_longitudinal,

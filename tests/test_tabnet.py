@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from bra_municipalities_panel.datasus import tabnet
-from bra_municipalities_panel.datasus.tabnet import TABULACOES, extrair_tabela, montar_corpo, nome_dbf, validar
-from bra_municipalities_panel.nucleo import RespostaInvalida
+from brmunipanel.datasus import tabnet
+from brmunipanel.datasus.tabnet import TABULACOES, extrair_tabela, montar_corpo, nome_dbf, validar
+from brmunipanel.nucleo import RespostaInvalida
 
 PASTA_DADOS = Path(__file__).parent / "dados"
 

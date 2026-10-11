@@ -1,4 +1,4 @@
-"""Testes do módulo bra_municipalities_panel.datasus.regioes_saude."""
+"""Testes do módulo brmunipanel.datasus.regioes_saude."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from typing import Any
 import polars as pl
 import pytest
 
-from bra_municipalities_panel import nucleo
-from bra_municipalities_panel.datasus import regioes_saude
-from bra_municipalities_panel.nucleo import RespostaInvalida
+from brmunipanel import nucleo
+from brmunipanel.datasus import regioes_saude
+from brmunipanel.nucleo import RespostaInvalida
 
 PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 

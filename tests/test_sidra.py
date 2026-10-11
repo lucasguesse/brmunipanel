@@ -1,4 +1,4 @@
-"""Testes do cliente compartilhado do SIDRA (bra_municipalities_panel.ibge.sidra)."""
+"""Testes do cliente compartilhado do SIDRA (brmunipanel.ibge.sidra)."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from bra_municipalities_panel.ibge import sidra
-from bra_municipalities_panel.nucleo import RespostaInvalida
+from brmunipanel.ibge import sidra
+from brmunipanel.nucleo import RespostaInvalida
 
 PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 

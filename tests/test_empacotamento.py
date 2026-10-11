@@ -8,7 +8,7 @@ from unittest import mock
 import polars as pl
 import pytest
 
-from bra_municipalities_panel import empacotamento
+from brmunipanel import empacotamento
 
 @pytest.fixture
 def fake_environment(tmp_path):

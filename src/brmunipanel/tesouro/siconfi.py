@@ -24,8 +24,8 @@ from pathlib import Path
 
 import polars as pl
 
-from bra_municipalities_panel import nucleo
-from bra_municipalities_panel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, ESQUEMA, FUNCOES
+from brmunipanel import nucleo
+from brmunipanel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, ESQUEMA, FUNCOES
 
 ANOS = tuple(range(2013, 2024))
 URL_PORTAL = "https://siconfi.tesouro.gov.br/siconfi/pages/public/consulta_finbra/finbra_list.jsf"

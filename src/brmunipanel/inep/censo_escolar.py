@@ -18,7 +18,7 @@ import zipfile
 import tempfile
 import polars as pl
 
-from bra_municipalities_panel.nucleo import Requisicao, RespostaInvalida, baixar_lote
+from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote
 
 ANOS_ATUAIS = list(range(2007, 2024))
 ANOS_TODOS = list(range(2006, 2024))

@@ -5,8 +5,8 @@ import pytest
 import polars as pl
 from pathlib import Path
 
-from bra_municipalities_panel.inep import censo_superior
-from bra_municipalities_panel.nucleo import baixar_lote as baixar_lote_do_nucleo
+from brmunipanel.inep import censo_superior
+from brmunipanel.nucleo import baixar_lote as baixar_lote_do_nucleo
 
 
 @pytest.fixture

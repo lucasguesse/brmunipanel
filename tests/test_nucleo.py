@@ -1,4 +1,4 @@
-"""Testes do núcleo comum de download, manifesto e tentativas (bra_municipalities_panel.nucleo)."""
+"""Testes do núcleo comum de download, manifesto e tentativas (brmunipanel.nucleo)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Sequence
 import pytest
 import requests
 
-from bra_municipalities_panel.nucleo import (
+from brmunipanel.nucleo import (
     Requisicao,
     RespostaInvalida,
     baixar,

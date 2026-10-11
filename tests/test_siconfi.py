@@ -5,10 +5,10 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from bra_municipalities_panel import nucleo
-from bra_municipalities_panel.tesouro import despesa_funcao, finbra, siconfi
-from bra_municipalities_panel.tesouro.despesa_funcao import ESQUEMA
-from bra_municipalities_panel.tesouro.finbra import processar_tabela
+from brmunipanel import nucleo
+from brmunipanel.tesouro import despesa_funcao, finbra, siconfi
+from brmunipanel.tesouro.despesa_funcao import ESQUEMA
+from brmunipanel.tesouro.finbra import processar_tabela
 
 def test_ler_cabecalho(tmp_path):
     z1 = tmp_path / "teste.zip"

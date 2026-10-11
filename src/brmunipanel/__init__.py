@@ -23,12 +23,12 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from bra_municipalities_panel import datasus, ibge, inep, ipea, tesouro
+    from brmunipanel import datasus, ibge, inep, ipea, tesouro
 
 
 def __getattr__(name: str):
     if name in _SUBMODULES:
-        module = importlib.import_module(f"bra_municipalities_panel.{name}")
+        module = importlib.import_module(f"brmunipanel.{name}")
         globals()[name] = module
         return module
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
