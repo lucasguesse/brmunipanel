@@ -178,7 +178,7 @@ Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the docum
 - `manifest.json` and `checksums.sha256`: Metadata artifacts and SHA-256 integrity checksums. Note: `manifest.json` and `checksums.sha256` are meta-artifacts.
 
 ## Reproducibility
-This dataset is deterministically generated via the `br_municipios_panel` Python package.
+This dataset is deterministically generated via the `bra_municipalities_panel` Python package.
 To reproduce from processed data:
 ```bash
 python scripts/run_pipeline.py --step data --etapa finalizar --dataset_version <version> --date <YYYY-MM-DD>

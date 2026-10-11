@@ -20,7 +20,7 @@ import tempfile
 import polars as pl
 import re
 
-from br_municipios_panel.nucleo import Requisicao, RespostaInvalida, baixar_lote
+from bra_municipalities_panel.nucleo import Requisicao, RespostaInvalida, baixar_lote
 
 ANOS_ATUAIS = list(range(2009, 2025))
 ANOS_ANTIGOS = list(range(2000, 2009))

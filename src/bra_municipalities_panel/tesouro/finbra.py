@@ -31,8 +31,8 @@ from pathlib import Path
 import polars as pl
 from access_parser import AccessParser
 
-from br_municipios_panel.nucleo import Requisicao, RespostaInvalida, baixar_lote, ler_bruto
-from br_municipios_panel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, ESQUEMA, FUNCOES
+from bra_municipalities_panel.nucleo import Requisicao, RespostaInvalida, baixar_lote, ler_bruto
+from bra_municipalities_panel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, ESQUEMA, FUNCOES
 
 
 def converter_moeda(valor) -> float | None:
