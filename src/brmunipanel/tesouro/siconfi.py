@@ -1,21 +1,21 @@
-"""Despesa municipal empenhada por função em 2013–2023 (SICONFI, Tesouro Nacional).
+"""Municipal committed expenditure by budget function in 2013–2023 (SICONFI, Tesouro Nacional).
 
-A saída tem só as 28 funções da classificação funcional.
-O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
+The output contains only the 28 functions of the functional classification.
+Declared total and intra-budgetary expenditure are used only in internal checks.
 
-Fonte: consulta "Contas Anuais" do portal do SICONFI, tabela "Despesas por Função (Anexo I-E)", escopo "Municípios",
-com um arquivo por exercício e todos os municípios em cada arquivo. O portal barra o download por script com um
-captcha, então os arquivos são baixados à mão e postos na pasta de dados brutos da fonte. `baixar` não acessa
-a rede: confere o cabeçalho de cada `.zip` e o registra no manifesto. Para refazer o download, abrir `URL_PORTAL`,
-escolher o exercício, o escopo e a tabela acima, deixar o período de homologação em branco e salvar o `.zip` na
-pasta, com qualquer nome, porque o ano vem de dentro do arquivo. O arquivo de 2024 é registrado e não é harmonizado.
+Source: "Contas Anuais" query from the SICONFI portal, table "Despesas por Função (Anexo I-E)", scope "Municípios",
+with one file per fiscal year and all municipalities in each file. The portal blocks script downloads with a
+captcha, so files are downloaded manually and placed in the source raw data folder. `baixar` does not access
+the network: it checks the header of each `.zip` and records it in the manifest. To redo the download, open `URL_PORTAL`,
+choose the fiscal year, scope, and table above, leave the approval period blank, and save the `.zip` in the
+folder, under any name, because the year comes from inside the file. The 2024 file is recorded and not harmonized.
 
-A harmonização usa só as linhas de "Despesas Empenhadas". A função com linha própria usa o valor da linha; sem linha
-própria, recebe a soma das suas subfunções; sem nenhuma das duas, vale zero. `desp_total_funcoes` é a linha de total
-sem as intraorçamentárias e fica nula quando a declaração não a traz. `desp_intraorcamentaria` é a linha de total
-intraorçamentário, ou zero quando ela não existe, e `declara_intraorcamentaria` é verdadeira quando ela é maior que
-zero. A conta "Demais Subfunções" sem código de função, que só aparece em 2017, é ignorada. O município sem despesa
-empenhada no ano não gera linha, e o Distrito Federal fica fora. A saída segue `despesa_funcao.ESQUEMA`.
+Harmonization uses only "Despesas Empenhadas" rows. A function with its own row uses the row value; without its own
+row, it receives the sum of its subfunctions; with neither, it is zero. `desp_total_funcoes` is the total row
+without intra-budgetary expenditures and remains null when the declaration does not include it. `desp_intraorcamentaria` is the total
+intra-budgetary row, or zero when it does not exist, and `declara_intraorcamentaria` is true when it is greater than
+zero. The "Demais Subfunções" account without function code, which only appears in 2017, is ignored. Municipalities without committed
+expenditure in the year do not generate a row, and Distrito Federal is excluded. Output follows `despesa_funcao.ESQUEMA`.
 """
 import csv
 import re

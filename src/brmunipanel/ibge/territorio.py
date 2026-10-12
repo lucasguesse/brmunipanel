@@ -1,11 +1,11 @@
-"""Tabelas territoriais do IBGE: Divisão Territorial Brasileira (DTB 2025), Municípios Limítrofes (2024), Áreas Territoriais (2025) e Localidades do Brasil (2022).
+"""IBGE territorial tables: Divisão Territorial Brasileira (DTB 2025), Municípios Limítrofes (2024), Áreas Territoriais (2025), and Localidades do Brasil (2022).
 
-DTB 2025: lista canônica de municípios (5.571 municípios mais DF) e regionalização
-(Regiões Geográficas Intermediárias e Imediatas).
-Municípios Limítrofes 2024: pares de municípios que compartilham fronteira física e
-indicadores de fronteira internacional e litoral atlântico.
-Áreas Territoriais 2025: área territorial de cada município em km².
-Localidades do Brasil 2022: latitude e longitude da sede municipal.
+DTB 2025: canonical list of municipalities (5,571 municipalities plus DF) and regionalization
+(Intermediate and Immediate Geographic Regions).
+Municípios Limítrofes 2024: pairs of municipalities that share a physical border and
+indicators of international border and Atlantic coast.
+Áreas Territoriais 2025: territorial area of each municipality in km².
+Localidades do Brasil 2022: latitude and longitude of the municipal seat.
 """
 
 from __future__ import annotations
@@ -75,7 +75,7 @@ UFS: dict[str, str] = {
 
 
 def validar_dtb(conteudo: bytes) -> None:
-    """Verifica se o conteúdo é um zip íntegro contendo o relatório de municípios da DTB."""
+    """Checks if the content is an intact zip containing the DTB municipalities report."""
     try:
         with zipfile.ZipFile(io.BytesIO(conteudo)) as zf:
             if NOME_XLS_DTB not in zf.namelist():
@@ -85,7 +85,7 @@ def validar_dtb(conteudo: bytes) -> None:
 
 
 def validar_localidades(conteudo: bytes) -> None:
-    """Verifica se o conteúdo é um zip íntegro contendo o geopackage de localidades."""
+    """Checks if the content is an intact zip containing the localities geopackage."""
     try:
         with zipfile.ZipFile(io.BytesIO(conteudo)) as zf:
             if NOME_GPKG_LOCALIDADES not in zf.namelist():
@@ -95,13 +95,13 @@ def validar_localidades(conteudo: bytes) -> None:
 
 
 def validar_limitrofes(conteudo: bytes) -> None:
-    """Verifica se o arquivo começa com a assinatura OLE (D0 CF 11 E0) de planilhas .xls legadas."""
+    """Checks if the file starts with the OLE signature (D0 CF 11 E0) of legacy .xls spreadsheets."""
     if not conteudo.startswith(b"\xd0\xcf\x11\xe0"):
         raise RespostaInvalida("Assinatura OLE (D0 CF 11 E0) não encontrada no início do arquivo .xls")
 
 
 def baixar(pasta: Path, **opcoes) -> list[dict]:
-    """Baixa o zip da DTB 2025, a planilha limítrofes 2024, a planilha de áreas 2025 e localidades 2022."""
+    """Downloads the DTB 2025 zip, the 2024 neighboring municipalities spreadsheet, the 2025 areas spreadsheet, and 2022 localities."""
     pasta = Path(pasta)
     req_dtb = Requisicao(
         chave=CHAVE_DTB,
@@ -149,7 +149,7 @@ def baixar(pasta: Path, **opcoes) -> list[dict]:
 
 
 def ler_fronteira_e_litoral(pasta: Path) -> tuple[set[str], set[str]]:
-    """Extrai os conjuntos de códigos de municípios com limite internacional e litorâneos."""
+    """Extracts sets of municipality codes with international borders and coastal borders."""
     conteudo = nucleo.ler_bruto(pasta, ARQUIVO_LIMITROFES)
     df_int = pd.read_excel(io.BytesIO(conteudo), sheet_name="Limítrofes com Limite Internacional", header=0, dtype=str)
     df_oa = pd.read_excel(io.BytesIO(conteudo), sheet_name="Limítrofes com Oceano Atlântico", header=0, dtype=str)
@@ -159,7 +159,7 @@ def ler_fronteira_e_litoral(pasta: Path) -> tuple[set[str], set[str]]:
 
 
 def processar_areas_df(df: pd.DataFrame) -> dict[str, float]:
-    """Processa a planilha de áreas e devolve um dicionário de cod_municipio para área em km²."""
+    """Processes the areas spreadsheet and returns a dictionary from cod_municipio to area in km²."""
     df_filtrado = df[df["CD_MUN"].astype(str).str.strip().str.fullmatch(r"\d{7}")].copy()
     codigos = df_filtrado["CD_MUN"].astype(str).str.strip()
     
@@ -185,14 +185,14 @@ def processar_areas_df(df: pd.DataFrame) -> dict[str, float]:
 
 
 def ler_areas(pasta: Path) -> dict[str, float]:
-    """Lê a planilha de áreas e retorna dicionário."""
+    """Reads the areas spreadsheet and returns dictionary."""
     conteudo = nucleo.ler_bruto(pasta, ARQUIVO_AREAS)
     df = pd.read_excel(io.BytesIO(conteudo), sheet_name="AR_BR_MUN_2025", header=0, dtype=str)
     return processar_areas_df(df)
 
 
 def processar_sedes_df(df: pd.DataFrame) -> dict[str, tuple[float, float]]:
-    """Processa a tabela de localidades e devolve um dicionário de cod_municipio para (latitude, longitude) da sede."""
+    """Processes the localities table and returns a dictionary from cod_municipio to seat (latitude, longitude)."""
     df_filtrado = df[df["CT_LOCALIDADE"].isin(["Cidade", "Distrito Estadual de Fernando de Noronha"])].copy()
     
     dict_sedes = {}
@@ -241,7 +241,7 @@ def processar_sedes_df(df: pd.DataFrame) -> dict[str, tuple[float, float]]:
 
 
 def ler_sedes(pasta: Path) -> dict[str, tuple[float, float]]:
-    """Lê o geopackage de localidades e retorna dicionário."""
+    """Reads the localities geopackage and returns dictionary."""
     conteudo = nucleo.ler_bruto(pasta, ARQUIVO_LOCALIDADES)
     with zipfile.ZipFile(io.BytesIO(conteudo)) as zf:
         banco = zf.read(NOME_GPKG_LOCALIDADES)
@@ -276,7 +276,7 @@ def processar_dtb_df(
     areas: dict[str, float] | None = None,
     sedes: dict[str, tuple[float, float]] | None = None,
 ) -> pl.DataFrame:
-    """Transforma o DataFrame bruto da DTB na tabela padronizada de municípios."""
+    """Transforms the raw DTB DataFrame into the standardized municipalities table."""
     cod_m = df["Código Município Completo"].astype(str).str.strip()
     cod_uf = df["UF"].astype(str).str.strip()
 
@@ -305,7 +305,7 @@ def harmonizar_municipios(
     codigos_fronteira: Iterable[str] | None = None,
     codigos_litoraneo: Iterable[str] | None = None,
 ) -> pl.DataFrame:
-    """Harmoniza a tabela canônica de municípios a partir da DTB 2025 e das abas de fronteira/litoral."""
+    """Harmonizes the canonical municipalities table from DTB 2025 and the border/coastal tabs."""
     pasta = Path(pasta)
     if codigos_fronteira is None or codigos_litoraneo is None:
         f, l = ler_fronteira_e_litoral(pasta)
@@ -327,11 +327,11 @@ def processar_limitrofes_df(
     df: pd.DataFrame,
     codigos_municipios: Iterable[str] | None = None,
 ) -> pl.DataFrame:
-    """Transforma o DataFrame bruto da aba 'Municípios Limítrofes' na tabela padronizada de pares.
+    """Transforms the raw DataFrame from the 'Municípios Limítrofes' tab into the standardized pairs table.
 
-    Aplica duas regras de exclusão:
-    1. Descarta municípios sem vizinho terrestre (N_LIM == 0 ou CD_LIM nulo);
-    2. Descarta pares em que qualquer um dos códigos não pertença a `codigos_municipios` (DTB).
+    Applies two exclusion rules:
+    1. Discards municipalities without terrestrial neighbors (N_LIM == 0 or CD_LIM null);
+    2. Discards pairs where either code does not belong to `codigos_municipios` (DTB).
     """
     mascara_vizinho = df["CD_LIM"].notna()
     if "N_LIM" in df.columns:
@@ -362,7 +362,7 @@ def harmonizar_limitrofes(
     pasta: Path,
     codigos_municipios: Iterable[str] | None = None,
 ) -> pl.DataFrame:
-    """Harmoniza a matriz de adjacência geográfica a partir da planilha de municípios limítrofes 2024."""
+    """Harmonizes the geographic adjacency matrix from the 2024 neighboring municipalities spreadsheet."""
     pasta = Path(pasta)
     if codigos_municipios is None:
         municipios = harmonizar_municipios(pasta)

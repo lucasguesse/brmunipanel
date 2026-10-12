@@ -1,9 +1,9 @@
-"""Consolidação da base em seis tabelas.
+"""Consolidation of the dataset into six tables.
 
-A base consolidada tem seis tabelas: a central de municípios, três tabelas longitudinais
-temáticas (demografia_economia_social, financas_publicas, saude), a tabela de 
-municipios_limitrofes, e a tabela de educacao.
-Nenhuma função aqui preenche nulo, tira linha, altera valor nem calcula coluna derivada.
+The consolidated dataset has six tables: the central municipalities table, three thematic
+longitudinal tables (demografia_economia_social, financas_publicas, saude), the 
+municipios_limitrofes table, and the educacao table.
+No function here fills nulls, removes rows, modifies values, or calculates derived columns.
 """
 
 from typing import Sequence
@@ -39,7 +39,7 @@ def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
     if dict(zip(finbra.columns, finbra.dtypes)) != dict(zip(siconfi.columns, siconfi.dtypes)):
         raise ValueError("Tipos diferentes entre finbra e siconfi")
         
-    # Confere se há o mesmo município e ano nas duas
+    # Checks if the same municipality and year appear in both
     finbra_keys = set(finbra.select(["cod_municipio", "ano"]).iter_rows())
     siconfi_keys = set(siconfi.select(["cod_municipio", "ano"]).iter_rows())
     inter = finbra_keys & siconfi_keys
@@ -48,7 +48,7 @@ def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
         
     saida = pl.concat([finbra, siconfi])
     
-    # Renomear desp_XX_nome para desp_nome
+    # Rename desp_XX_nome to desp_nome
     rename_map = {}
     for c in saida.columns:
         m = re.match(r"desp_\d{2}_(.*)", c)
@@ -60,7 +60,7 @@ def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
 def montar_tabela_longitudinal(municipios: pl.DataFrame, fontes: list[pl.DataFrame], anos: Sequence[int] = ANOS_PAINEL, nome_tabela: str = "tabela_longitudinal") -> pl.DataFrame:
     codigos_validos = set(municipios["cod_municipio"])
     
-    # Grade de municipios e anos
+    # Grid of municipalities and years
     grade = municipios.select(["cod_municipio"]).join(
         pl.DataFrame({"ano": list(anos)}).with_columns(pl.col("ano").cast(pl.Int16)),
         how="cross"

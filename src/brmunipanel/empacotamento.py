@@ -240,7 +240,7 @@ License: [Pending License]
             for am in sorted(arquivos_manifesto + [{"nome": "manifest.json", "sha256": calcular_sha256(manifest_destino)}], key=lambda x: x["nome"]):
                 f.write(f"{am['sha256']} *{am['nome']}\n")
 
-        # Validação Programática do Manifesto
+        # Programmatic manifest validation
         with open(manifest_destino, "r", encoding="utf-8") as f:
             loaded_manifest = json.load(f)
 
@@ -290,7 +290,7 @@ License: [Pending License]
                 if calcular_sha256(temp_dir / fname) != h_expected:
                     raise RuntimeError(f"Checksum mismatch for {fname}")
 
-        # Atomicidade na troca
+        # Atomicity in replacement
         if final_dir.exists():
             if backup_dir.exists():
                 shutil.rmtree(backup_dir)

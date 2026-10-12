@@ -20,12 +20,12 @@ def compute_statistics(df: pl.DataFrame, col_name: str) -> dict[str, Any]:
     is_boolean = dtype == pl.Boolean
     is_string = dtype == pl.Utf8 or dtype == pl.String
 
-    # Mínimo e Máximo
+    # Minimum and Maximum
     if is_numeric and df.height > 0 and nulos < df.height:
         minimo = str(col.min())
         maximo = str(col.max())
 
-    # Domínio
+    # Domain
     if is_boolean and df.height > 0 and nulos < df.height:
         # For boolean, domain is "true, false"
         vals = sorted(list(set(col.drop_nulls().to_list())))
@@ -33,7 +33,7 @@ def compute_statistics(df: pl.DataFrame, col_name: str) -> dict[str, Any]:
     elif is_string and df.height > 0 and nulos < df.height:
         # Compute cardinality
         cardinality = col.n_unique()
-        # O domínio lista os valores distintos só de colunas de texto com poucos valores, e não de códigos ou nomes de município
+        # The domain lists distinct values only for text columns with few values, not for codes or municipality names
         # If cardinality <= 35, list them
         if cardinality <= 35:
             vals = sorted(list(set(col.drop_nulls().to_list())))

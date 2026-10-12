@@ -1,1 +1,1 @@
-"""Módulos de coleta e harmonização de dados do Ministério da Saúde / DATASUS."""
+"""Data collection and harmonization modules for Ministério da Saúde / DATASUS."""

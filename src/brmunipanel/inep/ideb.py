@@ -5,7 +5,7 @@ import re
 from typing import Union
 
 def _encontrar_linha_cabecalho(caminho: Path) -> int:
-    """Encontra a linha de cabeçalho varrendo as primeiras 20 linhas."""
+    """Finds the header row scanning the first 20 rows."""
     df_head = pd.read_excel(caminho, nrows=20, header=None)
     for i, row in df_head.iterrows():
         if "SG_UF" in row.values:
@@ -14,7 +14,7 @@ def _encontrar_linha_cabecalho(caminho: Path) -> int:
 
 def _ler_planilha(caminho: Path, etapa_sufixo: str, valid_municipios: set) -> pl.DataFrame:
     linha_cab = _encontrar_linha_cabecalho(caminho)
-    # Ler com o cabeçalho correto, dtype=str previne inferência mista e conversões indevidas
+    # Read with the correct header, dtype=str prevents mixed inference and improper conversions
     df_pd = pd.read_excel(caminho, header=linha_cab, dtype=str)
     df = pl.from_pandas(df_pd)
     
@@ -53,8 +53,8 @@ def _ler_planilha(caminho: Path, etapa_sufixo: str, valid_municipios: set) -> pl
     ).drop("coluna_ano")
     
     val_col = f"ideb_{etapa_sufixo}_publica"
-    # Valores originais '-' e 'ND' falharão no cast(strict=False) e retornarão nulo, o que é o comportamento desejado.
-    # Trocamos vírgula por ponto para evitar que notas sejam lidas como string inválida.
+    # Original values '-' and 'ND' will fail cast(strict=False) and return null, which is the desired behavior.
+    # Replace comma with dot to prevent scores from being read as invalid strings.
     df_long = df_long.with_columns(
         pl.col(val_col).str.strip_chars().str.replace(",", ".").cast(pl.Float64, strict=False)
     )

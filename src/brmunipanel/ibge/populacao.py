@@ -1,8 +1,8 @@
-"""População residente estimada por município (SIDRA, Tabela 6579, variável 9324).
+"""Estimated resident population by municipality (SIDRA, Table 6579, variable 9324).
 
-A tabela não tem valor em 2007, 2010, 2022 e 2023. Esses anos são completados por interpolação geométrica
-(linear no logaritmo) entre as estimativas vizinhas, e a origem de cada valor fica em `pop_origem`.
-A estimativa de 2024 é baixada só para interpolar 2022 e 2023 e não entra no painel.
+The table has no values for 2007, 2010, 2022, and 2023. These years are completed by geometric interpolation
+(linear in logarithms) between neighboring estimates, and the source of each value is recorded in `pop_origem`.
+The 2024 estimate is downloaded only to interpolate 2022 and 2023 and is not included in the panel.
 """
 
 from __future__ import annotations
@@ -25,9 +25,9 @@ def baixar(pasta_sidra: Path, **opcoes) -> list[dict]:
 
 
 def interpolar(estimativas: pl.DataFrame, anos: tuple[int, ...] = ANOS_SEM_ESTIMATIVA) -> pl.DataFrame:
-    """Interpola `populacao` nos anos pedidos, entre a estimativa anterior e a seguinte mais próximas.
+    """Interpolates `populacao` for the requested years, between the closest previous and next estimates.
 
-    Um município só recebe valor interpolado quando tem estimativa nos dois anos vizinhos.
+    A municipality receives an interpolated value only when it has estimates in both neighboring years.
     """
     com_estimativa = sorted(estimativas["ano"].unique().to_list())
     partes = []
@@ -51,7 +51,7 @@ def interpolar(estimativas: pl.DataFrame, anos: tuple[int, ...] = ANOS_SEM_ESTIM
 
 
 def harmonizar(pasta_sidra: Path) -> pl.DataFrame:
-    """Painel 2006–2023: `cod_municipio`, `ano`, `populacao` e `pop_origem` (`estimativa` ou `interpolado`)."""
+    """Panel 2006–2023: `cod_municipio`, `ano`, `populacao`, and `pop_origem` (`estimativa` or `interpolado`)."""
     longo = sidra.ler_tabela(pasta_sidra, TABELA, ANOS_DOWNLOAD)
     estimativas, _ = sidra.para_painel(longo, {VARIAVEL: ("populacao", pl.Int64)})
     estimativas = estimativas.drop_nulls("populacao")

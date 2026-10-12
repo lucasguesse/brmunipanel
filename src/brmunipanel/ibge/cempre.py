@@ -1,11 +1,11 @@
-"""Cadastro Central de Empresas (CEMPRE), conceito de unidades locais, totais por município.
+"""Cadastro Central de Empresas (CEMPRE), local units concept, totals by municipality.
 
-Tabela 1685 em 2006–2021 e Tabela 9509 em 2022–2023. O painel mantém cinco variáveis harmonizadas.
-Três variáveis ficam apenas no bruto: empresas atuantes, salário médio mensal em salários mínimos e
-salário médio mensal em reais (calculado como salarios_mil_reais * 1000 / pessoal_assalariado_medio / 13).
-A tabela de origem de cada período é a 1685 até 2021, e a 9509 em 2022 e 2023. O IBGE declara quebra de
-série em 2022 (Nota técnica 01/2024), que a base não trata nem marca em coluna. O valor nulo significa
-município que ainda não existia ou valor omitido pelo IBGE por sigilo.
+Table 1685 in 2006–2021 and Table 9509 in 2022–2023. The panel maintains five harmonized variables.
+Three variables remain only in the raw data: active enterprises, average monthly salary in minimum wages, and
+average monthly salary in reais (calculated as salarios_mil_reais * 1000 / pessoal_assalariado_medio / 13).
+The source table for each period is 1685 until 2021, and 9509 in 2022 and 2023. IBGE reports a series
+break in 2022 (Nota técnica 01/2024), which the dataset does not treat or mark in a column. A null value means
+a municipality that did not yet exist or a value omitted by IBGE due to confidentiality.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ def baixar(pasta_sidra: Path, **opcoes) -> list[dict]:
 
 
 def harmonizar(pasta_sidra: Path) -> pl.DataFrame:
-    """Painel ordenado por cod_municipio e ano, com as cinco variáveis selecionadas."""
+    """Panel sorted by cod_municipio and ano, with the five selected variables."""
     paineis = []
     for tabela, anos in ANOS_POR_TABELA.items():
         painel, _ = sidra.para_painel(sidra.ler_tabela(pasta_sidra, tabela, anos), COLUNAS)

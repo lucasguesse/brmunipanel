@@ -1,8 +1,8 @@
-"""Produto Interno Bruto dos Municípios (SIDRA, Tabela 5938, referência 2010), em mil reais correntes.
+"""Produto Interno Bruto dos Municípios (SIDRA, Table 5938, 2010 reference), in current thousand reais.
 
-Apenas o PIB é harmonizado, porque a fonte não divulga o valor adicionado bruto nem os impostos de 2022 e 2023. A tabela não gera marcadores.
-O município tem pib nulo nos anos anteriores à sua instalação. O bruto continua trazendo
-as sete variáveis da tabela.
+Only PIB is harmonized, because the source does not publish gross value added or taxes for 2022 and 2023. The table does not generate markers.
+The municipality has null pib in the years prior to its installation. The raw data continues to bring
+the seven variables of the table.
 """
 
 from __future__ import annotations
@@ -26,6 +26,6 @@ def baixar(pasta_sidra: Path, **opcoes) -> list[dict]:
 
 
 def harmonizar(pasta_sidra: Path) -> pl.DataFrame:
-    """Painel 2006–2023 (uma linha por município e ano)."""
+    """Panel 2006–2023 (one row per municipality and year)."""
     painel, _ = sidra.para_painel(sidra.ler_tabela(pasta_sidra, TABELA, ANOS), COLUNAS)
     return painel

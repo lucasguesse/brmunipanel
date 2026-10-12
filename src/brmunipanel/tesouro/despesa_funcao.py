@@ -1,7 +1,7 @@
-"""Esquema e classificação comuns de despesas por função do Tesouro Nacional.
+"""Common schema and classification of expenditures by budget function from Tesouro Nacional.
 
-A saída tem só as 28 funções da classificação funcional.
-O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
+The output contains only the 28 functions of the functional classification.
+Declared total and intra-budgetary expenditure are used only in internal checks.
 """
 import polars as pl
 FUNCOES = [

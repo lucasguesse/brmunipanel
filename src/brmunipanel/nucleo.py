@@ -1,8 +1,8 @@
-"""Núcleo comum da coleta: requisição com novas tentativas, bruto gravado como veio e manifesto de proveniência por fonte.
+"""Common collection core: requests with retries, raw data saved as received, and provenance manifest per source.
 
-Cada fonte tem uma pasta própria dentro da pasta de dados brutos, com um `manifest.json` que registra,
-para cada arquivo, a requisição que o gerou (URL, método, corpo), a data, o tamanho e o hash da resposta.
-Um arquivo já registrado no manifesto nunca é baixado de novo nem sobrescrito, o que torna a coleta retomável.
+Each source has its own folder inside the raw data folder, with a `manifest.json` that records,
+for each file, the request that generated it (URL, method, body), the date, size, and response hash.
+A file already recorded in the manifest is never downloaded again or overwritten, making collection resumable.
 """
 
 from __future__ import annotations
@@ -24,12 +24,12 @@ AGENTE = "Mozilla/5.0 (compatible; brmunipanel/0.1)"
 
 
 class RespostaInvalida(Exception):
-    """A resposta chegou com HTTP 200, mas o conteúdo não é o esperado (página de erro, tabela vazia etc.)."""
+    """The response arrived with HTTP 200, but the content is not what was expected (error page, empty table, etc.)."""
 
 
 @dataclass(frozen=True)
 class Requisicao:
-    """Uma requisição e o arquivo bruto que ela gera, relativo à pasta da fonte."""
+    """A request and the raw file it generates, relative to the source folder."""
 
     chave: str
     url: str
@@ -60,7 +60,7 @@ def _gravar_manifesto(pasta: Path, manifesto: dict[str, dict]) -> None:
 
 
 def ler_bruto(pasta: Path, arquivo: str) -> bytes:
-    """Devolve os bytes da resposta original, descompactando quando o arquivo foi gravado em gzip."""
+    """Returns the bytes of the original response, decompressing when the file was saved in gzip."""
     conteudo = (Path(pasta) / arquivo).read_bytes()
     return gzip.decompress(conteudo) if arquivo.endswith(".gz") else conteudo
 
@@ -82,10 +82,10 @@ def baixar(
     espera: float = 10.0,
     timeout: float = 300.0,
 ) -> tuple[dict, bool]:
-    """Baixa `req` para dentro de `pasta` e registra no manifesto. Devolve o registro e se houve download.
+    """Downloads `req` into `pasta` and records it in the manifest. Returns the record and whether a download occurred.
 
-    Erros de rede, HTTP 429 e 5xx e respostas recusadas por `validar` são tentados de novo, com espera
-    dobrada a cada tentativa. Os demais erros HTTP sobem na hora, porque repetir não os resolve.
+    Network errors, HTTP 429 and 5xx, and responses rejected by `validar` are retried, with waiting time
+    doubled on each attempt. Other HTTP errors are raised immediately, because retrying does not resolve them.
     """
     pasta = Path(pasta)
     manifesto = ler_manifesto(pasta)
@@ -131,7 +131,7 @@ def baixar(
 
 
 def registrar_manual(pasta: Path, chave: str, arquivo: str, *, url: str, parametros: dict[str, str]) -> tuple[dict, bool]:
-    """Registra no manifesto um arquivo que já está em `pasta`, baixado à mão. Devolve o registro e se ele é novo."""
+    """Records in the manifest a file that is already in `pasta`, downloaded manually. Returns the record and whether it is new."""
     pasta = Path(pasta)
     destino = pasta / arquivo
     if not destino.exists():
@@ -174,7 +174,7 @@ def baixar_lote(
     avisar: Callable[[str], None] | None = print,
     **opcoes,
 ) -> list[dict]:
-    """Baixa as requisições em sequência, na mesma sessão HTTP, pulando as que já estão no manifesto."""
+    """Downloads requests in sequence, in the same HTTP session, skipping those already in the manifest."""
     sessao = opcoes.pop("sessao", None) or requests.Session()
     registros = []
     for req in requisicoes:

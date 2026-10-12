@@ -1,10 +1,10 @@
-"""Programa Bolsa Família (IPEA Data, API OData4, séries FAM_PBF e VAL_PBF).
+"""Programa Bolsa Família (IPEA Data, OData4 API, series FAM_PBF and VAL_PBF).
 
-Baixa as séries anuais de dezembro em nível municipal e consolida o painel 2006–2023:
-- FAM_PBF: número de benefícios em dezembro (Int64)
-- VAL_PBF: valor total dos benefícios em dezembro em R$ mil (Float64)
+Downloads annual December series at the municipal level and consolidates the 2006–2023 panel:
+- FAM_PBF: number of benefits in December (Int64)
+- VAL_PBF: total value of benefits in December in thousand R$ (Float64)
 
-Em 2013 e em 2016 o valor municipal da fonte é anômalo em parte dos municípios. Ele fica como veio, sem marca em coluna.
+In 2013 and 2016 the source's municipal value is anomalous in part of the municipalities. It remains as received, without column flag.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ def requisicao_metadados(serie: str) -> Requisicao:
 
 
 def validar_valores(conteudo: bytes) -> None:
-    """Recusa respostas que não sejam JSON com a chave 'value' contendo mais de 100 mil itens."""
+    """Rejects responses that are not JSON with the 'value' key containing more than 100 thousand items."""
     try:
         dados = json.loads(conteudo)
     except ValueError as erro:
@@ -53,7 +53,7 @@ def validar_valores(conteudo: bytes) -> None:
 
 
 def validar_metadados(conteudo: bytes) -> None:
-    """Recusa respostas de metadados que não contenham exatamente 1 item na chave 'value'."""
+    """Rejects metadata responses that do not contain exactly 1 item in the 'value' key."""
     try:
         dados = json.loads(conteudo)
     except ValueError as erro:
@@ -67,7 +67,7 @@ def validar_metadados(conteudo: bytes) -> None:
 
 
 def baixar(pasta: Path, **opcoes) -> list[dict]:
-    """Baixa as séries FAM_PBF e VAL_PBF e seus metadados para pasta."""
+    """Downloads FAM_PBF and VAL_PBF series and their metadata to pasta."""
     pasta = Path(pasta)
     reqs_meta = [requisicao_metadados(s) for s in SERIES]
     reqs_valores = [requisicao_serie(s) for s in SERIES]
@@ -77,7 +77,7 @@ def baixar(pasta: Path, **opcoes) -> list[dict]:
 
 
 def _ler_serie_bruta(pasta: Path, serie: str) -> tuple[pl.DataFrame, list[str]]:
-    """Lê a série bruta da pasta, filtrando apenas nível 'Municípios' e extraindo cod_municipio, ano e valor."""
+    """Reads the raw series from the folder, filtering only 'Municípios' level and extracting cod_municipio, ano, and valor."""
     conteudo = ler_bruto(pasta, f"{serie}.json.gz")
     dados = json.loads(conteudo)
     itens = dados.get("value", [])
@@ -106,7 +106,7 @@ def _ler_serie_bruta(pasta: Path, serie: str) -> tuple[pl.DataFrame, list[str]]:
 
 
 def conferir_unidade(pasta: Path) -> str:
-    """Verifica e retorna a unidade de medida declarada nos metadados de VAL_PBF."""
+    """Checks and returns the declared unit of measurement in VAL_PBF metadata."""
     caminho = Path(pasta) / "VAL_PBF_metadados.json.gz"
     if not caminho.exists():
         return ""
@@ -118,13 +118,13 @@ def conferir_unidade(pasta: Path) -> str:
 
 
 def harmonizar(pasta: Path) -> pl.DataFrame:
-    """Harmoniza as séries FAM_PBF e VAL_PBF para o painel 2006–2023.
+    """Harmonizes FAM_PBF and VAL_PBF series for the 2006–2023 panel.
 
-    Devolve um pl.DataFrame ordenado por cod_municipio e ano, com as colunas:
-    - cod_municipio (String, 7 dígitos)
+    Returns a pl.DataFrame sorted by cod_municipio and ano, with columns:
+    - cod_municipio (String, 7 digits)
     - ano (Int16)
-    - pbf_beneficios (Int64, quantidade de benefícios em dezembro)
-    - pbf_valor_mil_reais (Float64, valor total em R$ mil em dezembro)
+    - pbf_beneficios (Int64, number of benefits in December)
+    - pbf_valor_mil_reais (Float64, total value in thousand R$ in December)
     """
     pasta = Path(pasta)
     unidade = conferir_unidade(pasta)

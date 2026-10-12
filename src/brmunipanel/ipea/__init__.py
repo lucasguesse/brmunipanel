@@ -1,1 +1,1 @@
-"""IPEA Data source (API OData4): Programa Bolsa Família — FAM_PBF (número de benefícios) e VAL_PBF (valor total), série anual em dezembro, nível municipal."""
+"""IPEA Data source (OData4 API): Programa Bolsa Família — FAM_PBF (number of benefits) and VAL_PBF (total value), annual December series, municipal level."""

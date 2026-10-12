@@ -127,12 +127,12 @@ class QualityAuditor:
         clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
         
         if clean_name == "educacao":
-            # Totais nacionais de controle da educação básica e da superior, em 2006 e em 2023
+            # National control totals for basic and higher education, in 2006 and in 2023
             df_2006 = df.filter(pl.col("ano") == 2006)
             df_2023 = df.filter(pl.col("ano") == 2023)
             df_sp_2023 = df_2023.filter(pl.col("cod_municipio") == "3550308")
             
-            # Totais 2006
+            # 2006 totals
             inst_basica_2006 = df_2006["instituicoes_basica"].sum()
             mat_inf_2006 = df_2006["matriculas_infantil"].sum()
             mat_fund_2006 = df_2006["matriculas_fundamental"].sum()
@@ -145,7 +145,7 @@ class QualityAuditor:
             self.add_check(tabela, "educacao basica 2006 medio", "OK" if mat_med_2006 == 8906820 else "FALHA", str(mat_med_2006), "8906820")
             self.add_check(tabela, "educacao basica 2006 docentes", "OK" if docentes_2006 == 2647414 else "FALHA", str(docentes_2006), "2647414")
             
-            # Totais 2023
+            # 2023 totals
             inst_basica_2023 = df_2023["instituicoes_basica"].sum()
             mat_inf_2023 = df_2023["matriculas_infantil"].sum()
             mat_fund_2023 = df_2023["matriculas_fundamental"].sum()
@@ -162,7 +162,7 @@ class QualityAuditor:
             self.add_check(tabela, "educacao superior 2023 institutos", "OK" if inst_sup_2023 == 3800 else "FALHA", str(inst_sup_2023), "3800")
             self.add_check(tabela, "educacao superior 2023 matriculas", "OK" if mat_sup_2023 == 5063936 else "FALHA", str(mat_sup_2023), "5063936")
             
-            # Totais SP 2023
+            # SP 2023 totals
             if df_sp_2023.height > 0:
                 self.add_check(tabela, "SP 2023 basica inst", "OK" if df_sp_2023["instituicoes_basica"][0] == 7252 else "FALHA", str(df_sp_2023["instituicoes_basica"][0]), "7252")
                 self.add_check(tabela, "SP 2023 basica inf", "OK" if df_sp_2023["matriculas_infantil"][0] == 666498 else "FALHA", str(df_sp_2023["matriculas_infantil"][0]), "666498")
@@ -175,7 +175,7 @@ class QualityAuditor:
                 self.add_check(tabela, "SP 2023 ideb pub fin", "OK" if abs(df_sp_2023["ideb_anos_finais_publica"][0] - 4.8) < 0.01 else "FALHA", str(df_sp_2023["ideb_anos_finais_publica"][0]), "4.8")
                 self.add_check(tabela, "SP 2023 ideb pub med", "OK" if abs(df_sp_2023["ideb_ensino_medio_publica"][0] - 4.2) < 0.01 else "FALHA", str(df_sp_2023["ideb_ensino_medio_publica"][0]), "4.2")
 
-            # Contagem de valores não nulos do IDEB em cada etapa, de 2006 a 2023
+            # Count of non-null IDEB values in each stage, from 2006 to 2023
             nn_ini = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_iniciais_publica"].drop_nulls().len()
             nn_fin = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_finais_publica"].drop_nulls().len()
             nn_med = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_ensino_medio_publica"].drop_nulls().len()

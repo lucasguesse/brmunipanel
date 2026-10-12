@@ -1,7 +1,7 @@
-"""Cliente da API de agregados do IBGE (SIDRA), compartilhado pelas tabelas municipais.
+"""IBGE aggregates API client (SIDRA), shared across municipal tables.
 
-Uma chamada por tabela e ano, com todos os municípios (`N6[all]`): cada consulta nacional leva cerca de
-um minuto, e pedidos acima de cerca de 50 mil valores falham (HTTP 500), então não se junta mais de um ano.
+One call per table and year, with all municipalities (`N6[all]`): each national query takes about
+one minute, and requests above roughly 50 thousand values fail (HTTP 500), so more than one year is never joined.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from ..nucleo import Requisicao, RespostaInvalida, baixar_lote, ler_bruto
 
 BASE = "https://servicodados.ibge.gov.br/api/v3/agregados"
 
-# Marcadores do SIDRA no lugar do valor: zero absoluto, indisponível, não se aplica e sigilo.
+# SIDRA markers instead of value: absolute zero, unavailable, not applicable, and confidentiality.
 ZERO_ABSOLUTO = "-"
 MARCADORES_SEM_VALOR = ("...", "..", "X")
 
@@ -39,7 +39,7 @@ def requisicao_metadados(tabela: int) -> Requisicao:
 
 
 def validar_valores(conteudo: bytes, minimo_municipios: int = 5000) -> None:
-    """Recusa respostas que não tragam a lista de variáveis com séries municipais."""
+    """Rejects responses that do not bring the list of variables with municipal series."""
     try:
         blocos = json.loads(conteudo)
     except ValueError as erro:
@@ -53,14 +53,14 @@ def validar_valores(conteudo: bytes, minimo_municipios: int = 5000) -> None:
 
 
 def baixar_tabela(tabela: int, anos: Sequence[int], variaveis: Sequence[int], pasta: Path, **opcoes) -> list[dict]:
-    """Baixa os metadados da tabela e uma resposta por ano para dentro de `pasta` (a pasta do SIDRA)."""
+    """Downloads table metadata and one response per year into `pasta` (the SIDRA folder)."""
     metadados = baixar_lote([requisicao_metadados(tabela)], pasta, **opcoes)
     requisicoes = [requisicao_ano(tabela, ano, variaveis) for ano in anos]
     return metadados + baixar_lote(requisicoes, pasta, validar=validar_valores, **opcoes)
 
 
 def ler_tabela(pasta: Path, tabela: int, anos: Sequence[int]) -> pl.DataFrame:
-    """Lê os brutos de uma tabela em formato longo: município, ano, variável e o valor como veio (texto)."""
+    """Reads raw data from a table in long format: municipality, year, variable, and the value as received (text)."""
     linhas = []
     for ano in anos:
         blocos = json.loads(ler_bruto(pasta, requisicao_ano(tabela, ano, ()).arquivo))
@@ -78,11 +78,11 @@ def ler_tabela(pasta: Path, tabela: int, anos: Sequence[int]) -> pl.DataFrame:
 
 
 def para_painel(longo: pl.DataFrame, colunas: Mapping[int, tuple[str, pl.DataType]]) -> tuple[pl.DataFrame, pl.DataFrame]:
-    """Converte o formato longo em painel (uma linha por município e ano) e separa os marcadores.
+    """Converts long format into a panel (one row per municipality and year) and separates markers.
 
-    `colunas` associa o id de cada variável ao nome e ao tipo da coluna. O zero absoluto (`-`) vira 0;
-    indisponível (`...`), não se aplica (`..`) e sigilo (`X`) viram nulo no painel e são devolvidos na
-    segunda tabela, uma linha por célula, para que a razão do nulo não se perca.
+    `colunas` associates each variable ID with the column name and type. Absolute zero (`-`) becomes 0;
+    unavailable (`...`), not applicable (`..`), and confidentiality (`X`) become null in the panel and are returned in the
+    second table, one row per cell, so that the reason for the null is not lost.
     """
     nomes = pl.DataFrame(
         {"variavel": list(colunas), "coluna": [nome for nome, _ in colunas.values()]},

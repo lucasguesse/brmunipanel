@@ -1,25 +1,25 @@
-"""Despesa municipal empenhada por função em 2006–2012 (FINBRA, Tesouro Nacional).
+"""Municipal committed expenditure by budget function in 2006–2012 (FINBRA, Tesouro Nacional).
 
-A saída tem só as 28 funções da classificação funcional.
-O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
+The output contains only the 28 functions of the functional classification.
+Declared total and intra-budgetary expenditure are used only in internal checks.
 
-Baixa os sete bancos de dados do FINBRA (Finanças do Brasil), um `.zip` por ano com um banco Access (`.mdb`),
-de `thot-arquivos.tesouro.gov.br`, e lê a tabela `DSubFuncao`, que tem uma linha por município e uma coluna
-para cada uma das 28 funções da classificação funcional. Os valores são despesa empenhada, em reais correntes.
+Downloads the seven FINBRA (Finanças do Brasil) databases, one `.zip` per year with an Access database (`.mdb`),
+from `thot-arquivos.tesouro.gov.br`, and reads table `DSubFuncao`, which has one row per municipality and one column
+for each of the 28 functions of the functional classification. Values are committed expenditure, in current reais.
 
-O campo monetário do Access é um inteiro que vale o valor multiplicado por 10.000. Com a propriedade `Format`
-da coluna, o `access-parser` devolve esse campo como texto formatado e erra os valores abaixo de 10 centavos
-(lê 0,08 como 0,80). Por isso `ler_dsubfuncao` esvazia `extra_props` na instância do leitor, recebe o inteiro,
-e `converter_moeda` faz a divisão por 10.000. A versão do `access-parser` é fixada por causa disso.
+The Access currency field is an integer representing the value multiplied by 10,000. With the column's `Format`
+property, `access-parser` returns this field as formatted text and errs on values below 10 cents
+(reads 0.08 as 0.80). Therefore `ler_dsubfuncao` empties `extra_props` on the parser instance, receives the integer,
+and `converter_moeda` performs the division by 10,000. The `access-parser` version is pinned because of this.
 
-De 2006 a 2009 a fonte não separa as despesas intraorçamentárias (pagamentos entre órgãos do mesmo município):
-elas estão dentro das funções, e `desp_intraorcamentaria` e `declara_intraorcamentaria` ficam nulas. De 2010
-em diante elas saem das funções e vão para uma coluna própria da fonte: `desp_intraorcamentaria` traz esse
-total, e `declara_intraorcamentaria` é verdadeira quando ele é maior que zero.
+From 2006 to 2009 the source does not separate intra-budgetary expenditures (payments between agencies of the same municipality):
+they are inside the functions, and `desp_intraorcamentaria` and `declara_intraorcamentaria` remain null. From 2010
+onward they leave the functions and go to a dedicated source column: `desp_intraorcamentaria` brings that
+total, and `declara_intraorcamentaria` is true when it is greater than zero.
 
-Nada é imputado nem corrigido. `desp_total_funcoes` é o total declarado na fonte (`Despesas por Função`), sem
-recálculo: em 8 municípios de 2010 ele difere da soma das 28 funções. Em 4 linhas de 2011 e 2012, o total e
-todas as funções valem zero, e a despesa inteira está na coluna intraorçamentária.
+Nothing is imputed or corrected. `desp_total_funcoes` is the total declared in the source (`Despesas por Função`), without
+recalculation: in 8 municipalities of 2010 it differs from the sum of the 28 functions. In 4 rows of 2011 and 2012, the total and
+all functions are zero, and the entire expenditure is in the intra-budgetary column.
 """
 
 import io
@@ -90,7 +90,7 @@ def ler_dsubfuncao(pasta: Path, ano: int) -> dict[str, list]:
         (membro,) = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
         caminho = Path(zf.extract(membro, tmp))
         banco = AccessParser(str(caminho))
-        banco.extra_props = {}  # sem a propriedade Format, o campo monetário chega como inteiro (valor × 10.000)
+        banco.extra_props = {}  # without the Format property, the currency field arrives as an integer (value × 10,000)
         tabela = banco.parse_table("DSubFuncao")
         
     if not tabela:
@@ -102,7 +102,7 @@ def ler_dsubfuncao(pasta: Path, ano: int) -> dict[str, list]:
 def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
     colunas = [nome.strip() for nome in tabela.keys()]
     
-    # Conferir que as colunas existem
+    # Check that columns exist
     faltantes = [f for _, f, _ in FUNCOES if f not in colunas]
     if "UF" not in colunas:
         faltantes.append("UF")
@@ -114,13 +114,13 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
     if faltantes:
         raise ValueError(f"Colunas faltando na tabela: {faltantes}")
         
-    # Coluna intraorçamentária
+    # Intra-budgetary column
     col_intra = [c for c in colunas if "intra" in c.lower()]
     if len(col_intra) > 1:
         raise ValueError(f"Múltiplas colunas intraorçamentárias encontradas: {col_intra}")
     nome_intra = col_intra[0] if col_intra else None
     
-    # Conferir que as colunas têm o mesmo tamanho
+    # Check that columns have the same size
     colunas_usadas = ["UF", "Cod Mun", "Despesas por Função"] + [f for _, f, _ in FUNCOES]
     if nome_intra:
         colunas_usadas.append(nome_intra)
@@ -141,7 +141,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
         uf = tabela["UF"][i]
         cod = tabela["Cod Mun"][i]
         
-        # Montar a chave
+        # Assemble key
         chave = codigo_6(uf, cod)
         if chave is None:
             descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "chave nula"})
@@ -149,7 +149,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             
         chaves_vistas.append(chave)
         
-        # Converter para 7 dígitos
+        # Convert to 7 digits
         if chave not in municipios_dict:
             descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "fora da DTB"})
             continue
@@ -162,7 +162,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             "fonte": "finbra",
         }
         
-        # Converter as colunas monetárias
+        # Convert monetary columns
         for _, f, c_out in FUNCOES:
             linha[c_out] = converter_moeda(tabela[f][i])
             
@@ -178,13 +178,13 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             
         linhas_validas.append(linha)
         
-    # Chave repetida no ano
+    # Repeated key in year
     contagem_chaves = Counter(chaves_vistas)
     repetidas = [k for k, v in contagem_chaves.items() if v > 1]
     if repetidas:
         raise ValueError(f"Chaves repetidas: {repetidas}")
         
-    # Montar esquema e ordenar
+    # Assemble schema and sort
     if not linhas_validas:
         df = pl.DataFrame(schema=ESQUEMA)
     else:

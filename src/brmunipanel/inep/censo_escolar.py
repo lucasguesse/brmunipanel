@@ -1,16 +1,16 @@
 """
 Censo Escolar - INEP
 
-Fonte: Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP)
-Unidade de origem: escola
-Chave: município, ano, dependência administrativa, localização
+Source: Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP)
+Source unit: school
+Key: municipality, year, administrative dependency, location
 
-Ressalvas:
-- matriculas_basica é o total que o INEP publica (de 2007 em diante), e não a soma das outras etapas, que se sobrepõem.
-- A soma de docentes conta mais de uma vez quem atua em mais de uma escola no município.
-- Nulo significa que nenhuma escola do grupo tem o dado.
-- Em 2006, o leiaute é outro: a data de referência é 29 de março de 2006 (e de 2007 em diante é a última quarta-feira de maio); o vazio vale zero; a EJA inclui os cursos semipresenciais nas matrículas e não nas turmas; o curso normal e o médio integrado estão dentro do ensino médio; catorze colunas são nulas; e a série muda de método em 2007, quando o INEP passou a coletar o censo por aluno.
-- Docentes em 2006: são os professores em exercício da escola, e os de cada nível contam o mesmo professor em mais de um.
+Caveats:
+- matriculas_basica is the total published by INEP (from 2007 onwards), not the sum of other stages, which overlap.
+- The sum of teachers counts more than once those who work in more than one school in the municipality.
+- Null means that no school in the group has data.
+- In 2006, the layout is different: the reference date is March 29, 2006 (and from 2007 onwards it is the last Wednesday of May); blanks are zero; EJA includes blended courses in enrollments and not in classes; the normal track and integrated secondary education are within upper secondary education; fourteen columns are null; and the series changes method in 2007, when INEP began collecting the census per student.
+- Teachers in 2006: these are practicing teachers at the school, and those at each level count the same teacher in more than one.
 """
 
 from pathlib import Path
@@ -99,7 +99,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             
             colunas_todas = set(pl.scan_csv(arquivo_censo, separator="|", encoding="utf8-lossy", infer_schema_length=0).collect_schema().names())
             
-            # Mapeamento de variáveis
+            # Variable mapping
             matriculas = {}
             matriculas['creche'] = _get_dn(['DPE119'])
             matriculas['pre_escola'] = _get_dn(['DPE11D'])
@@ -173,18 +173,18 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
                 (pl.col("CODMUNIC").str.slice(0, 2) + pl.col("CODMUNIC").str.slice(-5)).alias("cod_municipio")
             )
             
-            # Validações preguiçosas para erro de valor
+            # Lazy validations for value error
             colunas_validar = list(set(colunas_para_ler) - {"MASCARA", "CODMUNIC", "DEP", "LOC", "CODFUNC", "ANO"})
             exprs_val = []
             for c in colunas_validar:
                 exprs_val.append(
                     (~pl.col(c).is_null() & (pl.col(c) != "") & ~pl.col(c).str.contains(r"^\d+$")).any().alias(c)
                 )
-            # Fazemos um collect pontual das validações para interromper antes de computar as agregações
+            # Run a punctual collect of validations to interrupt before computing aggregations
             res = lf.select(exprs_val).collect(engine="streaming").row(0)
             for i, c in enumerate(colunas_validar):
                 if res[i]:
-                    # Para trazer os primeiros casos no erro
+                    # To fetch the first cases in the error
                     invalidos = lf.filter(~pl.col(c).is_null() & (pl.col(c) != "") & ~pl.col(c).str.contains(r"^\d+$")).select("MASCARA", c).head(3).collect()
                     raise ValueError(f"Ano 2006: Valores não inteiros ou negativos na coluna {c}. Exemplo: {invalidos}")
             
@@ -204,7 +204,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             
             lf = lf.with_columns(exprs)
             
-            # Tabela EDUCPROF no plano preguiçoso
+            # EDUCPROF table in lazy plan
             lf_educ = pl.scan_csv(
                 arquivo_educ,
                 separator="|",
@@ -240,7 +240,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
                 pl.col("matriculas_prof_tecnica").alias("matriculas_profissional")
             )
             
-            # As catorze colunas nulas
+            # The fourteen null columns
             lf = lf.with_columns(
                 pl.lit(None).cast(pl.Int64).alias("matriculas_basica"),
                 pl.lit(None).cast(pl.Int64).alias("turmas_basica"),
@@ -258,7 +258,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
                 pl.lit(None).cast(pl.Int64).alias("turmas_especial_exclusiva")
             )
             
-            # Renomear colunas derivadas
+            # Rename derived columns
             rename_map = {}
             for qt_col, metric_name in COLUNAS_QUANTIDADE:
                 rename_map[metric_name] = qt_col
@@ -266,7 +266,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             lf = lf.rename(rename_map)
             lf = lf.with_columns(pl.lit(2006).cast(pl.Int16).alias("ano"))
             
-            # Definir as colunas necessárias antes da colheita
+            # Define required columns before collection
             col_order = ["cod_municipio", "ano", "ANO", "CODMUNIC", "DEP", "LOC", "MASCARA"]
             for qt_col, _ in COLUNAS_QUANTIDADE:
                 col_order.append(qt_col)
@@ -304,7 +304,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             if len(invalido_educ) > 0:
                 raise ValueError(f"Ano 2006: Curso técnico ativo de escola inativa ou não encontrada. Exemplo: {invalido_educ.head(3)}")
             
-            # Retornar removendo colunas temporárias
+            # Return removing temporary columns
             return df.drop(["ANO", "CODMUNIC", "DEP", "LOC", "MASCARA"])
 
 

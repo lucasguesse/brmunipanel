@@ -1,7 +1,7 @@
-"""Regiões e macrorregiões de saúde por município (API de Dados Abertos do Ministério da Saúde).
+"""Health regions and macroregions by municipality (API de Dados Abertos of Ministério da Saúde).
 
 Endpoint: https://apidadosabertos.saude.gov.br/macrorregiao-e-regiao-de-saude/municipio
-Os códigos de município chegam com 6 dígitos e são convertidos para os 7 dígitos da DTB.
+Municipality codes arrive with 6 digits and are converted to the 7 digits of DTB.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ LIMITE_PAGINA = 1000
 
 
 def validar(conteudo: bytes) -> None:
-    """Valida se o conteúdo é um JSON com o formato esperado da API de regiões de saúde."""
+    """Validates whether the content is a JSON with the expected format from the health regions API."""
     try:
         dados = json.loads(conteudo)
         if not isinstance(dados, dict):
@@ -36,7 +36,7 @@ def validar(conteudo: bytes) -> None:
 
 
 def baixar(pasta: Path, **opcoes) -> list[dict]:
-    """Baixa todas as páginas da API de regiões de saúde avançando o offset pelo total de itens recebidos."""
+    """Downloads all pages from the health regions API, advancing the offset by the total number of items received."""
     pasta = Path(pasta)
     offset = 0
     registros = []
@@ -68,10 +68,10 @@ def processar_itens(
     itens: list[dict[str, Any]],
     municipios: pl.DataFrame,
 ) -> tuple[pl.DataFrame, list[dict[str, Any]]]:
-    """Converte os itens da API para tabela harmonizada usando `cod_municipio_6` de `municipios`.
+    """Converts API items into a harmonized table using `cod_municipio_6` from `municipios`.
 
-    Retorna o DataFrame harmonizado e a lista de itens descartados por falta de correspondência na DTB.
-    Levanta ValueError se houver código de município repetido entre os itens recebidos.
+    Returns the harmonized DataFrame and the list of items discarded due to lack of match in DTB.
+    Raises ValueError if there are repeated municipality codes among the received items.
     """
     vistos: set[str] = set()
     repetidos: set[str] = set()
@@ -130,7 +130,7 @@ def processar_itens(
 
 
 def harmonizar(pasta: Path, municipios: pl.DataFrame) -> pl.DataFrame:
-    """Lê os arquivos baixados em `pasta`, extrai todos os registros e harmoniza contra `municipios`."""
+    """Reads files downloaded in `pasta`, extracts all records, and harmonizes against `municipios`."""
     pasta = Path(pasta)
     manifesto = nucleo.ler_manifesto(pasta)
 

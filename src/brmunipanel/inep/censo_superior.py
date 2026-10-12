@@ -1,16 +1,16 @@
 """
 Censo da Educação Superior - INEP
 
-Fonte: Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP)
-Tabelas de origem: CADASTRO_CURSOS e CADASTRO_IES
-Chave: município, ano, categoria administrativa
+Source: Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP)
+Source tables: CADASTRO_CURSOS and CADASTRO_IES
+Key: municipality, year, administrative category
 
-Ressalvas:
-- Apenas o ensino presencial entra nas colunas. Cursos a distância não são contados.
-- Os docentes são os da instituição inteira, no município da sede, e incluem os que atuam em cursos a distância de uma instituição que também tem curso presencial.
-- A categoria 'especial' foi criada pelo INEP em 2012.
-- A ausência de linha num ano coberto significa que não há instituição com curso presencial nem com sede no município para aquela categoria.
-- De 2000 a 2008: o leiaute é outro; a matrícula é a do primeiro semestre; os docentes de 2000 a 2003 são o total menos os afastados, e os de 2004 a 2008 vêm da variável de docentes em exercício; o leiaute antigo registra oferta em mais municípios pequenos que o novo (1.365 municípios com curso em 2008 e 1.159 em 2009); os docentes sobem de 321 mil em 2008 para 341 mil em 2009, quando o INEP passou a coletar o censo por docente; e a soma das matrículas da graduação fica cerca de 0,05% abaixo do total publicado.
+Caveats:
+- Only in-person education enters the columns. Distance-learning courses are not counted.
+- Teachers are those of the entire institution, in the seat municipality, and include those working in distance-learning courses of an institution that also offers in-person courses.
+- The 'especial' category was created by INEP in 2012.
+- The absence of a row in a covered year means that there is no institution with an in-person course or seat in the municipality for that category.
+- From 2000 to 2008: the layout is different; enrollment is that of the first semester; teachers from 2000 to 2003 are the total minus those on leave, and those from 2004 to 2008 come from the practicing teachers variable; the old layout records offerings in more small municipalities than the new one (1,365 municipalities with courses in 2008 and 1,159 in 2009); teachers increase from 321 thousand in 2008 to 341 thousand in 2009, when INEP began collecting the census per teacher; and the sum of undergraduate enrollments is about 0.05% below the published total.
 """
 from __future__ import annotations
 
@@ -243,7 +243,7 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
             z.extract(membro_ies, tmpdir)
             arquivo_ies = Path(tmpdir) / membro_ies.filename
             
-            # Cursos
+            # Courses
             colunas_cursos = ["CO_MUNICIPIO", "CO_IES", "TP_MODALIDADE_ENSINO", "TP_CATEGORIA_ADMINISTRATIVA", "QT_MAT"]
             df_cursos = pl.read_csv(
                 arquivo_cursos,
@@ -266,10 +266,10 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
                 schema_overrides={"CO_IES": pl.Utf8, "CO_MUNICIPIO_IES": pl.Utf8, "TP_CATEGORIA_ADMINISTRATIVA": pl.Utf8, col_docentes: pl.Utf8}
             )
             
-            # Filtra Cursos Presenciais
+            # Filter in-person courses
             df_cursos = df_cursos.filter(pl.col("TP_MODALIDADE_ENSINO") == "1")
             
-            # Mapeamento Categoria
+            # Category mapping
             cat_map = {
                 "1": "federal", 
                 "2": "estadual", 
@@ -299,7 +299,7 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
                 pl.col("TP_CATEGORIA_ADMINISTRATIVA").replace(cat_map).alias("categoria")
             )
             
-            # Validar e converter qt_mat e qt_docentes
+            # Validate and convert qt_mat and qt_docentes
             for nome, df, col_q in [("Cursos", df_cursos, "QT_MAT"), ("IES", df_ies, col_docentes)]:
                 invalido = df.filter(~pl.col(col_q).str.contains(r"^\d+$") | pl.col(col_q).is_null())
                 if len(invalido) > 0:
@@ -308,7 +308,7 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
             df_cursos = df_cursos.with_columns(pl.col("QT_MAT").cast(pl.Int64))
             df_ies = df_ies.with_columns(pl.col(col_docentes).cast(pl.Int64).alias("QT_DOC_EXE_CAST"))
             
-            # Verificar integridade IES <-> Cursos
+            # Verify integrity IES <-> Courses
             ies_com_cursos = df_cursos.select(["CO_IES", "categoria"]).unique()
             ies_cadastro = df_ies.select(["CO_IES", "categoria"]).unique()
             
@@ -322,11 +322,11 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
             if len(divergentes) > 0:
                 raise ValueError(f"Ano {ano}: Instituição com curso presencial com categoria divergente na tabela de instituições. Exemplo: {divergentes.head(3)}")
             
-            # Filtrar IES apenas presenciais
+            # Filter only in-person IES
             ies_presenciais_list = ies_com_cursos["CO_IES"].to_list()
             df_ies_presenciais = df_ies.filter(pl.col("CO_IES").is_in(ies_presenciais_list))
             
-            # Validar codigo_municipio da IES aqui (apenas nas IES presenciais)
+            # Validate IES municipality code here (only for in-person IES)
             invalido_mun_ies = df_ies_presenciais.filter(~pl.col("CO_MUNICIPIO_IES").is_in(valid_municipios) | pl.col("CO_MUNICIPIO_IES").is_null())
             if len(invalido_mun_ies) > 0:
                  raise ValueError(f"Ano {ano}: Municípios inválidos ou nulos em CO_MUNICIPIO_IES na tabela de IES. Exemplo: {invalido_mun_ies.head(3)}")
@@ -334,7 +334,7 @@ def ler_ano_atual(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl
             return df_cursos, df_ies_presenciais
 
 def agregar(df_cursos: pl.DataFrame, df_ies_presenciais: pl.DataFrame, ano: int) -> pl.DataFrame:
-    # Agregação de cursos
+    # Courses aggregation
     agg_cursos = (
         df_cursos
         .rename({"CO_MUNICIPIO": "cod_municipio"})
@@ -345,7 +345,7 @@ def agregar(df_cursos: pl.DataFrame, df_ies_presenciais: pl.DataFrame, ano: int)
         ])
     )
     
-    # Agregação IES
+    # IES aggregation
     agg_ies = (
         df_ies_presenciais
         .rename({"CO_MUNICIPIO_IES": "cod_municipio"})
@@ -359,7 +359,7 @@ def agregar(df_cursos: pl.DataFrame, df_ies_presenciais: pl.DataFrame, ano: int)
     # Full outer join
     res = agg_cursos.join(agg_ies, on=["cod_municipio", "categoria"], how="full", coalesce=True)
     
-    # Preencher nulos com zero onde cabível
+    # Fill nulls with zero where applicable
     res = res.with_columns([
         pl.col("instituicoes").fill_null(0).cast(pl.Int64),
         pl.col("matriculas").fill_null(0).cast(pl.Int64),

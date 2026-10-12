@@ -1,16 +1,16 @@
-"""Harmonização das tabulações de saúde do TabNet (DATASUS) em nível municipal.
+"""Harmonization of health tabulations from TabNet (DATASUS) at the municipal level.
 
-Gera o painel municipal de saúde (2006–2023) consolidando nove indicadores:
-- CNES: leitos de internação, leitos de UTI, equipamentos de diagnóstico por
-  imagem (grupo inteiro), médicos, unidades básicas e postos de saúde;
-- SIM: óbitos por agressão (CID-10 X85–Y09) e óbitos infantis;
-- Sinasc: nascidos vivos.
+Generates the municipal health panel (2006–2023) by consolidating nine indicators:
+- CNES: inpatient beds, ICU beds, diagnostic imaging
+  equipment (entire group), physicians, primary care units, and health posts;
+- SIM: deaths from assault (CID-10 X85–Y09) and infant deaths;
+- Sinasc: live births.
 
-Os leitos do SUS (recorte da internação geral), os leitos
-de UTI de COVID-19 (apenas 2020-2022) e a versão da CBO devolvida junto com os médicos
-(que repete o ano) não entram no painel. Os leitos de COVID-19 não são somados aos
-leitos de UTI. A contagem de médicos troca de classificação entre 2007 (CBO 1994)
-e 2008 (CBO 2002).
+SUS beds (general hospitalization subset), COVID-19
+ICU beds (2020-2022 only), and the CBO version returned alongside physicians
+(which repeats the year) are not included in the panel. COVID-19 beds are not added to
+ICU beds. Physician counts switch classification between 2007 (CBO 1994)
+and 2008 (CBO 2002).
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ COLUNAS_PAINEL: tuple[str, ...] = (
 
 
 def _converter_valor(valor: str) -> int:
-    """Converte string de valor do TabNet para inteiro (traço '-' vira 0)."""
+    """Converts TabNet value string to integer (dash '-' becomes 0)."""
     v = valor.strip()
     if not v or v == "-":
         return 0
@@ -53,7 +53,7 @@ def _processar_linhas_tabulacao(
     indices_colunas: dict[str, list[int]],
     mapa_6_para_7: dict[str, str],
 ) -> dict[str, dict[str, int]]:
-    """Extrai e agrega valores por município de 7 dígitos a partir das linhas de uma tabulação."""
+    """Extracts and aggregates values by 7-digit municipality from the rows of a tabulation."""
     valores_por_mun: dict[str, dict[str, int]] = {}
 
     for row in linhas:
@@ -63,17 +63,17 @@ def _processar_linhas_tabulacao(
 
         m = re.match(r"^(\d{6})(?:\s+(.*))?$", rotulo)
         if not m:
-            # Descartar linha sem código de 6 dígitos no início (ex.: 'MUNICIPIO IGNORADO - RJ')
+            # Discard row without a 6-digit code at the beginning (e.g. 'MUNICIPIO IGNORADO - RJ')
             continue
 
         cod6 = m.group(1)
-        # Qualquer código que comece com 53 é somado em 530010 (Brasília / DF)
+        # Any code starting with 53 is summed into 530010 (Brasília / DF)
         if cod6.startswith("53"):
             cod6 = "530010"
 
         cod7 = mapa_6_para_7.get(cod6)
         if not cod7:
-            # Código do TabNet sem correspondência na DTB é descartado
+            # TabNet code without a match in DTB is discarded
             continue
 
         if cod7 not in valores_por_mun:
@@ -213,22 +213,22 @@ def harmonizar(
     *,
     anos: tuple[int, ...] = ANOS_PAINEL,
 ) -> pl.DataFrame:
-    """Harmoniza as tabulações do TabNet para o painel municipal.
+    """Harmonizes TabNet tabulations for the municipal panel.
 
     Args:
-        pasta_tabnet: Diretório onde estão os arquivos brutos baixados do TabNet.
-        municipios: DataFrame de municípios da DTB com `cod_municipio` e `cod_municipio_6`.
-        populacao: DataFrame de população com `cod_municipio`, `ano` e `populacao`.
-        anos: Tupla de anos a processar (padrão: 2006 a 2023).
+        pasta_tabnet: Directory containing raw files downloaded from TabNet.
+        municipios: DTB municipalities DataFrame with `cod_municipio` and `cod_municipio_6`.
+        populacao: Population DataFrame with `cod_municipio`, `ano`, and `populacao`.
+        anos: Tuple of years to process (default: 2006 to 2023).
 
     Returns:
-        DataFrame polars com 1 linha por município e ano, ordenado por `cod_municipio` e `ano`.
+        Polars DataFrame with 1 row per municipality and year, sorted by `cod_municipio` and `ano`.
     """
     pasta_tabnet = Path(pasta_tabnet)
     mapa_6_para_7 = dict(zip(municipios["cod_municipio_6"].to_list(), municipios["cod_municipio"].to_list()))
     todos_municipios = sorted(municipios["cod_municipio"].unique().to_list())
 
-    # Pares (cod_municipio, ano) que possuem registro populacional válido
+    # Pairs (cod_municipio, ano) that have a valid population record
     pares_com_populacao = set(
         zip(
             populacao.filter(pl.col("populacao").is_not_null())["cod_municipio"].to_list(),
@@ -252,7 +252,7 @@ def harmonizar(
             tem_populacao = (cod7, ano) in pares_com_populacao
 
             if not tem_populacao:
-                # Ano em que o município não tem população fica nulo em todas as colunas
+                # Years in which the municipality has no population remain null in all columns
                 linhas_painel.append({
                     "cod_municipio": cod7,
                     "ano": ano,
@@ -267,7 +267,7 @@ def harmonizar(
                     "nascidos_vivos": None,
                 })
             else:
-                # Município ausente da resposta recebe zero
+                # Municipality absent from the response receives zero
                 m_lei = dados_leitos.get(cod7, {})
                 m_comp = dados_complementares.get(cod7, {})
                 m_equ = dados_equipamentos.get(cod7, {})
