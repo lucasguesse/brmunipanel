@@ -22,14 +22,14 @@ This library provides the reproducible scientific protocol and supporting codeba
   - `municipios_limitrofes`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
   - `educacao`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.
 - **Extensive Metadata & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
-- **Highly Performant:** Built with `duckdb` and `polars`/`pyarrow` for blazing fast in-memory analytics of large municipal microdata.
+- **Performance:** Built on `polars`, which reads and aggregates the large municipal microdata files in memory.
 
 ## Installation
 
-You can install the library directly from PyPI (once published) or from the source repository:
+You can install the library from PyPI or from the source repository:
 
 ```bash
-# Recommended via pip (once published on PyPI)
+# Recommended: from PyPI
 pip install brmunipanel
 
 # From the GitHub repository
@@ -58,13 +58,13 @@ print(bmp.__version__)
 # Available namespaces: bmp.ibge, bmp.tesouro, bmp.ipea, bmp.datasus, bmp.inep
 
 # Example: Harmonize population estimates from a local SIDRA raw folder
-# df_pop = populacao.harmonizar(Path("raw/bases-de-dados/ibge/populacao"))
+# df_pop = populacao.harmonizar(Path("raw/ibge/populacao"))
 
 # Example: Harmonize Bolsa Família records from an IPEA Data raw folder
-# df_pbf = pbf.harmonizar(Path("raw/bases-de-dados/ipea"))
+# df_pbf = pbf.harmonizar(Path("raw/ipea"))
 
 # Example: Harmonize public school IDEB scores with municipal crosswalk
-# df_ideb = harmonizar_ideb(Path("raw/bases-de-dados/ideb"), municipios_df)
+# df_ideb = harmonizar_ideb(Path("raw/ideb"), municipios_df)
 ```
 
 ## Data Sources Handled
@@ -117,14 +117,12 @@ python -m twine check --strict dist/*
 # 7. Test installation of the built wheel in a separate, clean virtual environment
 python -m venv .venv-clean
 source .venv-clean/bin/activate  # On Windows: .venv-clean\Scripts\activate
-pip install --no-deps dist/brmunipanel-0.1.0-py3-none-any.whl
+pip install --no-deps dist/brmunipanel-*.whl
 python -c "import brmunipanel as bmp; print(bmp.__version__)"
 deactivate
 ```
 
-> **Note on Publishing:** Distribution packages are published to TestPyPI and PyPI via GitHub Actions using PyPA Trusted Publishing (OIDC) without persistent tokens or secrets. Publishing to TestPyPI is triggered manually via `workflow_dispatch`, while official publishing to PyPI is triggered strictly upon a published GitHub Release (`v*`). Version `0.1.0` has been published and validated on TestPyPI, while official publication to PyPI remains pending the first official GitHub Release. Never commit API tokens, credentials, or `.pypirc` files to version control.
-
-Full end-to-end pipeline execution and paper reproduction scripts are maintained in the companion research repository.
+> **Note on Publishing:** Distribution packages are published to PyPI by GitHub Actions with PyPA Trusted Publishing (OIDC), without persistent tokens or secrets, when a GitHub Release (`v*`) is published. Never commit API tokens, credentials, or `.pypirc` files to version control.
 
 ## How to Cite
 If you use this library or its data routines in your research, please cite this software repository and specify the release version used while a definitive academic citation is not yet available:
