@@ -6,7 +6,7 @@ Gera o painel municipal de saúde (2006–2023) consolidando nove indicadores:
 - SIM: óbitos por agressão (CID-10 X85–Y09) e óbitos infantis;
 - Sinasc: nascidos vivos.
 
-Por decisão de 2026-10-07, os leitos do SUS (recorte da internação geral), os leitos
+Os leitos do SUS (recorte da internação geral), os leitos
 de UTI de COVID-19 (apenas 2020-2022) e a versão da CBO devolvida junto com os médicos
 (que repete o ano) não entram no painel. Os leitos de COVID-19 não são somados aos
 leitos de UTI. A contagem de médicos troca de classificação entre 2007 (CBO 1994)
@@ -252,7 +252,7 @@ def harmonizar(
             tem_populacao = (cod7, ano) in pares_com_populacao
 
             if not tem_populacao:
-                # Regra 6: anos em que o município não tem população ficam nulos em todas as colunas
+                # Ano em que o município não tem população fica nulo em todas as colunas
                 linhas_painel.append({
                     "cod_municipio": cod7,
                     "ano": ano,
@@ -267,7 +267,7 @@ def harmonizar(
                     "nascidos_vivos": None,
                 })
             else:
-                # Regra 5: município ausente da resposta recebe zero
+                # Município ausente da resposta recebe zero
                 m_lei = dados_leitos.get(cod7, {})
                 m_comp = dados_complementares.get(cod7, {})
                 m_equ = dados_equipamentos.get(cod7, {})

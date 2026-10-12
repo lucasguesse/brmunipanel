@@ -127,10 +127,7 @@ class QualityAuditor:
         clean_name = tabela.replace("[processed] ", "").replace("[intermediate] ", "")
         
         if clean_name == "educacao":
-            # na educação básica, os seguintes totais nacionais: 
-            # em 2006, 203.973 instituições, 7.016.095 matrículas infantis, 33.282.663 matrículas fundamentais, 8.906.820 matrículas no ensino médio e 2.647.414 docentes; 
-            # em 2023, respectivamente, 180.230, 9.461.155, 26.108.208, 7.676.743 e 2.934.558; 
-            # no Censo Superior em 2023, 3.800 instituições e 5.063.936 matrículas;
+            # Totais nacionais de controle da educação básica e da superior, em 2006 e em 2023
             df_2006 = df.filter(pl.col("ano") == 2006)
             df_2023 = df.filter(pl.col("ano") == 2023)
             df_sp_2023 = df_2023.filter(pl.col("cod_municipio") == "3550308")
@@ -178,8 +175,7 @@ class QualityAuditor:
                 self.add_check(tabela, "SP 2023 ideb pub fin", "OK" if abs(df_sp_2023["ideb_anos_finais_publica"][0] - 4.8) < 0.01 else "FALHA", str(df_sp_2023["ideb_anos_finais_publica"][0]), "4.8")
                 self.add_check(tabela, "SP 2023 ideb pub med", "OK" if abs(df_sp_2023["ideb_ensino_medio_publica"][0] - 4.2) < 0.01 else "FALHA", str(df_sp_2023["ideb_ensino_medio_publica"][0]), "4.2")
 
-            # IDEB totais não nulos
-            # no IDEB publicado, 48.097 valores não nulos nos anos iniciais, 47.897 nos anos finais e 18.493 no ensino médio dentro de 2006-2023
+            # Contagem de valores não nulos do IDEB em cada etapa, de 2006 a 2023
             nn_ini = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_iniciais_publica"].drop_nulls().len()
             nn_fin = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_anos_finais_publica"].drop_nulls().len()
             nn_med = df.filter((pl.col("ano") >= 2006) & (pl.col("ano") <= 2023))["ideb_ensino_medio_publica"].drop_nulls().len()

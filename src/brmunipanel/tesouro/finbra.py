@@ -1,6 +1,6 @@
 """Despesa municipal empenhada por função em 2006–2012 (FINBRA, Tesouro Nacional).
 
-Por decisão do usuário de 2026-10-07, a saída publicada tem só as 28 funções.
+A saída tem só as 28 funções da classificação funcional.
 O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
 
 Baixa os sete bancos de dados do FINBRA (Finanças do Brasil), um `.zip` por ano com um banco Access (`.mdb`),
@@ -102,7 +102,7 @@ def ler_dsubfuncao(pasta: Path, ano: int) -> dict[str, list]:
 def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
     colunas = [nome.strip() for nome in tabela.keys()]
     
-    # 1. Conferir que as colunas existem
+    # Conferir que as colunas existem
     faltantes = [f for _, f, _ in FUNCOES if f not in colunas]
     if "UF" not in colunas:
         faltantes.append("UF")
@@ -114,13 +114,13 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
     if faltantes:
         raise ValueError(f"Colunas faltando na tabela: {faltantes}")
         
-    # 2. Coluna intraorçamentária
+    # Coluna intraorçamentária
     col_intra = [c for c in colunas if "intra" in c.lower()]
     if len(col_intra) > 1:
         raise ValueError(f"Múltiplas colunas intraorçamentárias encontradas: {col_intra}")
     nome_intra = col_intra[0] if col_intra else None
     
-    # 3. Conferir que as colunas têm o mesmo tamanho
+    # Conferir que as colunas têm o mesmo tamanho
     colunas_usadas = ["UF", "Cod Mun", "Despesas por Função"] + [f for _, f, _ in FUNCOES]
     if nome_intra:
         colunas_usadas.append(nome_intra)
@@ -141,7 +141,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
         uf = tabela["UF"][i]
         cod = tabela["Cod Mun"][i]
         
-        # 4. Montar a chave
+        # Montar a chave
         chave = codigo_6(uf, cod)
         if chave is None:
             descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "chave nula"})
@@ -149,7 +149,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             
         chaves_vistas.append(chave)
         
-        # 6. Converter para 7 dígitos
+        # Converter para 7 dígitos
         if chave not in municipios_dict:
             descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "fora da DTB"})
             continue
@@ -162,7 +162,7 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             "fonte": "finbra",
         }
         
-        # 7. Converter as colunas monetárias
+        # Converter as colunas monetárias
         for _, f, c_out in FUNCOES:
             linha[c_out] = converter_moeda(tabela[f][i])
             
@@ -178,13 +178,13 @@ def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame
             
         linhas_validas.append(linha)
         
-    # 5. Chave repetida no ano
+    # Chave repetida no ano
     contagem_chaves = Counter(chaves_vistas)
     repetidas = [k for k, v in contagem_chaves.items() if v > 1]
     if repetidas:
         raise ValueError(f"Chaves repetidas: {repetidas}")
         
-    # 8. Montar esquema e ordenar
+    # Montar esquema e ordenar
     if not linhas_validas:
         df = pl.DataFrame(schema=ESQUEMA)
     else:

@@ -4,7 +4,7 @@ Baixa as séries anuais de dezembro em nível municipal e consolida o painel 200
 - FAM_PBF: número de benefícios em dezembro (Int64)
 - VAL_PBF: valor total dos benefícios em dezembro em R$ mil (Float64)
 
-Por decisão do usuário de 2026-10-07, a anomalia de 2013 e de 2016 não é marcada em coluna, mas descrita na seção de limitações do artigo de dados.
+Em 2013 e em 2016 o valor municipal da fonte é anômalo em parte dos municípios. Ele fica como veio, sem marca em coluna.
 """
 
 from __future__ import annotations

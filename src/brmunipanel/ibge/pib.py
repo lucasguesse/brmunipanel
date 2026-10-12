@@ -1,6 +1,6 @@
 """Produto Interno Bruto dos Municípios (SIDRA, Tabela 5938, referência 2010), em mil reais correntes.
 
-Por decisão do usuário de 2026-10-07, apenas o PIB é harmonizado. A tabela não gera marcadores.
+Apenas o PIB é harmonizado, porque a fonte não divulga o valor adicionado bruto nem os impostos de 2022 e 2023. A tabela não gera marcadores.
 O município tem pib nulo nos anos anteriores à sua instalação. O bruto continua trazendo
 as sete variáveis da tabela.
 """

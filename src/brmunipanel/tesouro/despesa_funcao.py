@@ -1,6 +1,6 @@
 """Esquema e classificação comuns de despesas por função do Tesouro Nacional.
 
-Por decisão do usuário de 2026-10-07, a saída publicada tem só as 28 funções.
+A saída tem só as 28 funções da classificação funcional.
 O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
 """
 import polars as pl

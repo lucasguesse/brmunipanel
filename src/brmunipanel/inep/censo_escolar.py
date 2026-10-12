@@ -260,7 +260,6 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             
             # Renomear colunas derivadas
             rename_map = {}
-            # Assumindo que COLUNAS_QUANTIDADE está disponível no escopo do módulo
             for qt_col, metric_name in COLUNAS_QUANTIDADE:
                 rename_map[metric_name] = qt_col
                 

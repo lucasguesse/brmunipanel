@@ -1,11 +1,11 @@
 """Despesa municipal empenhada por função em 2013–2023 (SICONFI, Tesouro Nacional).
 
-Por decisão do usuário de 2026-10-07, a saída publicada tem só as 28 funções.
+A saída tem só as 28 funções da classificação funcional.
 O total declarado e a despesa intraorçamentária são usados só nas conferências internas.
 
 Fonte: consulta "Contas Anuais" do portal do SICONFI, tabela "Despesas por Função (Anexo I-E)", escopo "Municípios",
 com um arquivo por exercício e todos os municípios em cada arquivo. O portal barra o download por script com um
-captcha, então os arquivos são baixados à mão e postos em `raw/bases-de-dados/tesouro/siconfi/`. `baixar` não acessa
+captcha, então os arquivos são baixados à mão e postos na pasta de dados brutos da fonte. `baixar` não acessa
 a rede: confere o cabeçalho de cada `.zip` e o registra no manifesto. Para refazer o download, abrir `URL_PORTAL`,
 escolher o exercício, o escopo e a tabela acima, deixar o período de homologação em branco e salvar o `.zip` na
 pasta, com qualquer nome, porque o ano vem de dentro do arquivo. O arquivo de 2024 é registrado e não é harmonizado.

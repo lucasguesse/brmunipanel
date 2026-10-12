@@ -33,7 +33,7 @@ def compute_statistics(df: pl.DataFrame, col_name: str) -> dict[str, Any]:
     elif is_string and df.height > 0 and nulos < df.height:
         # Compute cardinality
         cardinality = col.n_unique()
-        # "dominio contém os valores distintos ordenados somente para colunas categóricas com cardinalidade pequena. Não listar todos os códigos e nomes de município."
+        # O domínio lista os valores distintos só de colunas de texto com poucos valores, e não de códigos ou nomes de município
         # If cardinality <= 35, list them
         if cardinality <= 35:
             vals = sorted(list(set(col.drop_nulls().to_list())))
