@@ -82,7 +82,7 @@ def test_censo_escolar_agregacao_e_vazios(pasta_bruto_2007, municipios_mock, mon
     assert row_m_r["docentes_basica"][0] == 1
     assert row_m_r["turmas_basica"][0] == 3
     
-    # Conferir caso em que todas as escolas do grupo t├¬m valor vazio (fica com nulo)
+    # Conferir caso em que todas as escolas do grupo têm valor vazio (fica com nulo)
     # Grupo ('1100205', '4', '1') (privada, urbana) tem 1 escola com valor vazio
     row_p_u = df.filter(
         (pl.col("cod_municipio") == "1100205") &
@@ -182,7 +182,7 @@ def test_censo_escolar_baixar_mock(monkeypatch):
         assert req.url == f"https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_{ano}.zip"
         assert req.compactar is False
 
-    # caso em que o manifesto j├í tem a chave e o arquivo existe
+    # caso em que o manifesto já tem a chave e o arquivo existe
     monkeypatch.setattr(censo_escolar, "ANOS_TODOS", [2023])
     
     class SessaoFalha:
@@ -266,7 +266,7 @@ def test_censo_escolar_2006_casos(pasta_bruto_2006, municipios_mock, monkeypatch
     assert row["docentes_basica"] == 16
     assert row["turmas_fundamental"] == 0
     
-    # Acrescentar ao caso 2: municipal e rural de 1100205, com escolas igual a 1 (escola extinta não conta)
+    # Municipal e rural de 1100205, com escolas igual a 1 (escola extinta não conta)
     row_mun_rural = df.filter((pl.col("dependencia") == "municipal") & (pl.col("cod_municipio") == "1100205") & (pl.col("localizacao") == "rural")).to_dicts()[0]
     assert row_mun_rural["escolas"] == 1
     # Conferir creche e fundamental 9 anos

@@ -349,9 +349,7 @@ def test_consolidar_educacao_agregacao_e_ideb():
         "matriculas": [1000, 2000, 5000],
     })
     
-    # IDEB: we add 2008 (even year) with nulls in original table (not filtered out until consolidar filters if all null)
-    # Wait, 2008 has no ideb data but we pass nulls for all stages.
-    # We should add a valid IDEB year, say 2009, 2011, etc.
+    # IDEB: 2008, ano par, entra com as três etapas nulas, e 2009 entra com valor
     ideb = pl.DataFrame({
         "cod_municipio": ["1", "1"],
         "ano": pl.Series([2008, 2009], dtype=pl.Int16),

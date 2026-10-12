@@ -341,8 +341,6 @@ def test_baixar(base_dir, monkeypatch):
         json.dump(manifesto, f)
         
     # chama baixar de verdade, mas com sessao injetada
-    # monkeypatch.undo() # remover fake_baixar_lote
-    # como undo n remove se o original foi mudado globalmente, melhor importar
     monkeypatch.setattr(censo_superior, "baixar_lote", baixar_lote_do_nucleo)
     
     censo_superior.baixar(base_dir, sessao=SessaoFalha())
@@ -564,7 +562,7 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
     with pytest.raises(ValueError, match="Mais afastados que o total"):
         censo_superior.ler_ano_antigo(pasta, 2000, muns)
 
-    # Novo: negativo em matrícula
+    # Negativo em matrícula
     with zipfile.ZipFile(z_path, "w") as z:
         lines = (amostra_dir / "censo_superior_2000_graduacao_amostra.csv").read_text(encoding="latin1").splitlines(True)
         idx = lines[0].split("|").index("C0421")
@@ -578,7 +576,7 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
     with pytest.raises(ValueError, match="Valor não inteiro ou negativo em C0421"):
         censo_superior.ler_ano_antigo(pasta, 2000, muns)
 
-    # Novo: pacote de 2007 sem I44
+    # Pacote de 2007 sem I44
     pasta2007 = create_mock_zip(tmp_path, 2007, amostra_dir)
     z_path_2007 = tmp_path / "censo-superior" / "censo-superior_2007.zip"
     with zipfile.ZipFile(z_path_2007, "w") as z:
@@ -645,8 +643,7 @@ def test_antigo_caso_11_harmonizar_antigo_atual(tmp_path, monkeypatch, amostra_d
     
     municipios_df = pl.DataFrame({"cod_municipio": list(muns)})
     
-    # We must reset ANOS_ANTIGOS in monkeypatch before calling harmonizar, because it was mocked.
-    # Wait, harmonizar reads censo_superior.ANOS_ANTIGOS directly so we should mock it properly.
+    # harmonizar lê censo_superior.ANOS_ANTIGOS, e por isso a constante é trocada aqui
     monkeypatch.setattr(censo_superior, "ANOS_ANTIGOS", [2008])
     
     df_final = censo_superior.harmonizar(tmp_path, municipios_df)

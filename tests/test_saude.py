@@ -195,7 +195,7 @@ def test_regras_harmonizacao_saude(tmp_path: Path, df_municipios: pl.DataFrame, 
     # Soma de 530010 (10 + 0 UTI) com 539999 (5 + 2 UTI)
     m53 = painel.filter(pl.col("cod_municipio") == "5300108").to_dicts()[0]
     assert m53["leitos_uti"] == 17  # 10 + 0 + 5 + 2
-    # Nas tabulações onde Brasília não apareceu na resposta, recebeu 0 (Regra 5)
+    # Nas tabulações onde Brasília não apareceu na resposta, recebeu 0
     assert m53["leitos_internacao"] == 0
     assert m53["obitos_agressao"] == 0
 
@@ -213,7 +213,7 @@ def test_regras_harmonizacao_saude(tmp_path: Path, df_municipios: pl.DataFrame, 
 
 
 def test_municipio_sem_populacao_fica_nulo(tmp_path: Path, df_municipios: pl.DataFrame, df_populacao: pl.DataFrame):
-    """Regra 6: município e ano sem registro de população fica com todas as colunas nulas."""
+    """Município e ano sem registro de população fica com todas as colunas nulas."""
     ano = 2008
     _montar_estrutura_padrao(tmp_path, ano)
 

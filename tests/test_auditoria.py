@@ -54,15 +54,13 @@ def test_auditoria_totais_educacao():
         "ideb_ensino_medio_publica": [None, 4.2, 4.2],
     })
     
-    # We must add padding to reach non-null counts:
-    # 48097 iniciais, 47897 finais, 18493 medio
-    # But wait, testing specific totals is enough to see if rules are created.
+    # Os totais de controle bastam para conferir que as regras são criadas
     auditor.auditar_totais_de_controle(df, "educacao")
     checks = auditor.get_checks_df()
     
     assert checks.filter(pl.col("regra") == "educacao basica 2006 institutos")["status"][0] == "OK"
     assert checks.filter(pl.col("regra") == "SP 2023 basica inst")["status"][0] == "OK"
-    # Will fail IDEB counts, which is expected since it's a mock
+    # A contagem do IDEB falha de propósito, porque a tabela do teste é pequena
     assert checks.filter(pl.col("regra") == "IDEB pub ini nao nulo")["status"][0] == "FALHA"
 
 def test_auditoria_geografica_limites_noronha():
