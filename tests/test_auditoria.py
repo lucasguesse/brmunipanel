@@ -54,13 +54,13 @@ def test_auditoria_totais_educacao():
         "ideb_ensino_medio_publica": [None, 4.2, 4.2],
     })
     
-    # Os totais de controle bastam para conferir que as regras são criadas
+    # Control totals suffice to check that rules are created
     auditor.auditar_totais_de_controle(df, "educacao")
     checks = auditor.get_checks_df()
     
     assert checks.filter(pl.col("regra") == "educacao basica 2006 institutos")["status"][0] == "OK"
     assert checks.filter(pl.col("regra") == "SP 2023 basica inst")["status"][0] == "OK"
-    # A contagem do IDEB falha de propósito, porque a tabela do teste é pequena
+    # The IDEB count fails on purpose because the test table is small
     assert checks.filter(pl.col("regra") == "IDEB pub ini nao nulo")["status"][0] == "FALHA"
 
 def test_auditoria_geografica_limites_noronha():

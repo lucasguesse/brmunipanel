@@ -53,7 +53,7 @@ def criar_zip(nomes: list[str]) -> bytes:
 
 
 def test_validar_zip():
-    # Aceita zip com 1 .mdb
+    # Accepts zip with 1 .mdb
     validar_zip(criar_zip(["x.MDB", "manifest.txt"]))
 
     with pytest.raises(RespostaInvalida, match="não é um ZIP"):
@@ -136,7 +136,7 @@ def test_processar_tabela_2006(municipios):
             assert df.schema[c] == pl.Float64
     assert df.schema["declara_intraorcamentaria"] == pl.Boolean
     
-    # Ordem de cod_municipio
+    # Order of cod_municipio
     assert df["cod_municipio"].to_list() == ["1100150", "3550308"]
     assert df["ano"].to_list() == [2006, 2006]
     assert df["fonte"].to_list() == ["finbra", "finbra"]
@@ -235,20 +235,20 @@ def test_erros_processar_tabela(municipios):
         "Desporto e Lazer": [0],
     }
 
-    # Falta Encargos Especiais
+    # Missing Encargos Especiais
     with pytest.raises(ValueError, match="Colunas faltando.*Encargos Especiais"):
         processar_tabela(tabela, 2006, municipios)
 
     tabela["Encargos Especiais"] = [0]
     
-    # Duas intra
+    # Two intra
     tabela_intra = tabela.copy()
     tabela_intra["Intra 1"] = [0]
     tabela_intra["Intra 2"] = [0]
     with pytest.raises(ValueError, match="Múltiplas colunas intraorçamentárias"):
         processar_tabela(tabela_intra, 2006, municipios)
         
-    # Chave repetida
+    # Repeated key
     tabela_rep = {k: v * 2 for k, v in tabela.items()}
     with pytest.raises(ValueError, match="Chaves repetidas.*355030"):
         processar_tabela(tabela_rep, 2006, municipios)
@@ -315,7 +315,7 @@ def test_amostras_reais():
     df_2010, d_2010 = processar_tabela(tabela_2010, 2010, muns_reais)
     assert df_2010.height == 3
     
-    # O total de São Paulo igual ao inteiro da amostra / 10000
+    # São Paulo total equals sample integer / 10000
     sp_2006_raw = tabela_2006["Despesas por Função"][tabela_2006["Cod Mun"].index(5030)]
     sp_2006_df = df_2006.filter(pl.col("cod_municipio") == "3550308")["desp_total_funcoes"][0]
     assert sp_2006_df == sp_2006_raw / 10000.0
@@ -334,7 +334,7 @@ def test_amostras_reais():
     assert df_2010.filter(pl.col("cod_municipio") == "1100098")["declara_intraorcamentaria"][0] is True
     assert df_2010.filter(pl.col("cod_municipio") == "1100130")["declara_intraorcamentaria"][0] is False
 
-    # Soma das funções a menos de 0,1%
+    # Sum of budget functions within 0.1%
     funcoes_cols = [c for c in df_2006.columns if c.startswith("desp_") and c not in ("desp_total_funcoes", "desp_intraorcamentaria")]
     
     def check_soma(df, df_nome):
@@ -388,7 +388,7 @@ def test_harmonizar(tmp_path, monkeypatch):
     assert "declara_intraorcamentaria" not in df.columns
     
     assert df.is_sorted(["cod_municipio", "ano"])
-    assert df.height == 3 * 7  # 3 municípios, 7 anos (2006-2012)
+    assert df.height == 3 * 7  # 3 municipalities, 7 years (2006-2012)
     assert df.schema["cod_municipio"] == pl.String
     assert df.schema["ano"] == pl.Int16
     for c in COLUNAS_PUBLICADAS[2:]:

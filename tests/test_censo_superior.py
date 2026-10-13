@@ -38,7 +38,7 @@ def test_esquema(base_dir, amostra_dir, mock_municipios, monkeypatch):
     monkeypatch.setattr(censo_superior, "ANOS_ANTIGOS", [])
     create_zip(base_dir, 2023, amostra_dir, "MICRODADOS_CADASTRO_CURSOS_2023", "MICRODADOS_CADASTRO_IES_2023")
     
-    # precisamos adicionar os codigos de municipio da amostra ao mock
+    # Need to add sample municipality codes to the mock
     cursos = pl.read_csv(amostra_dir / "censo_superior_cursos_2023_amostra.csv", separator=";", encoding="utf8-lossy", infer_schema_length=0)
     ies = pl.read_csv(amostra_dir / "censo_superior_ies_2023_amostra.csv", separator=";", encoding="utf8-lossy", infer_schema_length=0)
     muns = set(cursos["CO_MUNICIPIO"].to_list() + ies["CO_MUNICIPIO_IES"].to_list())
@@ -107,11 +107,11 @@ def test_duas_instituicoes_mesmo_mun(base_dir, amostra_dir, monkeypatch):
     cursos = pl.read_csv(amostra_dir / "censo_superior_cursos_2023_amostra.csv", separator=";", encoding="utf8-lossy", infer_schema_length=0)
     ies = pl.read_csv(amostra_dir / "censo_superior_ies_2023_amostra.csv", separator=";", encoding="utf8-lossy", infer_schema_length=0)
     
-    # Criar duplicata de curso para a mesma IES no mesmo municipio
+    # Create duplicate course for the same IES in the same municipality
     pres = cursos.filter(pl.col("TP_MODALIDADE_ENSINO") == "1")
     if len(pres) > 0:
         row1 = pres.row(0, named=True)
-        # forcar uma duplicata de IES
+        # force a duplicate IES
         cursos_duplicados = pl.concat([cursos, pl.DataFrame([row1])])
         
         caminho_csv = base_dir / "mod_cursos.csv"
@@ -131,8 +131,8 @@ def test_duas_instituicoes_mesmo_mun(base_dir, amostra_dir, monkeypatch):
         
         row_agg = df.filter((pl.col("cod_municipio") == row1["CO_MUNICIPIO"]) & (pl.col("categoria") == cat))
         
-        # A ies tem 2 cursos, mas só conta como 1 em instituicoes
-        # Verifica se o numero de IES daquele grupo condiz com a contagem unica manual
+        # The IES has 2 courses, but only counts as 1 in instituicoes
+        # Checks whether the number of IES in that group matches the manual unique count
         pres_grupo = cursos_duplicados.filter(
             (pl.col("CO_MUNICIPIO") == row1["CO_MUNICIPIO"]) & 
             (pl.col("TP_CATEGORIA_ADMINISTRATIVA") == row1["TP_CATEGORIA_ADMINISTRATIVA"]) &
@@ -155,7 +155,7 @@ def test_grupo_so_sede_ou_so_curso(base_dir, amostra_dir, monkeypatch):
     })
     ies = pl.DataFrame({
         "CO_IES": ["1"],
-        "CO_MUNICIPIO_IES": ["5300108"], # Sede diferente
+        "CO_MUNICIPIO_IES": ["5300108"], # Different seat
         "TP_CATEGORIA_ADMINISTRATIVA": ["1"],
         "QT_DOC_EXE": ["50"]
     })
@@ -170,14 +170,14 @@ def test_grupo_so_sede_ou_so_curso(base_dir, amostra_dir, monkeypatch):
     mock_muns = pl.DataFrame({"cod_municipio": ["1100205", "5300108"]})
     df = censo_superior.harmonizar(base_dir, mock_muns)
     
-    # 1100205 = curso, matriculas; sede = 0
+    # 1100205 = course, enrollments; seat = 0
     row_curso = df.filter(pl.col("cod_municipio") == "1100205")
     assert row_curso["instituicoes"][0] == 1
     assert row_curso["matriculas"][0] == 100
     assert row_curso["instituicoes_sede"][0] == 0
     assert row_curso["docentes_sede"][0] == 0
     
-    # 5300108 = sede; curso = 0
+    # 5300108 = seat; course = 0
     row_sede = df.filter(pl.col("cod_municipio") == "5300108")
     assert row_sede["instituicoes"][0] == 0
     assert row_sede["matriculas"][0] == 0
@@ -193,7 +193,7 @@ def test_codigos_antigos_2009(base_dir, amostra_dir, monkeypatch):
         "CO_MUNICIPIO": ["1100205"],
         "CO_IES": ["1"],
         "TP_MODALIDADE_ENSINO": ["1"],
-        "TP_CATEGORIA_ADMINISTRATIVA": ["6"], # 6, 8, 9 viram privada
+        "TP_CATEGORIA_ADMINISTRATIVA": ["6"], # 6, 8, 9 become privada
         "QT_MAT": ["100"]
     })
     ies = pl.DataFrame({
@@ -248,7 +248,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
             z.writestr("cadastro_cursos.csv", cursos.write_csv(separator=";"))
             z.writestr("_ies_.csv", ies.write_csv(separator=";"))
     
-    # Categoria fora da lista
+    # Category outside the list
     write_zip(
         pl.DataFrame({"CO_MUNICIPIO": ["1100205"], "CO_IES": ["1"], "TP_MODALIDADE_ENSINO": ["1"], "TP_CATEGORIA_ADMINISTRATIVA": ["99"], "QT_MAT": ["100"]}),
         pl.DataFrame({"CO_IES": ["1"], "CO_MUNICIPIO_IES": ["1100205"], "TP_CATEGORIA_ADMINISTRATIVA": ["99"], "QT_DOC_EXE": ["50"]})
@@ -256,7 +256,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
     with pytest.raises(ValueError, match="Valores inválidos em TP_CATEGORIA_ADMINISTRATIVA"):
         censo_superior.harmonizar(base_dir, mock_muns)
         
-    # Municipio fora da tabela
+    # Municipality outside the table
     write_zip(
         pl.DataFrame({"CO_MUNICIPIO": ["9999999"], "CO_IES": ["1"], "TP_MODALIDADE_ENSINO": ["1"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_MAT": ["100"]}),
         pl.DataFrame({"CO_IES": ["1"], "CO_MUNICIPIO_IES": ["1100205"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_DOC_EXE": ["50"]})
@@ -264,7 +264,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
     with pytest.raises(ValueError, match="Municípios inválidos ou nulos em CO_MUNICIPIO"):
         censo_superior.harmonizar(base_dir, mock_muns)
         
-    # QT_MAT n int
+    # QT_MAT non-int
     write_zip(
         pl.DataFrame({"CO_MUNICIPIO": ["1100205"], "CO_IES": ["1"], "TP_MODALIDADE_ENSINO": ["1"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_MAT": ["a"]}),
         pl.DataFrame({"CO_IES": ["1"], "CO_MUNICIPIO_IES": ["1100205"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_DOC_EXE": ["50"]})
@@ -272,7 +272,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
     with pytest.raises(ValueError, match="Valores não inteiros, negativos ou vazios na coluna QT_MAT"):
         censo_superior.harmonizar(base_dir, mock_muns)
         
-    # IES ausente da tabela de IES
+    # IES absent from the IES table
     write_zip(
         pl.DataFrame({"CO_MUNICIPIO": ["1100205"], "CO_IES": ["1"], "TP_MODALIDADE_ENSINO": ["1"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_MAT": ["100"]}),
         pl.DataFrame({"CO_IES": ["2"], "CO_MUNICIPIO_IES": ["1100205"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_DOC_EXE": ["50"]})
@@ -281,7 +281,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
         censo_superior.harmonizar(base_dir, mock_muns)
         
 
-    # QT_MAT vazio numa linha presencial
+    # QT_MAT empty in an in-person row
     write_zip(
         pl.DataFrame({"CO_MUNICIPIO": ["1100205"], "CO_IES": ["1"], "TP_MODALIDADE_ENSINO": ["1"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_MAT": [""]}),
         pl.DataFrame({"CO_IES": ["1"], "CO_MUNICIPIO_IES": ["1100205"], "TP_CATEGORIA_ADMINISTRATIVA": ["1"], "QT_DOC_EXE": ["50"]})
@@ -289,7 +289,7 @@ def test_erros(base_dir, amostra_dir, monkeypatch):
     with pytest.raises(ValueError, match="Valores não inteiros, negativos ou vazios na coluna QT_MAT"):
         censo_superior.harmonizar(base_dir, mock_muns)
         
-    # Sem arquivo de IES
+    # Without IES file
     pasta_inep = base_dir / "censo-superior"
     zip_path = pasta_inep / "censo-superior_2023.zip"
     with zipfile.ZipFile(zip_path, 'w') as z:
@@ -312,7 +312,7 @@ def test_baixar(base_dir, monkeypatch):
     assert calls[0].url == "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2000.zip"
     assert calls[0].compactar is False
 
-    # caso em que o manifesto já tem a chave e o arquivo existe
+    # case where the manifest already has the key and the file exists
     monkeypatch.setattr(censo_superior, "ANOS_TODOS", [2023])
     
     class SessaoFalha:
@@ -321,11 +321,11 @@ def test_baixar(base_dir, monkeypatch):
         def post(self, *args, **kwargs):
             raise RuntimeError("Não deveria chamar a rede")
             
-    # Criar pasta e manifesto com arquivo existente
+    # Create folder and manifest with existing file
     pasta_inep = base_dir / "censo-superior"
     pasta_inep.mkdir(parents=True, exist_ok=True)
     arquivo = pasta_inep / "censo-superior_2023.zip"
-    arquivo.write_bytes(b"PK" + b"X" * 100) # zip mock
+    arquivo.write_bytes(b"PK  " + b"X" * 100) # zip mock
     
     sha256 = hashlib.sha256(arquivo.read_bytes()).hexdigest()
     
@@ -340,7 +340,7 @@ def test_baixar(base_dir, monkeypatch):
     with open(base_dir / "manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifesto, f)
         
-    # chama baixar de verdade, mas com sessao injetada
+    # calls baixar for real, but with injected session
     monkeypatch.setattr(censo_superior, "baixar_lote", baixar_lote_do_nucleo)
     
     censo_superior.baixar(base_dir, sessao=SessaoFalha())
@@ -562,7 +562,7 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
     with pytest.raises(ValueError, match="Mais afastados que o total"):
         censo_superior.ler_ano_antigo(pasta, 2000, muns)
 
-    # Negativo em matrícula
+    # Negative in enrollment
     with zipfile.ZipFile(z_path, "w") as z:
         lines = (amostra_dir / "censo_superior_2000_graduacao_amostra.csv").read_text(encoding="latin1").splitlines(True)
         idx = lines[0].split("|").index("C0421")
@@ -576,7 +576,7 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
     with pytest.raises(ValueError, match="Valor não inteiro ou negativo em C0421"):
         censo_superior.ler_ano_antigo(pasta, 2000, muns)
 
-    # Pacote de 2007 sem I44
+    # 2007 package without I44
     pasta2007 = create_mock_zip(tmp_path, 2007, amostra_dir)
     z_path_2007 = tmp_path / "censo-superior" / "censo-superior_2007.zip"
     with zipfile.ZipFile(z_path_2007, "w") as z:
@@ -643,7 +643,7 @@ def test_antigo_caso_11_harmonizar_antigo_atual(tmp_path, monkeypatch, amostra_d
     
     municipios_df = pl.DataFrame({"cod_municipio": list(muns)})
     
-    # harmonizar lê censo_superior.ANOS_ANTIGOS, e por isso a constante é trocada aqui
+    # harmonizar reads censo_superior.ANOS_ANTIGOS, which is why the constant is replaced here
     monkeypatch.setattr(censo_superior, "ANOS_ANTIGOS", [2008])
     
     df_final = censo_superior.harmonizar(tmp_path, municipios_df)

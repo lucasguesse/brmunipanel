@@ -1,4 +1,4 @@
-"""Testes do módulo brmunipanel.datasus.regioes_saude."""
+"""Tests for the brmunipanel.datasus.regioes_saude module."""
 
 from __future__ import annotations
 
@@ -39,15 +39,15 @@ class SessaoFalsa:
 
 
 def test_validar() -> None:
-    # Válido
+    # Valid
     conteudo_valido = json.dumps({"macrorregiao_regiao_saude_municipios": []}).encode("utf-8")
     regioes_saude.validar(conteudo_valido)
 
-    # Inválido: não é JSON
+    # Invalid: not JSON
     with pytest.raises(RespostaInvalida, match="não é um objeto JSON|Conteúdo inválido"):
         regioes_saude.validar(b"<html>404 Not Found</html>")
 
-    # Inválido: chave ausente
+    # Invalid: missing key
     with pytest.raises(RespostaInvalida, match="não é uma lista"):
         regioes_saude.validar(json.dumps({"dados": []}).encode("utf-8"))
 
@@ -57,7 +57,7 @@ def test_processar_itens() -> None:
     dados = json.loads(caminho_amostra.read_text(encoding="utf-8"))
     itens = dados["macrorregiao_regiao_saude_municipios"]
 
-    # Adicionar um item fictício com código sem correspondência na DTB (ex: 999999)
+    # Add a mock item with code without match in DTB (e.g. 999999)
     itens_com_invalido = list(itens) + [
         {
             "codigo_municipio": "999999",
@@ -68,7 +68,7 @@ def test_processar_itens() -> None:
         }
     ]
 
-    # Municípios DTB simulados contendo apenas os 5 municípios válidos da amostra
+    # Mock DTB municipalities containing only the 5 valid sample municipalities
     municipios = pl.DataFrame({
         "cod_municipio": ["1200013", "1200054", "1200104", "1200138", "1200179"],
         "cod_municipio_6": ["120001", "120005", "120010", "120013", "120017"],
@@ -76,7 +76,7 @@ def test_processar_itens() -> None:
 
     df, descartados = regioes_saude.processar_itens(itens_com_invalido, municipios)
 
-    # 1. Esquema e tipos
+    # 1. Schema and types
     assert df.schema == {
         "cod_municipio": pl.String,
         "cod_regiao_saude": pl.String,
@@ -85,15 +85,15 @@ def test_processar_itens() -> None:
         "nome_macrorregiao_saude": pl.String,
     }
 
-    # 2. Conversão de 6 para 7 dígitos e total de válidos
+    # 2. Conversion from 6 to 7 digits and total valid
     assert df.height == 5
     assert set(df["cod_municipio"]) == {"1200013", "1200054", "1200104", "1200138", "1200179"}
 
-    # 3. Código sem correspondência é descartado
+    # 3. Code without match is discarded
     assert len(descartados) == 1
     assert descartados[0]["codigo_municipio"] == "999999"
 
-    # 4. Ausência de chave primária duplicada
+    # 4. Absence of duplicate primary key
     assert df["cod_municipio"].n_unique() == df.height
 
 
@@ -117,7 +117,7 @@ def test_paginacao_sessao_falsa(tmp_path: Path) -> None:
 
     registros = regioes_saude.baixar(tmp_path, sessao=sessao, intervalo=0.0)
 
-    # 4 requisições feitas na primeira execução
+    # 4 requests made on first run
     assert sessao.chamadas == 4
     assert [r["arquivo"] for r in registros] == [
         "regioes_saude_offset0000.json.gz",
@@ -129,7 +129,7 @@ def test_paginacao_sessao_falsa(tmp_path: Path) -> None:
     manifesto = nucleo.ler_manifesto(tmp_path)
     assert sorted(manifesto.keys()) == ["offset0000", "offset0003", "offset0006", "offset0008"]
 
-    # Segunda chamada sobre a mesma pasta não faz nenhuma requisição
+    # Second call on the same folder makes no requests
     registros2 = regioes_saude.baixar(tmp_path, sessao=sessao, intervalo=0.0)
     assert sessao.chamadas == 4
     assert len(registros2) == 4

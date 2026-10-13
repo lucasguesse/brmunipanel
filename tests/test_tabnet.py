@@ -1,4 +1,4 @@
-"""Testes do cliente do TabNet (DATASUS)."""
+"""Tests for the TabNet client (DATASUS)."""
 
 from pathlib import Path
 
@@ -19,7 +19,7 @@ def _obter_tabulacao(nome: str):
 
 
 def test_montar_corpo_cnes_leitos_internacao_2006():
-    """1. montar_corpo para cnes_leitos_internacao em 2006 devolve o corpo exato esperado."""
+    """1. montar_corpo for cnes_leitos_internacao in 2006 returns the exact expected body."""
     tab = _obter_tabulacao("cnes_leitos_internacao")
     corpo = montar_corpo(tab, "2006")
     esperado = (
@@ -33,7 +33,7 @@ def test_montar_corpo_cnes_leitos_internacao_2006():
 
 
 def test_montar_corpo_sim_obitos_agressao_2023():
-    """2. montar_corpo para sim_obitos_agressao em 2023 contém os parâmetros e filtros esperados."""
+    """2. montar_corpo for sim_obitos_agressao in 2023 contains expected parameters and filters."""
     tab = _obter_tabulacao("sim_obitos_agressao")
     corpo = montar_corpo(tab, "2023")
     assert "Incremento=%D3bitos_p%2FResid%EAnc" in corpo
@@ -44,7 +44,7 @@ def test_montar_corpo_sim_obitos_agressao_2023():
 
 
 def test_nome_dbf_por_tabulacao_e_periodo():
-    """3. O nome do arquivo .dbf por tabulação e período, incluindo pfbr0708.dbf."""
+    """3. The .dbf file name by tabulation and period, including pfbr0708.dbf."""
     t_leitos = _obter_tabulacao("cnes_leitos_internacao")
     assert nome_dbf(t_leitos, "200607") == "ltbr0607.dbf"
     assert nome_dbf(t_leitos, "202307") == "ltbr2307.dbf"
@@ -71,32 +71,32 @@ def test_nome_dbf_por_tabulacao_e_periodo():
 
 
 def test_extrair_tabela_e_validar_amostras_reais():
-    """4. extrair_tabela e validar sobre amostras reais e rejeição de 'Nenhum registro selecionado'."""
-    # Amostra sem coluna ativa
+    """4. extrair_tabela and validar on real samples and rejection of 'Nenhum registro selecionado'."""
+    # Sample without active column
     conteudo_sem_coluna = (PASTA_DADOS / "tabnet_sem_coluna_amostra.html").read_bytes()
     cabecalho, linhas = extrair_tabela(conteudo_sem_coluna)
     assert cabecalho == ["Município", "Quantidade existente", "Quantidade SUS"]
-    assert len(linhas) == 11  # 10 municipios + Total
+    assert len(linhas) == 11  # 10 municipalities + Total
     assert linhas[-1][0].lower() == "total"
     validar(conteudo_sem_coluna, min_linhas=10)
 
-    # Amostra com coluna ativa
+    # Sample with active column
     conteudo_com_coluna = (PASTA_DADOS / "tabnet_com_coluna_amostra.html").read_bytes()
     cab_col, linhas_col = extrair_tabela(conteudo_com_coluna)
     assert cab_col[0] == "Município"
     assert len(cab_col) > 2
-    assert len(linhas_col) == 11  # 10 municipios + Total
+    assert len(linhas_col) == 11  # 10 municipalities + Total
     assert linhas_col[-1][0].lower() == "total"
     validar(conteudo_com_coluna, min_linhas=10)
 
-    # Amostra vazia ("Nenhum registro selecionado")
+    # Empty sample ("Nenhum registro selecionado")
     conteudo_vazio = (PASTA_DADOS / "tabnet_vazio_amostra.html").read_bytes()
     with pytest.raises(RespostaInvalida, match="Nenhum registro selecionado"):
         validar(conteudo_vazio, min_linhas=10)
 
 
 def test_extrair_tabela_linha_malformada_antes_do_total_levanta_erro():
-    """Linha com número divergente de colunas antes do Total levanta RespostaInvalida com rótulo."""
+    """Malformed row before Total with mismatched column count raises RespostaInvalida with label."""
     html_malformado = (
         b"<PRE>"
         b'"Municipio";"Col1";"Col2"\n'
@@ -108,7 +108,7 @@ def test_extrair_tabela_linha_malformada_antes_do_total_levanta_erro():
     with pytest.raises(RespostaInvalida, match="Linha malformada antes do Total: rótulo '110002 ARIQUEMES'"):
         extrair_tabela(html_malformado)
 
-    # Linhas divergentes APÓS o Total são ignoradas sem levantar erro
+    # Divergent rows AFTER Total are ignored without raising error
     html_rodape_divergente = (
         b"<PRE>"
         b'"Municipio";"Col1";"Col2"\n'

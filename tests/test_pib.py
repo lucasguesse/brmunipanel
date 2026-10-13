@@ -1,4 +1,4 @@
-"""Testes do módulo do Produto Interno Bruto (brmunipanel.ibge.pib)."""
+"""Tests for the Gross Domestic Product module (brmunipanel.ibge.pib)."""
 
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ def test_harmonizar(tmp_path: Path, amostra_5938_2022_bytes: bytes, monkeypatch:
         "ano": pl.Int16,
         "pib": pl.Float64,
     }
-    # PIB na amostra de 2022 não deve ser nulo
+    # GDP in the 2022 sample must not be null
     assert painel["pib"].null_count() == 0
 
 
@@ -48,7 +48,7 @@ def test_harmonizar_com_marcador_nulo(tmp_path: Path, amostra_5938_2022_bytes: b
     
     dados = json.loads(amostra_5938_2022_bytes)
     cod_municipio_alterado = None
-    # Procurar a variavel 37 e setar "..." na serie 2022
+    # Search for variable 37 and set "..." in the 2022 series
     for variavel_obj in dados:
         if variavel_obj["id"] == "37":
             serie = variavel_obj["resultados"][0]["series"][0]
@@ -64,8 +64,8 @@ def test_harmonizar_com_marcador_nulo(tmp_path: Path, amostra_5938_2022_bytes: b
 
 
 def test_variaveis_download() -> None:
-    # A requisição deve conter exatamente a string de variáveis esperada para não quebrar 
-    # o manifesto e baixar tudo de novo.
+    # The request must contain exactly the expected variables string so as not to break
+    # the manifest and download everything again.
     req = sidra.requisicao_ano(pib.TABELA, 2022, pib.VARIAVEIS_DOWNLOAD)
     assert req.url.endswith("variaveis/37|543|498|513|517|6575|525?localidades=N6[all]")
 

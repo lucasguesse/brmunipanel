@@ -1,4 +1,4 @@
-"""Testes do módulo CEMPRE do IBGE/SIDRA (brmunipanel.ibge.cempre)."""
+"""Tests for the IBGE/SIDRA CEMPRE module (brmunipanel.ibge.cempre)."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ def pasta_sidra_cempre(tmp_path: Path) -> Path:
 def test_harmonizar_cempre_esquema(pasta_sidra_cempre: Path) -> None:
     painel = cempre.harmonizar(pasta_sidra_cempre)
 
-    # 1. Esquema esperado: cod_municipio, ano e as 5 colunas harmonizadas
+    # 1. Expected schema: cod_municipio, ano, and the 5 harmonized columns
     esquema_esperado = {
         "cod_municipio": pl.String,
         "ano": pl.Int16,
@@ -42,15 +42,15 @@ def test_harmonizar_cempre_esquema(pasta_sidra_cempre: Path) -> None:
     }
     assert painel.schema == esquema_esperado
 
-    # 2. Janela estritamente 2006–2023
+    # 2. Window strictly 2006–2023
     assert painel["ano"].min() == 2006
     assert painel["ano"].max() == 2023
 
-    # 3. Há linhas para anos das duas tabelas de origem (ex: 2021 e 2022)
+    # 3. There are rows for years from both source tables (e.g. 2021 and 2022)
     assert 2021 in painel["ano"].unique().to_list()
     assert 2022 in painel["ano"].unique().to_list()
 
-    # 4. Chave única e ordenação
+    # 4. Unique key and sorting
     dups = painel.group_by(["cod_municipio", "ano"]).agg(pl.len().alias("n")).filter(pl.col("n") > 1)
     assert dups.height == 0
     assert painel.equals(painel.sort(["cod_municipio", "ano"]))

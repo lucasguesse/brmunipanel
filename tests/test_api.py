@@ -1,7 +1,7 @@
-"""Testes da interface pública da biblioteca brmunipanel.
+"""Tests for the public interface of the brmunipanel library.
 
-Valida versão, __all__, namespaces de fontes e importabilidade de funções
-documentadas no README sem qualquer chamada de rede.
+Validates version, __all__, source namespaces, and importability of functions
+documented in the README without any network calls.
 """
 
 from pathlib import Path
@@ -14,14 +14,14 @@ import brmunipanel as bmp
 
 
 def test_package_version():
-    """Valida que __version__ está definida, é string e coincide com a versão da distribuição."""
+    """Validate that __version__ is defined, is a string, and matches the distribution version."""
     assert hasattr(bmp, "__version__")
     assert isinstance(bmp.__version__, str)
     assert bmp.__version__ == "0.1.0"
 
 
 def test_public_api_all():
-    """Valida que __all__ declara a versão e os namespaces de fontes canônicos."""
+    """Validate that __all__ declares the version and canonical source namespaces."""
     assert hasattr(bmp, "__all__")
     esperados = {"__version__", "datasus", "ibge", "inep", "ipea", "tesouro"}
     assert set(bmp.__all__) == esperados
@@ -30,7 +30,7 @@ def test_public_api_all():
 
 
 def test_source_namespaces():
-    """Valida que os namespaces de fontes são módulos acessíveis diretamente em bmp."""
+    """Validate that source namespaces are modules directly accessible in bmp."""
     assert isinstance(bmp.datasus, types.ModuleType)
     assert isinstance(bmp.ibge, types.ModuleType)
     assert isinstance(bmp.inep, types.ModuleType)
@@ -39,7 +39,7 @@ def test_source_namespaces():
 
 
 def test_readme_quickstart_imports_and_callables():
-    """Valida que todas as importações e funções documentadas no Quick Start do README são válidas e invocáveis."""
+    """Validate that all imports and functions documented in the README Quick Start are valid and callable."""
     from brmunipanel.ibge import populacao, pib
     from brmunipanel.ipea import pbf
     from brmunipanel.inep import (
@@ -50,7 +50,7 @@ def test_readme_quickstart_imports_and_callables():
     from brmunipanel.tesouro import siconfi, finbra
     from brmunipanel.datasus import saude
 
-    # Funções de harmonização documentadas no README
+    # Harmonization functions documented in the README
     assert callable(populacao.harmonizar)
     assert callable(pib.harmonizar)
     assert callable(pbf.harmonizar)
@@ -63,7 +63,7 @@ def test_readme_quickstart_imports_and_callables():
 
 
 def test_from_import_submodules():
-    """Valida que 'from brmunipanel import <namespace>' importa os submódulos corretamente."""
+    """Validate that 'from brmunipanel import <namespace>' imports submodules correctly."""
     from brmunipanel import datasus, ibge, inep, ipea, tesouro
 
     assert isinstance(datasus, types.ModuleType)
@@ -74,7 +74,7 @@ def test_from_import_submodules():
 
 
 def test_lazy_imports_clean_subprocess():
-    """Valida que 'import brmunipanel' em processo limpo não carrega polars, pandas nem módulos pesados."""
+    """Validate that 'import brmunipanel' in a clean process does not load polars, pandas, or heavy modules."""
     src_dir = str(Path(__file__).resolve().parent.parent / "src")
     code = (
         "import sys\n"

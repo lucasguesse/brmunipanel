@@ -85,24 +85,24 @@ def test_empacotamento_arquivos_e_manifesto(fake_environment):
     assert manifest["git_commit_projeto"] == "hash2"
     assert len(manifest["arquivos"]) == 16 # 6 parquet + 6 csv + 3 docs + 1 readme
 
-    # Metadata por tabela no manifesto
+    # Metadata per table in the manifest
     for item in manifest["arquivos"]:
         if item["formato"] in ("parquet", "csv.gz"):
             assert "janela_temporal" in item
             assert "chaves" in item
 
-    # Testar determinismo real
+    # Test real determinism
     final2 = final_dir.parent / "final2"
     final_dir.rename(final2)
     empacotamento.montar_pacote_final("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
 
-    # Todos os arquivos idênticos byte a byte
+    # All files identical byte-for-byte
     for f in arquivos_esperados:
         b1 = (final_dir / f).read_bytes()
         b2 = (final2 / f).read_bytes()
         assert b1 == b2, f"{f} não é determinístico"
 
-    # Checar Parquet == Processed, CSV relido == Parquet
+    # Check Parquet == Processed, reread CSV == Parquet
     for t in [
         "municipios", "demografia_economia_social", "financas_publicas",
         "saude", "municipios_limitrofes", "educacao"
@@ -115,7 +115,7 @@ def test_empacotamento_arquivos_e_manifesto(fake_environment):
         df_csv = pl.read_csv(final_dir / f"{t}.csv.gz", schema_overrides=df_pq.schema)
         assert df_pq.equals(df_csv)
 
-    # Checar checksums
+    # Check checksums
     checksum_file = final_dir / "checksums.sha256"
     assert checksum_file.exists()
     linhas_chk = checksum_file.read_text("utf-8").strip().split("\n")
@@ -125,7 +125,7 @@ def test_empacotamento_arquivos_e_manifesto(fake_environment):
         h, name = line.split(" *")
         assert empacotamento.calcular_sha256(final_dir / name) == h
 
-    # Temporário apagado
+    # Temporary removed
     assert not (data_dir / "final_temp").exists()
 
 
@@ -136,7 +136,7 @@ def test_falha_atomica(fake_environment):
     final_dir = data_dir / "final"
     hash_antes = empacotamento.calcular_sha256(final_dir / "municipios.parquet")
 
-    # Simula erro durante a troca substituindo shutil.move por algo que cria parcialmente e quebra no meio
+    # Simulate error during replacement by replacing shutil.move with something that creates partially and breaks halfway
     orig_move = shutil.move
     def move_mock(src, dst):
         if str(src).endswith("final_temp") and str(dst).endswith("final"):
@@ -149,7 +149,7 @@ def test_falha_atomica(fake_environment):
         with pytest.raises(OSError, match="Erro simulado durante a substituição"):
             empacotamento.montar_pacote_final("2.0.0", "2026-10-11", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
 
-    # O pacote não foi corrompido; backup foi restaurado
+    # The package was not corrupted; backup was restored
     assert final_dir.exists()
     assert empacotamento.calcular_sha256(final_dir / "municipios.parquet") == hash_antes
     assert not (data_dir / "final_backup").exists()

@@ -18,25 +18,25 @@ def test_ler_cabecalho(tmp_path):
     cab = siconfi.ler_cabecalho(z1)
     assert cab == {"exercicio": 2013, "escopo": "Municípios", "tabela": "Despesas por Função (Anexo I-E)"}
     
-    # Escopo errado
+    # Wrong scope
     with zipfile.ZipFile(tmp_path / "t2.zip", "w") as zf:
         zf.writestr("finbra.csv", "Exercício: 2013\nEscopo: Estados/DF\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
     with pytest.raises(ValueError, match="Estados/DF"):
         siconfi.ler_cabecalho(tmp_path / "t2.zip")
         
-    # Outra tabela
+    # Other table
     with zipfile.ZipFile(tmp_path / "t3.zip", "w") as zf:
         zf.writestr("finbra.csv", "Exercício: 2013\nEscopo: Municípios\nTabela: Outra Tabela\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
     with pytest.raises(ValueError, match="Outra Tabela"):
         siconfi.ler_cabecalho(tmp_path / "t3.zip")
         
-    # Cabeçalho da 4a linha
+    # 4th line header
     with zipfile.ZipFile(tmp_path / "t4.zip", "w") as zf:
         zf.writestr("finbra.csv", "Exercício: 2013\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Valor\n".encode("latin-1"))
     with pytest.raises(ValueError, match="Cabeçalho inválido"):
         siconfi.ler_cabecalho(tmp_path / "t4.zip")
         
-    # Dois arquivos CSV
+    # Two CSV files
     with zipfile.ZipFile(tmp_path / "t5.zip", "w") as zf:
         zf.writestr("f1.csv", "")
         zf.writestr("f2.csv", "")
@@ -48,13 +48,13 @@ def test_baixar(tmp_path):
         with zipfile.ZipFile(tmp_path / f"arq_{ano}.zip", "w") as zf:
             zf.writestr("f.csv", f"Exercício: {ano}\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
             
-    # Listar e registrar
+    # List and register
     registros = siconfi.baixar(tmp_path)
     assert len(registros) == len(siconfi.ANOS)
     for r in registros:
         assert r["metodo"] == "MANUAL"
         
-    # Segunda chamada não cria registro novo
+    # Second call does not create a new record
     registros2 = siconfi.baixar(tmp_path)
     assert registros == registros2
 
@@ -117,7 +117,7 @@ def test_processar_declaracao_simples():
     assert ret["desp_intraorcamentaria"] == 10.0
     assert ret["declara_intraorcamentaria"] is True
     
-    # Função só com subfunções
+    # Budget function only with subfunctions
     itens2 = [
         {"coluna": "Despesas Empenhadas", "conta": "08.122 - Sub", "valor": 30.0},
         {"coluna": "Despesas Empenhadas", "conta": "08.123 - Sub", "valor": 20.0},
@@ -128,7 +128,7 @@ def test_processar_declaracao_simples():
     assert ret2["desp_intraorcamentaria"] == 0.0
     assert ret2["declara_intraorcamentaria"] is False
     
-    # Função sem linha nenhuma vale zero
+    # Budget function without any row counts as zero
     assert ret2["desp_10_saude"] == 0.0
 
 def test_processar_declaracao_variantes_total():
@@ -147,17 +147,17 @@ def test_processar_declaracao_variantes_total():
         assert ret["desp_intraorcamentaria"] == 5.0
 
 def test_processar_declaracao_casos_especiais():
-    # Sem despesa empenhada
+    # Without committed expenditure
     assert siconfi.processar_declaracao([{"coluna": "Outra", "conta": "04 - Administração", "valor": 1.0}]) == (None, [])
     
-    # Duas linhas
+    # Two rows
     with pytest.raises(ValueError, match="Duas linhas de função com mesmo código 04"):
         siconfi.processar_declaracao([
             {"coluna": "Despesas Empenhadas", "conta": "04 - A", "valor": 1.0},
             {"coluna": "Despesas Empenhadas", "conta": "04 - B", "valor": 2.0},
         ])
         
-    # Função de código 99 gera aviso
+    # Budget function with code 99 generates warning
     ret, av = siconfi.processar_declaracao([
         {"coluna": "Despesas Empenhadas", "conta": "99 - Z", "valor": 1.0}
     ])
@@ -165,7 +165,7 @@ def test_processar_declaracao_casos_especiais():
     assert len(ret) == 31
     assert not any("99" in k for k in ret.keys())
     
-    # Valor nulo vira zero
+    # Null value becomes zero
     ret, av = siconfi.processar_declaracao([
         {"coluna": "Despesas Empenhadas", "conta": "04 - Administração", "valor": None},
         {"coluna": "Despesas Empenhadas", "conta": "Despesas (Exceto Intraorçamentárias)", "valor": 0.0}
@@ -173,14 +173,14 @@ def test_processar_declaracao_casos_especiais():
     assert ret["desp_04_administracao"] == 0.0
     assert "valor_nulo:04 - Administração" in av
     
-    # Sem linha de total
+    # Without total row
     ret, av = siconfi.processar_declaracao([
         {"coluna": "Despesas Empenhadas", "conta": "04 - Administração", "valor": 10.0}
     ])
     assert ret["desp_total_funcoes"] is None
     assert "sem_total" in av
     
-    # Outra coluna da mesma função não entra
+    # Other column of the same budget function does not enter
     ret, av = siconfi.processar_declaracao([
         {"coluna": "Despesas Empenhadas", "conta": "04 - Administração", "valor": 10.0},
         {"coluna": "Despesas Liquidadas", "conta": "04 - Administração", "valor": 5.0},
@@ -188,7 +188,7 @@ def test_processar_declaracao_casos_especiais():
     ])
     assert ret["desp_04_administracao"] == 10.0
     
-    # Função montada pela soma das subfunções
+    # Budget function assembled by sum of subfunctions
     ret, av = siconfi.processar_declaracao([
         {"coluna": "Despesas Empenhadas", "conta": "10.301 - Sub", "valor": 5.0},
         {"coluna": "Despesas Empenhadas", "conta": "Despesas (Exceto Intraorçamentárias)", "valor": 10.0}

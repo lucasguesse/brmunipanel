@@ -1,4 +1,4 @@
-"""Testes do módulo brmunipanel.ibge.territorio."""
+"""Tests for the brmunipanel.ibge.territorio module."""
 
 from __future__ import annotations
 
@@ -15,17 +15,17 @@ from brmunipanel.nucleo import RespostaInvalida
 
 
 def test_validar_dtb() -> None:
-    # Válido: zip contendo o relatório de municípios
+    # Valid: zip containing municipalities report
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("RELATORIO_DTB_BRASIL_2025_MUNICIPIOS.xls", b"dados falsos")
     territorio.validar_dtb(buf.getvalue())
 
-    # Inválido: não é zip
+    # Invalid: not a zip
     with pytest.raises(RespostaInvalida, match="inválido"):
         territorio.validar_dtb(b"conteudo nao zip")
 
-    # Inválido: zip sem o arquivo esperado
+    # Invalid: zip without expected file
     buf_vazio = io.BytesIO()
     with zipfile.ZipFile(buf_vazio, "w") as zf:
         zf.writestr("outro_arquivo.txt", b"foo")
@@ -50,10 +50,10 @@ def test_validar_localidades() -> None:
 
 
 def test_validar_limitrofes() -> None:
-    # Válido: assinatura OLE
+    # Valid: OLE signature
     territorio.validar_limitrofes(b"\xd0\xcf\x11\xe0cabecalho_ole")
 
-    # Inválido: outra assinatura
+    # Invalid: another signature
     with pytest.raises(RespostaInvalida, match="Assinatura OLE"):
         territorio.validar_limitrofes(b"PK\x03\x04zip")
 
@@ -109,7 +109,7 @@ def test_processar_sedes_df() -> None:
 
 
 def test_processar_sedes_df_erros() -> None:
-    # 1. Duas linhas diferentes
+    # 1. Two different rows
     df1 = pd.DataFrame({"CD_MUN": ["1100205", "1100205"], "CT_LOCALIDADE": ["Cidade", "Cidade"], "LAT_LOCALIDADE": [-9.6462, -9.7], "LONG_LOCALIDADE": [-63.9599, -63.9599]})
     with pytest.raises(ValueError, match="1100205"):
         territorio.processar_sedes_df(df1)
@@ -124,29 +124,29 @@ def test_processar_sedes_df_erros() -> None:
     with pytest.raises(ValueError, match="1100015"):
         territorio.processar_sedes_df(df3)
         
-    # 4. Latitude texto
+    # 4. String latitude
     df4 = pd.DataFrame({"CD_MUN": ["1100015"], "CT_LOCALIDADE": ["Cidade"], "LAT_LOCALIDADE": ["abc"], "LONG_LOCALIDADE": [-62.0037]})
     with pytest.raises(ValueError, match="1100015"):
         territorio.processar_sedes_df(df4)
         
-    # 5. Coordenada trocada
+    # 5. Swapped coordinates
     df5 = pd.DataFrame({"CD_MUN": ["1100015"], "CT_LOCALIDADE": ["Cidade"], "LAT_LOCALIDADE": [62.0037], "LONG_LOCALIDADE": [-11.933]})
     with pytest.raises(ValueError, match="1100015"):
         territorio.processar_sedes_df(df5)
         
-    # 6. Fora do limite
+    # 6. Out of bounds
     df6 = pd.DataFrame({"CD_MUN": ["1100015"], "CT_LOCALIDADE": ["Cidade"], "LAT_LOCALIDADE": [-11.933], "LONG_LOCALIDADE": [-20.0]})
     with pytest.raises(ValueError, match="1100015"):
         territorio.processar_sedes_df(df6)
         
-    # 7. Código menor
+    # 7. Shorter code
     df7 = pd.DataFrame({"CD_MUN": ["110001"], "CT_LOCALIDADE": ["Cidade"], "LAT_LOCALIDADE": [-11.933], "LONG_LOCALIDADE": [-62.0037]})
     with pytest.raises(ValueError, match="110001"):
         territorio.processar_sedes_df(df7)
 
 
 def test_processar_dtb_df() -> None:
-    # DataFrame simulando estrutura lida da DTB
+    # DataFrame simulating structure read from DTB
     df_raw = pd.DataFrame({
         "UF": ["11", "35", "53"],
         "Nome_UF": ["Rondônia", "São Paulo", "Distrito Federal"],
@@ -165,7 +165,7 @@ def test_processar_dtb_df() -> None:
 
     res = territorio.processar_dtb_df(df_raw, fronteira, litoral, areas=areas, sedes={"1100015": (-11.933, -62.0037), "3550308": (-23.5548, -46.579)})
 
-    # 1. Esquema
+    # 1. Schema
     colunas_esperadas = [
         "cod_municipio", "cod_municipio_6", "nome_municipio", "cod_uf", "sigla_uf", "nome_uf",
         "cod_rg_intermediaria", "nome_rg_intermediaria", "cod_rg_imediata", "nome_rg_imediata",
@@ -191,13 +191,13 @@ def test_processar_dtb_df() -> None:
         "longitude_sede": pl.Float64,
     }
 
-    # 2. Derivação do código de 6 dígitos
+    # 2. Derivation of 6-digit code
     assert res["cod_municipio_6"].to_list() == ["110001", "355030", "530010"]
 
-    # 3. Siglas de UF mapeadas
+    # 3. Mapped UF abbreviations
     assert res["sigla_uf"].to_list() == ["RO", "SP", "DF"]
 
-    # 4. Flags de fronteira e litoral
+    # 4. Border and coastal flags
     assert res.filter(pl.col("cod_municipio") == "1100015")["fronteira_internacional"][0] is True
     assert res.filter(pl.col("cod_municipio") == "1100015")["litoraneo"][0] is False
 
@@ -207,11 +207,11 @@ def test_processar_dtb_df() -> None:
     assert res.filter(pl.col("cod_municipio") == "5300108")["fronteira_internacional"][0] is False
     assert res.filter(pl.col("cod_municipio") == "5300108")["litoraneo"][0] is False
     
-    # 5. Áreas
+    # 5. Areas
     assert res.filter(pl.col("cod_municipio") == "1100015")["area_km2"][0] == 100.5
     assert res.filter(pl.col("cod_municipio") == "5300108")["area_km2"][0] is None
     
-    # 6. Sem areas
+    # 6. Without areas
     res_sem_area = territorio.processar_dtb_df(df_raw, fronteira, litoral)
     assert res_sem_area["area_km2"].null_count() == 3
 
@@ -244,12 +244,12 @@ def test_processar_limitrofes_df() -> None:
         "comprimento_km": pl.Float64,
     }
 
-    # 1. Sem vizinho (2605459) e pares com código fora da DTB (4300001) retirados
+    # 1. Without neighbor (2605459) and pairs with code outside DTB (4300001) removed
     assert res.height == 2
     assert set(res["cod_municipio"]) == {"1100015", "1100379"}
     assert set(res["cod_municipio_limitrofe"]) == {"1100015", "1100379"}
 
-    # 2. Sem nulos
+    # 2. No nulls
     assert res["cod_municipio"].null_count() == 0
     assert res["cod_municipio_limitrofe"].null_count() == 0
     assert res["comprimento_km"].null_count() == 0

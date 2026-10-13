@@ -1,4 +1,4 @@
-"""Testes do módulo de população do IBGE/SIDRA (brmunipanel.ibge.populacao)."""
+"""Tests for the IBGE/SIDRA population module (brmunipanel.ibge.populacao)."""
 
 from __future__ import annotations
 
@@ -15,24 +15,24 @@ PASTA_DADOS = Path(__file__).resolve().parent / "dados"
 
 
 def test_interpolar_manual() -> None:
-    """Valida o cálculo exato da interpolação geométrica e o descarte de municípios sem vizinho."""
+    """Validate exact geometric interpolation calculation and discarding municipalities without neighbors."""
     estimativas = pl.DataFrame(
         [
-            # Município A ("1100015"): tem 2006 (100) e 2008 (121) -> 2007 deve ser 110
-            #                          tem 2021 (1000) e 2024 (1331) -> 2022=1100, 2023=1210
+            # Municipality A ("1100015"): has 2006 (100) and 2008 (121) -> 2007 must be 110
+            #                             has 2021 (1000) and 2024 (1331) -> 2022=1100, 2023=1210
             ("1100015", 2006, 100),
             ("1100015", 2008, 121),
             ("1100015", 2009, 500),
             ("1100015", 2011, 500),
             ("1100015", 2021, 1000),
             ("1100015", 2024, 1331),
-            # Município B ("1200328"): tem 2006, mas NÃO tem 2008 -> não deve receber 2007
-            #                          tem 2021, mas NÃO tem 2024 -> não deve receber 2022 nem 2023
+            # Municipality B ("1200328"): has 2006, but does NOT have 2008 -> must not receive 2007
+            #                             has 2021, but does NOT have 2024 -> must not receive 2022 nor 2023
             ("1200328", 2006, 100),
             ("1200328", 2009, 500),
             ("1200328", 2011, 500),
             ("1200328", 2021, 1000),
-            # Município C ("3550308"): NÃO tem 2006, tem 2008 -> não deve receber 2007
+            # Municipality C ("3550308"): does NOT have 2006, has 2008 -> must not receive 2007
             ("3550308", 2008, 121),
             ("3550308", 2009, 500),
             ("3550308", 2011, 500),
@@ -44,13 +44,13 @@ def test_interpolar_manual() -> None:
 
     interpolados = populacao.interpolar(estimativas)
 
-    # 1. Município A tem 2007, 2010, 2022 e 2023
+    # 1. Municipality A has 2007, 2010, 2022, and 2023
     res_a = interpolados.filter(pl.col("cod_municipio") == "1100015").sort("ano")
     assert res_a.filter(pl.col("ano") == 2007)["populacao"].item() == 110
     assert res_a.filter(pl.col("ano") == 2022)["populacao"].item() == 1100
     assert res_a.filter(pl.col("ano") == 2023)["populacao"].item() == 1210
 
-    # 2. Municípios B e C não devem receber anos onde faltou vizinho
+    # 2. Municipalities B and C must not receive years missing a neighbor
     assert interpolados.filter((pl.col("cod_municipio") == "1200328") & (pl.col("ano") == 2007)).height == 0
     assert interpolados.filter((pl.col("cod_municipio") == "1200328") & (pl.col("ano") == 2022)).height == 0
     assert interpolados.filter((pl.col("cod_municipio") == "1200328") & (pl.col("ano") == 2023)).height == 0
@@ -73,7 +73,7 @@ def pasta_sidra_populacao(tmp_path: Path) -> Path:
 def test_harmonizar_amostra(pasta_sidra_populacao: Path) -> None:
     df = populacao.harmonizar(pasta_sidra_populacao)
 
-    # 1. Esquema
+    # 1. Schema
     assert df.schema == {
         "cod_municipio": pl.String,
         "ano": pl.Int16,
@@ -81,12 +81,12 @@ def test_harmonizar_amostra(pasta_sidra_populacao: Path) -> None:
         "pop_origem": pl.String,
     }
 
-    # 2. Janela estritamente 2006–2023 (sem 2024)
+    # 2. Window strictly 2006–2023 (without 2024)
     assert df["ano"].min() == 2006
     assert df["ano"].max() == 2023
     assert 2024 not in df["ano"].unique().to_list()
 
-    # 3. pop_origem é exatamente 'interpolado' em 2007, 2010, 2022 e 2023, e 'estimativa' nos demais
+    # 3. pop_origem is exactly 'interpolado' in 2007, 2010, 2022, and 2023, and 'estimativa' in the others
     anos_interpolados = {2007, 2010, 2022, 2023}
     for ano in range(2006, 2024):
         sub = df.filter(pl.col("ano") == ano)
@@ -96,6 +96,6 @@ def test_harmonizar_amostra(pasta_sidra_populacao: Path) -> None:
         else:
             assert origens == ["estimativa"], f"Esperado apenas 'estimativa' para {ano}, obtido {origens}"
 
-    # 4. Sem duplicação de chave
+    # 4. No key duplication
     dups = df.group_by(["cod_municipio", "ano"]).agg(pl.len().alias("n")).filter(pl.col("n") > 1)
     assert dups.height == 0

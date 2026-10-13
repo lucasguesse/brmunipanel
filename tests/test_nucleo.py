@@ -1,4 +1,4 @@
-"""Testes do núcleo comum de download, manifesto e tentativas (brmunipanel.nucleo)."""
+"""Tests for the common download, manifest, and retry core (brmunipanel.nucleo)."""
 
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ class SessaoFalsa:
 
 
 def test_baixar_grava_gzip_e_ler_bruto_descompacta(tmp_path: Path) -> None:
-    """1. baixar grava o arquivo em gzip, e ler_bruto devolve exatamente os bytes da resposta."""
+    """1. baixar saves the file in gzip, and ler_bruto returns exactly the response bytes."""
     dados = b"resposta original em texto ou json"
     sessao = SessaoFalsa([RespostaFalsa(dados, 200)])
     req = Requisicao(chave="teste/1", url="http://exemplo.org/1", arquivo="teste/1.json.gz", compactar=True)
@@ -71,7 +71,7 @@ def test_baixar_grava_gzip_e_ler_bruto_descompacta(tmp_path: Path) -> None:
 
 
 def test_manifesto_registra_campos_esperados_get_e_post(tmp_path: Path) -> None:
-    """2. O manifesto registra url, metodo, arquivo, bytes, sha256 (da resposta, não do gzip) e baixado_em; em POST, também corpo."""
+    """2. The manifest records url, metodo, arquivo, bytes, sha256 (of the response, not gzip), and baixado_em; on POST, also corpo."""
     dados_get = b"resposta get"
     sessao_get = SessaoFalsa([RespostaFalsa(dados_get, 200)])
     req_get = Requisicao(chave="fonte/get", url="http://exemplo.org/get", arquivo="fonte/get.json.gz")
@@ -88,7 +88,7 @@ def test_manifesto_registra_campos_esperados_get_e_post(tmp_path: Path) -> None:
     manifesto = ler_manifesto(tmp_path)
     assert manifesto["fonte/get"] == registro_get
 
-    # POST com corpo
+    # POST with body
     dados_post = b"resposta post"
     sessao_post = SessaoFalsa([RespostaFalsa(dados_post, 200)])
     req_post = Requisicao(
@@ -113,7 +113,7 @@ def test_manifesto_registra_campos_esperados_get_e_post(tmp_path: Path) -> None:
 
 
 def test_segunda_chamada_retorna_registro_sem_nova_requisicao(tmp_path: Path) -> None:
-    """3. Segunda chamada com a mesma chave não faz requisição e devolve o mesmo registro (baixou falso)."""
+    """3. Second call with the same key does not make a request and returns the same record (baixou False)."""
     dados = b"resposta imutavel"
     sessao = SessaoFalsa([RespostaFalsa(dados, 200)])
     req = Requisicao(chave="chave/unica", url="http://exemplo.org/dados", arquivo="dados.json.gz")
@@ -125,12 +125,12 @@ def test_segunda_chamada_retorna_registro_sem_nova_requisicao(tmp_path: Path) ->
     registro2, baixou2 = baixar(req, tmp_path, sessao=sessao, espera=0)
     assert baixou2 is False
     assert registro1 == registro2
-    assert len(sessao.chamadas) == 1  # não chamou de novo
+    assert len(sessao.chamadas) == 1  # did not call again
 
 
 def test_novas_tentativas_http_500(tmp_path: Path) -> None:
-    """4. HTTP 500 seguido de 200 resulta em sucesso, com 2 requisições; HTTP 500 em todas as tentativas levanta RuntimeError e não deixa arquivo nem registro."""
-    # Caso de recuperação na 2ª tentativa
+    """4. HTTP 500 followed by 200 results in success, with 2 requests; HTTP 500 across all attempts raises RuntimeError and leaves no file or record."""
+    # Recovery case on the 2nd attempt
     sessao_recup = SessaoFalsa([RespostaFalsa(b"erro", 500), RespostaFalsa(b"ok final", 200)])
     req1 = Requisicao(chave="tentativas/recup", url="http://exemplo.org/recup", arquivo="recup.json.gz")
     registro, baixou = baixar(req1, tmp_path, sessao=sessao_recup, tentativas=3, espera=0)
@@ -138,7 +138,7 @@ def test_novas_tentativas_http_500(tmp_path: Path) -> None:
     assert registro["bytes"] == len(b"ok final")
     assert len(sessao_recup.chamadas) == 2
 
-    # Caso de falha persistente
+    # Persistent failure case
     sessao_falha = SessaoFalsa([RespostaFalsa(b"erro", 500), RespostaFalsa(b"erro", 502), RespostaFalsa(b"erro", 503)])
     req2 = Requisicao(chave="tentativas/falha", url="http://exemplo.org/falha", arquivo="falha.json.gz")
     with pytest.raises(RuntimeError, match="falhou depois de 3 tentativas"):
@@ -149,7 +149,7 @@ def test_novas_tentativas_http_500(tmp_path: Path) -> None:
 
 
 def test_validar_resposta_invalida_provoca_nova_tentativa(tmp_path: Path) -> None:
-    """5. validar que levanta RespostaInvalida provoca nova tentativa, e nada é gravado enquanto a resposta for recusada."""
+    """5. A validator that raises RespostaInvalida triggers a new attempt, and nothing is saved while the response is rejected."""
     chamadas_validar = 0
 
     def validador(conteudo: bytes) -> None:
@@ -167,7 +167,7 @@ def test_validar_resposta_invalida_provoca_nova_tentativa(tmp_path: Path) -> Non
     assert len(sessao.chamadas) == 2
     assert ler_bruto(tmp_path, req.arquivo) == b"completo"
 
-    # Se a validação sempre falhar:
+    # If validation always fails:
     def validador_sempre_falha(c: bytes) -> None:
         raise RespostaInvalida("sempre recusa")
 
@@ -181,7 +181,7 @@ def test_validar_resposta_invalida_provoca_nova_tentativa(tmp_path: Path) -> Non
 
 
 def test_http_404_sobe_imediatamente_na_primeira_tentativa(tmp_path: Path) -> None:
-    """6. HTTP 404 sobe como requests.HTTPError na primeira tentativa."""
+    """6. HTTP 404 raises immediately as requests.HTTPError on the first attempt."""
     sessao = SessaoFalsa([RespostaFalsa(b"nao encontrado", 404)])
     req = Requisicao(chave="erro/404", url="http://exemplo.org/404", arquivo="404.json.gz")
 
@@ -195,7 +195,7 @@ def test_http_404_sobe_imediatamente_na_primeira_tentativa(tmp_path: Path) -> No
 
 
 def test_compactar_false_grava_sem_gzip(tmp_path: Path) -> None:
-    """7. compactar=False grava os bytes sem gzip."""
+    """7. compactar=False saves bytes without gzip."""
     dados_binarios = b"\x00\x01\x02\x03\xff"
     sessao = SessaoFalsa([RespostaFalsa(dados_binarios, 200)])
     req = Requisicao(chave="bin/raw", url="http://exemplo.org/bin", arquivo="arquivo.bin", compactar=False)
@@ -208,7 +208,7 @@ def test_compactar_false_grava_sem_gzip(tmp_path: Path) -> None:
 
 
 def test_baixar_lote_mantem_registros_anteriores(tmp_path: Path) -> None:
-    """8. baixar_lote mantém os registros anteriores do manifesto ao acrescentar um novo."""
+    """8. baixar_lote preserves previous manifest records when adding a new one."""
     sessao1 = SessaoFalsa([RespostaFalsa(b"dado1", 200)])
     req1 = Requisicao(chave="lote/1", url="http://exemplo.org/1", arquivo="1.json.gz")
     baixar(req1, tmp_path, sessao=sessao1, espera=0)
