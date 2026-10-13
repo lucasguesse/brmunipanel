@@ -3,7 +3,7 @@
 Generates the municipal health panel (2006–2023) by consolidating nine indicators:
 - CNES: inpatient beds, ICU beds, diagnostic imaging
   equipment (entire group), physicians, primary care units, and health posts;
-- SIM: deaths from assault (CID-10 X85–Y09) and infant deaths;
+- SIM: deaths from assault (ICD-10 X85–Y09) and infant deaths;
 - Sinasc: live births.
 
 SUS beds (general hospitalization subset), COVID-19

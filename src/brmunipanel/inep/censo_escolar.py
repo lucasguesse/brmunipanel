@@ -180,7 +180,7 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
                 exprs_val.append(
                     (~pl.col(c).is_null() & (pl.col(c) != "") & ~pl.col(c).str.contains(r"^\d+$")).any().alias(c)
                 )
-            # Run a punctual collect of validations to interrupt before computing aggregations
+            # Run a one-off collect of the validations to stop before computing the aggregations
             res = lf.select(exprs_val).collect(engine="streaming").row(0)
             for i, c in enumerate(colunas_validar):
                 if res[i]:

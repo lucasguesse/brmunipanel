@@ -1,6 +1,6 @@
 """Produto Interno Bruto dos Municípios (SIDRA, Table 5938, 2010 reference), in current thousand reais.
 
-Only PIB is harmonized, because the source does not publish gross value added or taxes for 2022 and 2023. The table does not generate markers.
+Only GDP is harmonized, because the source does not publish gross value added or taxes for 2022 and 2023. The table does not generate markers.
 The municipality has null pib in the years prior to its installation. The raw data continues to bring
 the seven variables of the table.
 """
