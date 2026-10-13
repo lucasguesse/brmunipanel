@@ -325,7 +325,7 @@ def test_baixar(base_dir, monkeypatch):
     pasta_inep = base_dir / "censo-superior"
     pasta_inep.mkdir(parents=True, exist_ok=True)
     arquivo = pasta_inep / "censo-superior_2023.zip"
-    arquivo.write_bytes(b"PK  " + b"X" * 100) # zip mock
+    arquivo.write_bytes(b"PK\x03\x04" + b"X" * 100) # zip mock
     
     sha256 = hashlib.sha256(arquivo.read_bytes()).hexdigest()
     

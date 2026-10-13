@@ -109,12 +109,12 @@ def test_para_painel_converte_marcadores_e_traco(
     }
     painel_pib, marcadores_pib = sidra.para_painel(df_longo_pib, colunas_pib_teste)
 
-    # PIB has numeric value
+    # GDP has a numeric value
     assert painel_pib["pib"].null_count() == 0
     # Impostos and VAB are null
     assert painel_pib["impostos_liquidos"].null_count() == 4
     assert painel_pib["vab_total"].null_count() == 4
-    # Marker '...' present in PIB markers
+    # Marker '...' present in the GDP markers
     assert all(m == "..." for m in marcadores_pib["marcador"].to_list())
     assert marcadores_pib.height == 6 * 4  # 6 columns without value x 4 municipalities
 

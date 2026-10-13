@@ -286,8 +286,8 @@ def test_censo_escolar_2006_casos(pasta_bruto_2006, municipios_mock, monkeypatch
     row = df.filter((pl.col("cod_municipio") == "1100205") & (pl.col("dependencia") == "estadual") & (pl.col("localizacao") == "urbana")).to_dicts()[0]
     assert row["matriculas_medio"] == 147
     
-    # Case 6: EJA sums in-person and semi-in-person, and EJA classes count in-person
-    # ('1100338', 'estadual', 'urbana') has semi-in-person EJA (VES12A3)
+    # Case 6: EJA sums in-person and blended, and EJA classes count in-person
+    # ('1100338', 'estadual', 'urbana') has blended EJA (VES12A3)
     row = df.filter((pl.col("cod_municipio") == "1100338") & (pl.col("dependencia") == "estadual") & (pl.col("localizacao") == "urbana")).to_dicts()[0]
     assert row["matriculas_eja"] == 712
     assert row["turmas_eja"] == 8
