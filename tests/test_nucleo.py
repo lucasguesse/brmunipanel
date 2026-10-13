@@ -265,3 +265,31 @@ def test_registrar_manual_arquivo_existente_hash_diferente(tmp_path: Path) -> No
     with pytest.raises(RuntimeError, match="arquivo mudou depois de registrado"):
         registrar_manual(tmp_path, "chave3", "manual3.zip", url="http", parametros={})
 
+
+def test_erro_de_certificado_sobe_sem_nova_tentativa(tmp_path: Path) -> None:
+    erro_ssl = requests.exceptions.SSLError(
+        "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate"
+    )
+    sessao = SessaoFalsa([erro_ssl])
+    req = Requisicao(chave="teste/cert", url="http://exemplo.org/cert", arquivo="cert.bin")
+
+    with pytest.raises(RuntimeError, match="falha na verificação do certificado do servidor"):
+        baixar(req, tmp_path, sessao=sessao, tentativas=5, espera=0)
+
+    assert len(sessao.chamadas) == 1
+    assert not (tmp_path / req.arquivo).exists()
+    assert req.chave not in ler_manifesto(tmp_path)
+
+
+def test_erro_de_tls_sem_ser_de_certificado_provoca_nova_tentativa(tmp_path: Path) -> None:
+    erro_ssl = requests.exceptions.SSLError("EOF occurred in violation of protocol")
+    sessao = SessaoFalsa([erro_ssl, RespostaFalsa(b"ok", 200)])
+    req = Requisicao(chave="teste/tls", url="http://exemplo.org/tls", arquivo="tls.bin", compactar=False)
+
+    registro, baixou = baixar(req, tmp_path, sessao=sessao, tentativas=3, espera=0)
+    assert baixou is True
+    assert len(sessao.chamadas) == 2
+    assert (tmp_path / req.arquivo).read_bytes() == b"ok"
+    assert ler_bruto(tmp_path, req.arquivo) == b"ok"
+
+

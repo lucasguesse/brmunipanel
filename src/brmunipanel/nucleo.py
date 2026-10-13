@@ -85,7 +85,8 @@ def baixar(
     """Downloads `req` into `pasta` and records it in the manifest. Returns the record and whether a download occurred.
 
     Network errors, HTTP 429 and 5xx, and responses rejected by `validar` are retried, with waiting time
-    doubled on each attempt. Other HTTP errors are raised immediately, because retrying does not resolve them.
+    doubled on each attempt. Other HTTP errors and a failed certificate verification are raised immediately,
+    because retrying does not resolve them.
     """
     pasta = Path(pasta)
     manifesto = ler_manifesto(pasta)
@@ -107,6 +108,10 @@ def baixar(
             if validar is not None:
                 validar(conteudo)
             break
+        except requests.exceptions.SSLError as erro:
+            if "CERTIFICATE_VERIFY_FAILED" in str(erro):
+                raise RuntimeError(f"{req.chave}: falha na verificação do certificado do servidor ({erro})") from erro
+            ultimo_erro = erro
         except (requests.ConnectionError, requests.Timeout, requests.exceptions.ChunkedEncodingError, RespostaInvalida) as erro:
             ultimo_erro = erro
     else:
