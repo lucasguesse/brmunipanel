@@ -3,4 +3,5 @@ include README.md
 include pyproject.toml
 graft tests
 recursive-include src/brmunipanel/metadata *.json
+recursive-include src/brmunipanel/inep/certificados *.pem
 global-exclude *.py[cod] __pycache__ *.so

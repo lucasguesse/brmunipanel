@@ -94,3 +94,20 @@ def test_manifest_in_declarations():
     assert "include pyproject.toml" in content
     assert "graft tests" in content
     assert "recursive-include src/brmunipanel/metadata *.json" in content
+
+
+def test_certificado_inep_data_asset():
+    root = Path(__file__).resolve().parent.parent
+    cert_path = root / "src" / "brmunipanel" / "inep" / "certificados" / "rnp_icpedu_gr46_ov_tls_ca_2025.pem"
+    assert cert_path.exists(), "Certificado deve existir em src/brmunipanel/inep/certificados/"
+
+    pyproject_path = root / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+    package_data = data.get("tool", {}).get("setuptools", {}).get("package-data", {})
+    assert "certificados/*.pem" in package_data.get("brmunipanel.inep", [])
+
+    manifest_path = root / "MANIFEST.in"
+    manifest_content = manifest_path.read_text(encoding="utf-8")
+    assert "recursive-include src/brmunipanel/inep/certificados *.pem" in manifest_content
+

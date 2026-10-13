@@ -89,6 +89,8 @@ The library currently wraps and harmonizes the following official sources:
   * Censo da Educação Superior: In-person higher education institutions and enrollments
   * IDEB: Observed public school scores across primary (anos iniciais), lower secondary (anos finais), and upper secondary (ensino médio) education
 
+The INEP download server (`download.inep.gov.br`) sends its certificate without the intermediate certificate that signed it, which makes the default verification of `requests` fail. The package ships that intermediate certificate (RNP ICPEdu GR46 OV TLS CA 2025, issued by GlobalSign Root R46 and valid until November 2030) and uses it only for requests to that server. Certificate verification stays on.
+
 ## Development, Testing, and Building
 To set up the library for local development, run tests, and build verifiable distribution packages according to the Python Packaging User Guide:
 

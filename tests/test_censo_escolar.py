@@ -408,3 +408,30 @@ def test_censo_escolar_2006_e_2007(pasta_bruto_2007, tmp_path, municipios_mock, 
     df_filtered = df.filter(pl.col("ano") == 2007)
     
     assert df_filtered.equals(df_2007_only)
+
+
+def test_baixar_usa_a_sessao_do_inep(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    chamadas: list[dict] = []
+
+    def mock_baixar_lote(reqs, pasta, **opcoes):
+        chamadas.append(opcoes)
+
+    monkeypatch.setattr(censo_escolar, "baixar_lote", mock_baixar_lote)
+
+    from brmunipanel.inep import conexao
+    import requests
+
+    # Case 1: without sessao provided
+    censo_escolar.baixar(tmp_path)
+    assert len(chamadas) == 1
+    sessao_padrao = chamadas[0].get("sessao")
+    assert isinstance(sessao_padrao, requests.Session)
+    assert sessao_padrao.verify == str(conexao.autoridades())
+
+    # Case 2: with explicit sessao
+    objeto_sessao = requests.Session()
+    censo_escolar.baixar(tmp_path, sessao=objeto_sessao)
+    assert len(chamadas) == 2
+    sessao_custom = chamadas[1].get("sessao")
+    assert sessao_custom is objeto_sessao
+

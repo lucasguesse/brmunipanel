@@ -657,3 +657,30 @@ def test_antigo_caso_11_harmonizar_antigo_atual(tmp_path, monkeypatch, amostra_d
     
     df_2023_alone = df_2023_alone.sort(["cod_municipio", "ano", "categoria"]).select(df_final.columns)
     assert df_2023_in_final.equals(df_2023_alone)
+
+
+def test_baixar_usa_a_sessao_do_inep(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    chamadas: list[dict] = []
+
+    def mock_baixar_lote(reqs, pasta, **opcoes):
+        chamadas.append(opcoes)
+
+    monkeypatch.setattr(censo_superior, "baixar_lote", mock_baixar_lote)
+
+    from brmunipanel.inep import conexao
+    import requests
+
+    # Case 1: without sessao provided
+    censo_superior.baixar(tmp_path)
+    assert len(chamadas) == 1
+    sessao_padrao = chamadas[0].get("sessao")
+    assert isinstance(sessao_padrao, requests.Session)
+    assert sessao_padrao.verify == str(conexao.autoridades())
+
+    # Case 2: with explicit sessao
+    objeto_sessao = requests.Session()
+    censo_superior.baixar(tmp_path, sessao=objeto_sessao)
+    assert len(chamadas) == 2
+    sessao_custom = chamadas[1].get("sessao")
+    assert sessao_custom is objeto_sessao
+

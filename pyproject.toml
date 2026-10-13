@@ -68,3 +68,4 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 brmunipanel = ["metadata/variaveis.json"]
+"brmunipanel.inep" = ["certificados/*.pem"]

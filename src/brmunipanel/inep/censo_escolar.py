@@ -18,6 +18,7 @@ import zipfile
 import tempfile
 import polars as pl
 
+from brmunipanel.inep.conexao import criar_sessao
 from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote
 
 ANOS_ATUAIS = list(range(2007, 2024))
@@ -67,7 +68,8 @@ def baixar(pasta: Path | str, **opcoes):
                 compactar=False
             )
         )
-    baixar_lote(reqs, pasta, validar=validar_zip, intervalo=1.0, **opcoes)
+    sessao = opcoes.pop("sessao", None) or criar_sessao()
+    baixar_lote(reqs, pasta, sessao=sessao, validar=validar_zip, intervalo=1.0, **opcoes)
 
 def _get_dn(cols):
     res = []

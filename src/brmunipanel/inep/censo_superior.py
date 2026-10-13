@@ -20,6 +20,7 @@ import tempfile
 import polars as pl
 import re
 
+from brmunipanel.inep.conexao import criar_sessao
 from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote
 
 ANOS_ATUAIS = list(range(2009, 2025))
@@ -43,7 +44,8 @@ def baixar(pasta: Path | str, **opcoes):
                 compactar=False
             )
         )
-    baixar_lote(reqs, pasta, validar=validar_zip, intervalo=1.0, **opcoes)
+    sessao = opcoes.pop("sessao", None) or criar_sessao()
+    baixar_lote(reqs, pasta, sessao=sessao, validar=validar_zip, intervalo=1.0, **opcoes)
 
 def ler_ano_antigo(pasta: Path, ano: int, valid_municipios: set[str]) -> tuple[pl.DataFrame, pl.DataFrame]:
     caminho_zip = pasta / f"censo-superior/censo-superior_{ano}.zip"
