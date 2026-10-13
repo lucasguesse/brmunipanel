@@ -219,3 +219,117 @@ def test_erros_diversos(tmp_path):
         df.to_excel(tmp_path / "anos_finais" / "b.xlsx", index=False, header=False)
         df.to_excel(tmp_path / "ensino_medio" / "c.xlsx", index=False, header=False)
         harmonizar(tmp_path, valid_mun)
+
+
+import zipfile
+import requests
+from brmunipanel.inep import ideb, conexao
+from brmunipanel.nucleo import RespostaInvalida
+
+
+def test_baixar_monta_as_tres_requisicoes(monkeypatch, tmp_path):
+    chamadas = []
+
+    def mock_baixar_lote(reqs, pasta, **opcoes):
+        chamadas.append((reqs, pasta, opcoes))
+
+    monkeypatch.setattr(ideb, "baixar_lote", mock_baixar_lote)
+
+    ideb.baixar(tmp_path)
+    assert len(chamadas) == 1
+    reqs, pasta, opcoes = chamadas[0]
+    assert pasta == tmp_path
+    assert len(reqs) == 3
+
+    assert reqs[0].chave == "anos_iniciais/2025"
+    assert reqs[0].url == "https://download.inep.gov.br/ideb/resultados/divulgacao_anos_iniciais_municipios_2025.zip"
+    assert reqs[0].arquivo == "divulgacao_anos_iniciais_municipios_2025.zip"
+    assert reqs[0].compactar is False
+
+    assert reqs[1].chave == "anos_finais/2025"
+    assert reqs[1].url == "https://download.inep.gov.br/ideb/resultados/divulgacao_anos_finais_municipios_2025.zip"
+    assert reqs[1].arquivo == "divulgacao_anos_finais_municipios_2025.zip"
+    assert reqs[1].compactar is False
+
+    assert reqs[2].chave == "ensino_medio/2025"
+    assert reqs[2].url == "https://download.inep.gov.br/ideb/resultados/divulgacao_ensino_medio_municipios_2025.zip"
+    assert reqs[2].arquivo == "divulgacao_ensino_medio_municipios_2025.zip"
+    assert reqs[2].compactar is False
+
+    assert opcoes["validar"] is ideb.validar_zip
+    assert opcoes["intervalo"] == 1.0
+    sessao = opcoes["sessao"]
+    assert isinstance(sessao, requests.Session)
+    assert sessao.verify == str(conexao.autoridades())
+
+    objeto = requests.Session()
+    ideb.baixar(tmp_path, sessao=objeto)
+    assert len(chamadas) == 2
+    assert chamadas[1][2]["sessao"] is objeto
+
+
+def test_validar_zip():
+    ideb.validar_zip(b"PK\x03\x04resto")
+    with pytest.raises(RespostaInvalida):
+        ideb.validar_zip(b"<html>")
+
+
+def test_harmonizar_le_a_planilha_de_dentro_do_pacote(tmp_path):
+    valid_mun = pl.DataFrame({"cod_municipio": ["1100015"]})
+    pasta_antiga = tmp_path / "antigo"
+    pasta_nova = tmp_path / "novo"
+    pasta_antiga.mkdir()
+    pasta_nova.mkdir()
+
+    df_base = pd.DataFrame([
+        {"SG_UF": "SG_UF", "CO_MUNICIPIO": "CO_MUNICIPIO", "NO_MUNICIPIO": "NO_MUNICIPIO", "REDE": "REDE",
+         "VL_OBSERVADO_2005": "VL_OBSERVADO_2005", "VL_OBSERVADO_2007": "VL_OBSERVADO_2007"},
+        {"SG_UF": "RO", "CO_MUNICIPIO": "1100015", "NO_MUNICIPIO": "Alta Floresta", "REDE": "Pública",
+         "VL_OBSERVADO_2005": "4,5", "VL_OBSERVADO_2007": "4.8"},
+    ])
+
+    for etapa in ["anos_iniciais", "anos_finais", "ensino_medio"]:
+        pasta_etapa_antiga = pasta_antiga / etapa
+        pasta_etapa_antiga.mkdir()
+        caminho_xlsx = pasta_etapa_antiga / "a.xlsx"
+        df_base.to_excel(caminho_xlsx, index=False, header=False)
+
+        pacote_zip = pasta_nova / f"divulgacao_{etapa}_municipios_2025.zip"
+        with zipfile.ZipFile(pacote_zip, "w") as z:
+            z.write(caminho_xlsx, f"divulgacao_{etapa}_municipios_2025/divulgacao_{etapa}_municipios_2025.xlsx")
+            z.writestr(f"divulgacao_{etapa}_municipios_2025/leia-me.txt", "texto")
+            z.writestr(f"divulgacao_{etapa}_municipios_2025/dados.ods", b"ods")
+
+    df_antigo = harmonizar(pasta_antiga, valid_mun)
+    df_novo = harmonizar(pasta_nova, valid_mun)
+
+    assert df_novo.equals(df_antigo)
+    assert df_novo.height == 2
+
+    l2005 = df_novo.filter(pl.col("ano") == 2005)
+    assert l2005["ideb_anos_iniciais_publica"][0] == 4.5
+    assert l2005["ideb_anos_finais_publica"][0] == 4.5
+    assert l2005["ideb_ensino_medio_publica"][0] == 4.5
+
+    l2007 = df_novo.filter(pl.col("ano") == 2007)
+    assert l2007["ideb_anos_iniciais_publica"][0] == 4.8
+    assert l2007["ideb_anos_finais_publica"][0] == 4.8
+    assert l2007["ideb_ensino_medio_publica"][0] == 4.8
+
+
+def test_pacote_sem_planilha_ou_com_duas_levanta_erro(tmp_path):
+    valid_mun = pl.DataFrame({"cod_municipio": ["1100015"]})
+    pacote = tmp_path / "divulgacao_anos_iniciais_municipios_2025.zip"
+
+    with zipfile.ZipFile(pacote, "w") as z:
+        z.writestr("texto.txt", "conteudo")
+
+    with pytest.raises(ValueError, match="deveria ter uma planilha"):
+        harmonizar(tmp_path, valid_mun)
+
+    with zipfile.ZipFile(pacote, "w") as z:
+        z.writestr("planilha1.xlsx", b"")
+        z.writestr("planilha2.xlsx", b"")
+
+    with pytest.raises(ValueError, match="deveria ter uma planilha"):
+        harmonizar(tmp_path, valid_mun)

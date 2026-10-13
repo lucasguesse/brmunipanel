@@ -2,7 +2,43 @@ import pandas as pd
 import polars as pl
 from pathlib import Path
 import re
+import tempfile
+import zipfile
 from typing import Union
+
+from brmunipanel.inep.conexao import criar_sessao
+from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote
+
+EDICAO = 2025
+ETAPAS = ["anos_iniciais", "anos_finais", "ensino_medio"]
+URL_BASE = "https://download.inep.gov.br/ideb/resultados"
+
+
+def nome_pacote(etapa: str) -> str:
+    """Returns the file name of the package of one stage in the release in use."""
+    return f"divulgacao_{etapa}_municipios_{EDICAO}.zip"
+
+
+def validar_zip(conteudo: bytes):
+    if not conteudo.startswith(b"PK\x03\x04"):
+        raise RespostaInvalida("O conteúdo não é um arquivo ZIP válido.")
+
+
+def baixar(pasta: Union[Path, str], **opcoes):
+    """Downloads the three packages of the release, one per stage. Each package carries the whole series of its stage."""
+    pasta = Path(pasta)
+    reqs = [
+        Requisicao(
+            chave=f"{etapa}/{EDICAO}",
+            url=f"{URL_BASE}/{nome_pacote(etapa)}",
+            arquivo=nome_pacote(etapa),
+            metodo="GET",
+            compactar=False,
+        )
+        for etapa in ETAPAS
+    ]
+    sessao = opcoes.pop("sessao", None) or criar_sessao()
+    baixar_lote(reqs, pasta, sessao=sessao, validar=validar_zip, intervalo=1.0, **opcoes)
 
 def _encontrar_linha_cabecalho(caminho: Path) -> int:
     """Finds the header row scanning the first 20 rows."""
@@ -67,6 +103,17 @@ def _ler_planilha(caminho: Path, etapa_sufixo: str, valid_municipios: set) -> pl
     
     return df_long
 
+def _ler_pacote(pacote: Path, etapa_sufixo: str, valid_municipios: set) -> pl.DataFrame:
+    """Reads the spreadsheet of one stage from inside the package, extracting it to a temporary folder."""
+    with zipfile.ZipFile(pacote) as z:
+        planilhas = [m for m in z.namelist() if m.lower().endswith(".xlsx")]
+        if len(planilhas) != 1:
+            raise ValueError(f"O pacote {pacote} deveria ter uma planilha .xlsx e tem {len(planilhas)}")
+        with tempfile.TemporaryDirectory() as temporaria:
+            caminho = Path(z.extract(planilhas[0], temporaria))
+            return _ler_planilha(caminho, etapa_sufixo, valid_municipios)
+
+
 def harmonizar(pasta: Union[Path, str], municipios: pl.DataFrame) -> pl.DataFrame:
     pasta = Path(pasta)
     valid_municipios = set(municipios["cod_municipio"].to_list())
@@ -79,6 +126,11 @@ def harmonizar(pasta: Union[Path, str], municipios: pl.DataFrame) -> pl.DataFram
     
     dfs = []
     for pasta_etapa, sufixo in etapas.items():
+        pacote = pasta / nome_pacote(pasta_etapa)
+        if pacote.exists():
+            dfs.append(_ler_pacote(pacote, sufixo, valid_municipios))
+            continue
+
         caminho_dir = pasta / pasta_etapa
         if not caminho_dir.exists():
             raise FileNotFoundError(f"Pasta da etapa não encontrada: {caminho_dir}")

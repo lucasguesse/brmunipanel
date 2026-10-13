@@ -64,7 +64,7 @@ print(bmp.__version__)
 # df_pbf = pbf.harmonizar(Path("raw/ipea"))
 
 # Example: Harmonize public school IDEB scores with municipal crosswalk
-# df_ideb = harmonizar_ideb(Path("raw/ideb"), municipios_df)
+# df_ideb = harmonizar_ideb(Path("raw/inep/ideb"), municipios_df)
 ```
 
 ## Data Sources Handled
