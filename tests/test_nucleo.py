@@ -4,20 +4,28 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import json
+import socket
+import threading
+import time
 from pathlib import Path
 from typing import Sequence
 
 import pytest
 import requests
+import urllib3.util.connection
 
 from brmunipanel.nucleo import (
     Requisicao,
     RespostaInvalida,
     baixar,
+    baixar_em_ritmo,
     baixar_lote,
     ler_bruto,
     ler_manifesto,
+    registrar_arquivo,
     registrar_manual,
+    somente_ipv4,
 )
 
 
@@ -291,5 +299,196 @@ def test_erro_de_tls_sem_ser_de_certificado_provoca_nova_tentativa(tmp_path: Pat
     assert len(sessao.chamadas) == 2
     assert (tmp_path / req.arquivo).read_bytes() == b"ok"
     assert ler_bruto(tmp_path, req.arquivo) == b"ok"
+
+
+def test_baixar_em_ritmo_grava_linhas_ordenadas(tmp_path: Path) -> None:
+    chaves = ["req_e", "req_b", "req_d", "req_a", "req_c"]
+    reqs = [Requisicao(chave=k, url=f"http://api.teste/{k}", arquivo="saida.jsonl.gz") for k in chaves]
+    destino = tmp_path / "saida.jsonl.gz"
+
+    class SessaoOrdenada:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            chave = url.split("/")[-1]
+            return RespostaFalsa(f"corpo_{chave}".encode("utf-8"), 200)
+
+    res = baixar_em_ritmo(reqs, destino, ritmo=100.0, sessao=SessaoOrdenada(), avisar=None, espera=0)
+
+    assert destino.exists()
+    assert not (tmp_path / "saida.jsonl.gz.em_andamento").exists()
+    assert res["linhas"] == 5
+
+    linhas = [json.loads(linha) for linha in gzip.decompress(destino.read_bytes()).decode("utf-8").splitlines()]
+    assert len(linhas) == 5
+    assert [l["chave"] for l in linhas] == sorted(chaves)
+    for l in linhas:
+        assert l["http"] == 200
+        assert l["url"] == f"http://api.teste/{l['chave']}"
+        assert l["corpo"] == f"corpo_{l['chave']}"
+
+
+def test_baixar_em_ritmo_respeita_o_ritmo(tmp_path: Path) -> None:
+    tempos: list[float] = []
+    trava = threading.Lock()
+
+    class SessaoRitmo:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            with trava:
+                tempos.append(time.monotonic())
+            return RespostaFalsa(b"ok", 200)
+
+    reqs = [Requisicao(chave=f"k{i}", url=f"http://api.teste/k{i}", arquivo="saida.jsonl.gz") for i in range(6)]
+    destino = tmp_path / "saida.jsonl.gz"
+    baixar_em_ritmo(reqs, destino, ritmo=20.0, sessao=SessaoRitmo(), avisar=None, espera=0)
+
+    assert len(tempos) == 6
+    assert tempos[5] - tempos[0] >= 0.24
+
+
+def test_baixar_em_ritmo_limita_simultaneas(tmp_path: Path) -> None:
+    ativas = 0
+    max_ativas = 0
+    trava = threading.Lock()
+
+    class SessaoSimultaneas:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            nonlocal ativas, max_ativas
+            with trava:
+                ativas += 1
+                if ativas > max_ativas:
+                    max_ativas = ativas
+            time.sleep(0.1)
+            with trava:
+                ativas -= 1
+            return RespostaFalsa(b"ok", 200)
+
+    reqs = [Requisicao(chave=f"k{i}", url=f"http://api.teste/k{i}", arquivo="saida.jsonl.gz") for i in range(6)]
+    destino = tmp_path / "saida.jsonl.gz"
+    baixar_em_ritmo(reqs, destino, ritmo=100.0, simultaneas=2, sessao=SessaoSimultaneas(), avisar=None, espera=0)
+
+    assert max_ativas == 2
+
+
+def test_baixar_em_ritmo_pausa_em_429(tmp_path: Path) -> None:
+    chamadas: list[float] = []
+    trava = threading.Lock()
+
+    class Sessao429:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            with trava:
+                agora = time.monotonic()
+                primeira = len(chamadas) == 0
+                chamadas.append(agora)
+            if primeira:
+                return RespostaFalsa(b"calm down", 429)
+            return RespostaFalsa(b"ok corpo", 200)
+
+    reqs = [Requisicao(chave="r1", url="http://api.teste/r1", arquivo="saida.jsonl.gz")]
+    destino = tmp_path / "saida.jsonl.gz"
+    res = baixar_em_ritmo(reqs, destino, ritmo=100.0, pausa_429=0.2, sessao=Sessao429(), avisar=None, espera=0)
+
+    assert destino.exists()
+    linhas = [json.loads(linha) for linha in gzip.decompress(destino.read_bytes()).decode("utf-8").splitlines()]
+    assert len(linhas) == 1
+    assert linhas[0]["chave"] == "r1"
+    assert linhas[0]["http"] == 200
+    assert linhas[0]["corpo"] == "ok corpo"
+    assert res["pausas_429"] == 1
+    assert len(chamadas) == 2
+    assert chamadas[1] - chamadas[0] >= 0.2
+
+
+def test_baixar_em_ritmo_retoma_do_parcial(tmp_path: Path) -> None:
+    destino = tmp_path / "saida.jsonl.gz"
+    parcial = tmp_path / "saida.jsonl.gz.em_andamento"
+    parcial.write_text(
+        json.dumps({"chave": "k1", "url": "http://api.teste/k1", "http": 200, "corpo": "c1"}) + "\n"
+        + json.dumps({"chave": "k2", "url": "http://api.teste/k2", "http": 200, "corpo": "c2"}) + "\n",
+        encoding="utf-8",
+    )
+    chamadas: list[str] = []
+    trava = threading.Lock()
+
+    class SessaoRetoma:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            with trava:
+                chamadas.append(url)
+            chave = url.split("/")[-1]
+            return RespostaFalsa(f"corpo_{chave}".encode("utf-8"), 200)
+
+    reqs = [Requisicao(chave=f"k{i}", url=f"http://api.teste/k{i}", arquivo="saida.jsonl.gz") for i in (1, 2, 3, 4)]
+    baixar_em_ritmo(reqs, destino, ritmo=100.0, sessao=SessaoRetoma(), avisar=None, espera=0)
+
+    assert len(chamadas) == 2
+    assert set(chamadas) == {"http://api.teste/k3", "http://api.teste/k4"}
+    assert destino.exists()
+    linhas = [json.loads(linha) for linha in gzip.decompress(destino.read_bytes()).decode("utf-8").splitlines()]
+    assert len(linhas) == 4
+    assert [l["chave"] for l in linhas] == ["k1", "k2", "k3", "k4"]
+
+
+def test_baixar_em_ritmo_falha_mantem_parcial(tmp_path: Path) -> None:
+    class SessaoFalha:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            if "falha" in url:
+                raise requests.ConnectionError("falha simulada")
+            return RespostaFalsa(b"ok", 200)
+
+    reqs = [
+        Requisicao(chave="k1", url="http://api.teste/k1", arquivo="saida.jsonl.gz"),
+        Requisicao(chave="k2", url="http://api.teste/falha", arquivo="saida.jsonl.gz"),
+        Requisicao(chave="k3", url="http://api.teste/k3", arquivo="saida.jsonl.gz"),
+    ]
+    destino = tmp_path / "saida.jsonl.gz"
+    parcial = tmp_path / "saida.jsonl.gz.em_andamento"
+
+    with pytest.raises(RuntimeError, match="falharam"):
+        baixar_em_ritmo(reqs, destino, ritmo=100.0, tentativas=2, espera=0, sessao=SessaoFalha(), avisar=None)
+
+    assert not destino.exists()
+    assert parcial.exists()
+    linhas_parcial = [json.loads(linha) for linha in parcial.read_text(encoding="utf-8").splitlines() if linha.strip()]
+    assert len(linhas_parcial) == 2
+    assert {l["chave"] for l in linhas_parcial} == {"k1", "k3"}
+
+
+def test_baixar_em_ritmo_erro_de_certificado(tmp_path: Path) -> None:
+    class SessaoCert:
+        def get(self, url: str, headers: dict | None = None, timeout: float = 120.0) -> RespostaFalsa:
+            raise requests.exceptions.SSLError("[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed")
+
+    reqs = [Requisicao(chave="k1", url="http://api.teste/k1", arquivo="saida.jsonl.gz")]
+    destino = tmp_path / "saida.jsonl.gz"
+
+    with pytest.raises(RuntimeError, match="certificado"):
+        baixar_em_ritmo(reqs, destino, ritmo=100.0, sessao=SessaoCert(), avisar=None, espera=0)
+
+
+def test_registrar_arquivo(tmp_path: Path) -> None:
+    arquivo = tmp_path / "dados.bin"
+    conteudo = b"amostra de teste"
+    arquivo.write_bytes(conteudo)
+
+    reg = registrar_arquivo(
+        tmp_path,
+        "dca_teste",
+        "dados.bin",
+        url="http://api.teste/dca",
+        metodo="GET",
+        parametros={"ano": "2020", "ente": "123"},
+    )
+
+    assert reg["metodo"] == "GET"
+    assert reg["parametros"] == {"ano": "2020", "ente": "123"}
+    assert reg["bytes"] == len(conteudo)
+    assert reg["sha256"] == hashlib.sha256(conteudo).hexdigest()
+    assert ler_manifesto(tmp_path)["dca_teste"] == reg
+
+
+def test_somente_ipv4_restaura() -> None:
+    original = urllib3.util.connection.allowed_gai_family
+    with somente_ipv4():
+        assert urllib3.util.connection.allowed_gai_family() == socket.AF_INET
+    assert urllib3.util.connection.allowed_gai_family is original
+
 
 

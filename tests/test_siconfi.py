@@ -1,3 +1,4 @@
+import gzip
 import json
 import zipfile
 from pathlib import Path
@@ -322,4 +323,133 @@ def test_finbra_esquema_igual():
     df, _ = processar_tabela(tabela_2006, 2006, muns_reais)
     
     assert df.schema == ESQUEMA
+
+
+def test_requisicoes_api():
+    reqs_2013 = siconfi.requisicoes_api(2013, ["1200013"])
+    assert len(reqs_2013) == 1
+    assert reqs_2013[0].chave == "2013/1200013"
+    assert reqs_2013[0].url.endswith("no_anexo=Anexo+I-E")
+
+    reqs_2014 = siconfi.requisicoes_api(2014, ["1200013"])
+    assert len(reqs_2014) == 1
+    assert reqs_2014[0].chave == "2014/1200013"
+    assert reqs_2014[0].url.endswith("no_anexo=DCA-Anexo+I-E")
+
+    reqs_ordem = siconfi.requisicoes_api(2015, ["3550308", "1100015", "1200013"])
+    assert [r.chave for r in reqs_ordem] == ["2015/1100015", "2015/1200013", "2015/3550308"]
+
+
+def test_validar_resposta_api():
+    siconfi.validar_resposta_api(b'{"items": [], "hasMore": false}')
+
+    with pytest.raises(nucleo.RespostaInvalida):
+        siconfi.validar_resposta_api(b"texto nao json")
+
+    with pytest.raises(nucleo.RespostaInvalida):
+        siconfi.validar_resposta_api(b'{"hasMore": false}')
+
+    with pytest.raises(nucleo.RespostaInvalida):
+        siconfi.validar_resposta_api(b'{"items": [], "hasMore": true}')
+
+
+def test_baixar_api_pula_ano_registrado_e_exclui_df(tmp_path, monkeypatch):
+    chamadas = []
+
+    def fake_baixar_em_ritmo(requisicoes, destino, **kwargs):
+        chamadas.append(list(requisicoes))
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        destino.write_bytes(gzip.compress(b'{"chave": "x"}\n', mtime=0))
+        return {"linhas": len(requisicoes), "pausas_429": 0}
+
+    monkeypatch.setattr(nucleo, "baixar_em_ritmo", fake_baixar_em_ritmo)
+
+    municipios = ["1200013", "5300108", "1100015"]
+    anos = [2013, 2014]
+
+    siconfi.baixar_api(tmp_path, municipios, anos=anos)
+    assert len(chamadas) == 2
+    for lote in chamadas:
+        chaves = [r.chave for r in lote]
+        assert not any("5300108" in c for c in chaves)
+
+    manifesto = nucleo.ler_manifesto(tmp_path)
+    assert "dca_2013" in manifesto
+    assert "dca_2014" in manifesto
+    assert manifesto["dca_2013"]["metodo"] == "GET"
+    assert manifesto["dca_2014"]["metodo"] == "GET"
+
+    siconfi.baixar_api(tmp_path, municipios, anos=anos)
+    assert len(chamadas) == 2
+
+
+def test_harmonizar_api_igual_ao_portal(tmp_path):
+    pasta_portal = tmp_path / "portal"
+    pasta_api = tmp_path / "api"
+    pasta_portal.mkdir()
+    pasta_api.mkdir()
+
+    amostras = [
+        (2013, Path(__file__).parent / "dados" / "siconfi_contas_anuais_2013_amostra.csv"),
+        (2022, Path(__file__).parent / "dados" / "siconfi_contas_anuais_2022_amostra.csv"),
+    ]
+    municipios = pl.DataFrame({"cod_municipio": ["3550308", "1600279", "4126652", "2905206"]})
+
+    manifesto_portal = {}
+    manifesto_api = {}
+
+    for ano, p in amostras:
+        caminho_zip = pasta_portal / f"a_{ano}.zip"
+        with zipfile.ZipFile(caminho_zip, "w") as zf:
+            zf.write(p, "f.csv")
+        manifesto_portal[f"contas_anuais_{ano}"] = {"arquivo": caminho_zip.name}
+
+        df_ano = siconfi.ler_arquivo(pasta_portal, caminho_zip.name)
+        linhas_jsonl = []
+        for cod_mun, grupo in df_ano.group_by("cod_municipio"):
+            cod_str = cod_mun[0] if isinstance(cod_mun, tuple) else cod_mun
+            items = []
+            for row in grupo.iter_rows(named=True):
+                items.append({
+                    "cod_ibge": int(cod_str),
+                    "coluna": row["coluna"],
+                    "conta": row["conta"],
+                    "valor": row["valor"],
+                })
+            corpo = json.dumps({"items": items, "hasMore": False}, ensure_ascii=False)
+            linhas_jsonl.append(json.dumps({
+                "chave": f"{ano}/{cod_str}",
+                "url": f"http://api/{ano}/{cod_str}",
+                "http": 200,
+                "corpo": corpo,
+            }, ensure_ascii=False))
+
+        arquivo_api_ano = siconfi.arquivo_api(ano)
+        texto_gz = gzip.compress("\n".join(linhas_jsonl).encode("utf-8") + (b"\n" if linhas_jsonl else b""), mtime=0)
+        (pasta_api / arquivo_api_ano).write_bytes(texto_gz)
+        manifesto_api[f"dca_{ano}"] = {"arquivo": arquivo_api_ano}
+
+    for ano in siconfi.ANOS:
+        if f"contas_anuais_{ano}" not in manifesto_portal:
+            caminho_zip = pasta_portal / f"a_{ano}.zip"
+            with zipfile.ZipFile(caminho_zip, "w") as zf:
+                zf.writestr("f.csv", f"Exercício: {ano}\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
+            manifesto_portal[f"contas_anuais_{ano}"] = {"arquivo": caminho_zip.name}
+
+        if f"dca_{ano}" not in manifesto_api:
+            arquivo_api_ano = siconfi.arquivo_api(ano)
+            (pasta_api / arquivo_api_ano).write_bytes(gzip.compress(b"", mtime=0))
+            manifesto_api[f"dca_{ano}"] = {"arquivo": arquivo_api_ano}
+
+    nucleo._gravar_manifesto(pasta_portal, manifesto_portal)
+    nucleo._gravar_manifesto(pasta_api, manifesto_api)
+
+    df_portal = siconfi.harmonizar(pasta_portal, municipios)
+    df_api = siconfi.harmonizar(pasta_api, municipios, origem="api")
+
+    assert df_api.equals(df_portal)
+
+    with pytest.raises(ValueError, match="Origem desconhecida"):
+        siconfi.harmonizar(pasta_api, municipios, origem="outra")
+
 

@@ -16,11 +16,20 @@ without intra-budgetary expenditures and remains null when the declaration does 
 intra-budgetary row, or zero when it does not exist, and `declara_intraorcamentaria` is true when it is greater than
 zero. The "Demais Subfunções" account without function code, which only appears in 2017, is ignored. Municipalities without committed
 expenditure in the year do not generate a row, and Distrito Federal is excluded. Output follows `despesa_funcao.ESQUEMA`.
+
+The same declarations can be collected from the Tesouro API with `baixar_api`, which answers one municipality and
+one year per request. The requests run at a fixed rate with overlapping calls, through `nucleo.baixar_em_ritmo`, and
+each year is stored as one gzip JSON Lines file with one line per municipality. `harmonizar(..., origem="api")`
+reads those files with `ler_ano_api` and applies the same rules.
 """
 import csv
+import gzip
+import json
 import re
 import zipfile
 from pathlib import Path
+from typing import Sequence
+from urllib.parse import urlencode
 
 import polars as pl
 
@@ -32,6 +41,85 @@ URL_PORTAL = "https://siconfi.tesouro.gov.br/siconfi/pages/public/consulta_finbr
 ESCOPO = "Municípios"
 TABELA = "Despesas por Função (Anexo I-E)"
 CABECALHO = "Instituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor"
+
+
+URL_API = "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/dca"
+
+
+def anexo_api(ano: int) -> str:
+    """Returns the annex name the API expects: without the "DCA-" prefix in 2013, with it from 2014 on."""
+    return "Anexo I-E" if ano == 2013 else "DCA-Anexo I-E"
+
+
+def arquivo_api(ano: int) -> str:
+    return f"dca_anexo_i_e_{ano}.jsonl.gz"
+
+
+def requisicoes_api(ano: int, municipios: Sequence[str]) -> list[nucleo.Requisicao]:
+    return [
+        nucleo.Requisicao(
+            chave=f"{ano}/{cod}",
+            url=f"{URL_API}?{urlencode({'an_exercicio': ano, 'id_ente': cod, 'no_anexo': anexo_api(ano)})}",
+            arquivo=arquivo_api(ano),
+        )
+        for cod in sorted(municipios)
+    ]
+
+
+def validar_resposta_api(conteudo: bytes) -> None:
+    try:
+        dados = json.loads(conteudo)
+    except ValueError as erro:
+        raise nucleo.RespostaInvalida("A resposta não é JSON.") from erro
+    if not isinstance(dados, dict) or not isinstance(dados.get("items"), list):
+        raise nucleo.RespostaInvalida("A resposta não tem a lista 'items'.")
+    if dados.get("hasMore"):
+        raise nucleo.RespostaInvalida("A resposta tem mais de uma página.")
+
+
+def baixar_api(pasta: Path, municipios: Sequence[str], anos: Sequence[int] = ANOS, *, ritmo: float = 4.0, **opcoes) -> list[dict]:
+    """Downloads the declarations from the Tesouro API, one request per municipality and year, into one file per year.
+
+    Distrito Federal is not requested, because it reports as a state. A year already in the manifest is skipped.
+    """
+    pasta = Path(pasta)
+    codigos = sorted({str(c) for c in municipios if not str(c).startswith("53")})
+    manifesto = nucleo.ler_manifesto(pasta)
+    registros = []
+    for ano in anos:
+        chave, arquivo = f"dca_{ano}", arquivo_api(ano)
+        if chave in manifesto and (pasta / arquivo).exists():
+            registros.append(manifesto[chave])
+            continue
+        with nucleo.somente_ipv4():
+            nucleo.baixar_em_ritmo(requisicoes_api(ano, codigos), pasta / arquivo, ritmo=ritmo, validar=validar_resposta_api, **opcoes)
+        registros.append(
+            nucleo.registrar_arquivo(
+                pasta,
+                chave,
+                arquivo,
+                url=URL_API,
+                metodo="GET",
+                parametros={"an_exercicio": str(ano), "no_anexo": anexo_api(ano), "municipios": str(len(codigos)), "ritmo": str(ritmo)},
+            )
+        )
+    return registros
+
+
+def ler_ano_api(pasta: Path, arquivo: str) -> pl.DataFrame:
+    """Reads one year collected from the API into the same columns that `ler_arquivo` returns."""
+    dados = []
+    for linha in gzip.decompress((Path(pasta) / arquivo).read_bytes()).decode("utf-8").splitlines():
+        if not linha.strip():
+            continue
+        for item in json.loads(json.loads(linha)["corpo"])["items"]:
+            valor = item.get("valor")
+            dados.append((str(item["cod_ibge"]).zfill(7), item["coluna"], str(item["conta"]).strip(), None if valor is None else float(valor)))
+    return pl.DataFrame(
+        dados,
+        schema={"cod_municipio": pl.String, "coluna": pl.String, "conta": pl.String, "valor": pl.Float64},
+        orient="row",
+    )
 
 
 def ler_cabecalho(caminho_zip: Path) -> dict:
@@ -241,7 +329,9 @@ def processar_declaracao(itens: list[dict]) -> tuple[dict | None, list[str]]:
     return ret, avisos
 
 
-def harmonizar(pasta: Path, municipios: pl.DataFrame, relatorio: list[dict] | None = None) -> pl.DataFrame:
+def harmonizar(pasta: Path, municipios: pl.DataFrame, relatorio: list[dict] | None = None, origem: str = "portal") -> pl.DataFrame:
+    if origem not in ("portal", "api"):
+        raise ValueError(f"Origem desconhecida: {origem}")
     pasta = Path(pasta)
     manifesto = nucleo.ler_manifesto(pasta)
     
@@ -249,12 +339,12 @@ def harmonizar(pasta: Path, municipios: pl.DataFrame, relatorio: list[dict] | No
     valid_cods = set(municipios.select("cod_municipio").to_series().to_list())
     
     for ano in ANOS:
-        chave = f"contas_anuais_{ano}"
+        chave = f"dca_{ano}" if origem == "api" else f"contas_anuais_{ano}"
         if chave not in manifesto:
             raise FileNotFoundError(f"Chave {chave} não encontrada no manifesto. Rode a etapa 'baixar'.")
             
         arquivo = manifesto[chave]["arquivo"]
-        df = ler_arquivo(pasta, arquivo)
+        df = ler_ano_api(pasta, arquivo) if origem == "api" else ler_arquivo(pasta, arquivo)
         mun_todos = df.select("cod_municipio").unique().to_series().to_list()
         
         df_empenhada = df.filter(pl.col("coluna") == "Despesas Empenhadas")
