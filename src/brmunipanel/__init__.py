@@ -3,7 +3,7 @@
 import importlib
 from typing import TYPE_CHECKING
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 _SUBMODULES = {
     "datasus",

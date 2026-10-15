@@ -16,7 +16,7 @@ def test_package_version():
     """Validate that __version__ is defined, is a string, and matches the distribution version."""
     assert hasattr(bmp, "__version__")
     assert isinstance(bmp.__version__, str)
-    assert bmp.__version__ == "0.1.1"
+    assert bmp.__version__ == "0.2.0"
 
 
 def test_public_api_all():
