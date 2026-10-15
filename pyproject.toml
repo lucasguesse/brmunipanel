@@ -34,7 +34,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
 dependencies = [
-    "duckdb>=1.0.0",
     "polars>=1.0.0",
     "pyarrow>=16.0.0",
     "pandas>=2.2.0",
@@ -42,7 +41,6 @@ dependencies = [
     "xlrd>=2.0.0",
     "openpyxl>=3.1.0",
     "requests>=2.32.0",
-    "tqdm>=4.66.0",
     "access-parser==0.0.6",
     "construct>=2.10.70",
     "tabulate>=0.10.0",
@@ -53,6 +51,7 @@ plots = ["matplotlib>=3.9.0", "seaborn>=0.13.0"]
 dev = [
     "build>=1.2.0",
     "pytest>=8.0.0",
+    "ruff==0.14.0",
     "twine>=5.0.0",
     'tomli>=1.1.0; python_version < "3.11"',
 ]
@@ -69,3 +68,6 @@ where = ["src"]
 [tool.setuptools.package-data]
 brmunipanel = ["metadata/variaveis.json"]
 "brmunipanel.inep" = ["certificados/*.pem"]
+
+[tool.ruff]
+target-version = "py310"

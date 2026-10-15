@@ -308,9 +308,9 @@ def harmonizar_municipios(
     """Harmonizes the canonical municipalities table from DTB 2025 and the border/coastal tabs."""
     pasta = Path(pasta)
     if codigos_fronteira is None or codigos_litoraneo is None:
-        f, l = ler_fronteira_e_litoral(pasta)
-        codigos_fronteira = codigos_fronteira if codigos_fronteira is not None else f
-        codigos_litoraneo = codigos_litoraneo if codigos_litoraneo is not None else l
+        fronteira, litoraneo = ler_fronteira_e_litoral(pasta)
+        codigos_fronteira = codigos_fronteira if codigos_fronteira is not None else fronteira
+        codigos_litoraneo = codigos_litoraneo if codigos_litoraneo is not None else litoraneo
 
     areas = ler_areas(pasta)
     sedes = ler_sedes(pasta)

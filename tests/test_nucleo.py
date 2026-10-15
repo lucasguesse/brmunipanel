@@ -319,11 +319,11 @@ def test_baixar_em_ritmo_grava_linhas_ordenadas(tmp_path: Path) -> None:
 
     linhas = [json.loads(linha) for linha in gzip.decompress(destino.read_bytes()).decode("utf-8").splitlines()]
     assert len(linhas) == 5
-    assert [l["chave"] for l in linhas] == sorted(chaves)
-    for l in linhas:
-        assert l["http"] == 200
-        assert l["url"] == f"http://api.teste/{l['chave']}"
-        assert l["corpo"] == f"corpo_{l['chave']}"
+    assert [item["chave"] for item in linhas] == sorted(chaves)
+    for item in linhas:
+        assert item["http"] == 200
+        assert item["url"] == f"http://api.teste/{item['chave']}"
+        assert item["corpo"] == f"corpo_{item['chave']}"
 
 
 def test_baixar_em_ritmo_respeita_o_ritmo(tmp_path: Path) -> None:
@@ -423,7 +423,7 @@ def test_baixar_em_ritmo_retoma_do_parcial(tmp_path: Path) -> None:
     assert destino.exists()
     linhas = [json.loads(linha) for linha in gzip.decompress(destino.read_bytes()).decode("utf-8").splitlines()]
     assert len(linhas) == 4
-    assert [l["chave"] for l in linhas] == ["k1", "k2", "k3", "k4"]
+    assert [item["chave"] for item in linhas] == ["k1", "k2", "k3", "k4"]
 
 
 def test_baixar_em_ritmo_falha_mantem_parcial(tmp_path: Path) -> None:
@@ -448,7 +448,7 @@ def test_baixar_em_ritmo_falha_mantem_parcial(tmp_path: Path) -> None:
     assert parcial.exists()
     linhas_parcial = [json.loads(linha) for linha in parcial.read_text(encoding="utf-8").splitlines() if linha.strip()]
     assert len(linhas_parcial) == 2
-    assert {l["chave"] for l in linhas_parcial} == {"k1", "k3"}
+    assert {item["chave"] for item in linhas_parcial} == {"k1", "k3"}
 
 
 def test_baixar_em_ritmo_erro_de_certificado(tmp_path: Path) -> None:

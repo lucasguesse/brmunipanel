@@ -106,7 +106,8 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 # 3. Install in editable mode with development dependencies
 pip install -e ".[dev]"
 
-# 4. Run the full test suite
+# 4. Run the linter and the full test suite
+ruff check src tests
 pytest
 
 # 5. Build standard distribution artifacts (sdist and wheel)

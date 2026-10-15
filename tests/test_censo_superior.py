@@ -529,7 +529,8 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
         df = df.rename({col: col.strip() for col in df.columns})
         df = df.select(pl.all().str.strip_chars())
         for val in df["CODMUNICCURSO"].drop_nulls().to_list():
-            if len(val) == 12: val = val[:2] + val[7:12]
+            if len(val) == 12:
+                val = val[:2] + val[7:12]
             muns.add(val)
         censo_superior.ler_ano_antigo(pasta, 2000, muns)
         
@@ -586,7 +587,6 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
         
         lines = (amostra_dir / "censo_superior_2007_instituicao_amostra.csv").read_text(encoding="latin1").splitlines(True)
         headers = lines[0].split("|")
-        new_headers = [h for h in headers if not h.startswith("I44")]
         idx_to_keep = [i for i, h in enumerate(headers) if not h.startswith("I44")]
         
         new_lines = []
@@ -603,7 +603,8 @@ def test_antigo_caso_10_erros(tmp_path, amostra_dir):
         for col in ["CODMUNICCURSO", "CODMUNIC_CURSO", "CODMUNIC"]:
             if col in df.columns:
                 for val in df[col].drop_nulls().to_list():
-                    if len(val) == 12: val = val[:2] + val[7:12]
+                    if len(val) == 12:
+                        val = val[:2] + val[7:12]
                     muns_2007.add(val)
     with pytest.raises(ValueError, match="Nenhuma coluna I44 encontrada"):
         censo_superior.ler_ano_antigo(pasta2007, 2007, muns_2007)
@@ -639,7 +640,8 @@ def test_antigo_caso_11_harmonizar_antigo_atual(tmp_path, monkeypatch, amostra_d
             for col in ["CODMUNICCURSO", "CODMUNIC_CURSO", "CODMUNIC"]:
                 if col in df.columns:
                     for val in df[col].drop_nulls().to_list():
-                        if len(val) == 12: val = val[:2] + val[7:12]
+                        if len(val) == 12:
+                            val = val[:2] + val[7:12]
                         muns.add(val)
     
     municipios_df = pl.DataFrame({"cod_municipio": list(muns)})

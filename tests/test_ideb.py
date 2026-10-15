@@ -1,9 +1,12 @@
 import pytest
 import polars as pl
 import pandas as pd
-from pathlib import Path
-from brmunipanel.inep.ideb import harmonizar, _ler_planilha, _encontrar_linha_cabecalho
+from brmunipanel.inep.ideb import harmonizar, _encontrar_linha_cabecalho
 import hashlib
+import zipfile
+import requests
+from brmunipanel.inep import ideb, conexao
+from brmunipanel.nucleo import RespostaInvalida
 
 def test_encontrar_cabecalho(tmp_path):
     df_fake = pd.DataFrame({
@@ -219,12 +222,6 @@ def test_erros_diversos(tmp_path):
         df.to_excel(tmp_path / "anos_finais" / "b.xlsx", index=False, header=False)
         df.to_excel(tmp_path / "ensino_medio" / "c.xlsx", index=False, header=False)
         harmonizar(tmp_path, valid_mun)
-
-
-import zipfile
-import requests
-from brmunipanel.inep import ideb, conexao
-from brmunipanel.nucleo import RespostaInvalida
 
 
 def test_baixar_monta_as_tres_requisicoes(monkeypatch, tmp_path):

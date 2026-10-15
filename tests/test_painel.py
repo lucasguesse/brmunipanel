@@ -1,7 +1,3 @@
-import os
-import re
-import sys
-from pathlib import Path
 
 import polars as pl
 import pytest

@@ -285,7 +285,8 @@ License: [Pending License]
 
         with open(checksums_destino, "r", encoding="utf-8") as f:
             for line in f:
-                if not line.strip(): continue
+                if not line.strip():
+                    continue
                 h_expected, fname = line.strip().split(" *")
                 if calcular_sha256(temp_dir / fname) != h_expected:
                     raise RuntimeError(f"Checksum mismatch for {fname}")

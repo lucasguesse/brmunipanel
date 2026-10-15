@@ -7,7 +7,7 @@ import polars as pl
 import pytest
 
 from brmunipanel import nucleo
-from brmunipanel.tesouro import despesa_funcao, finbra, siconfi
+from brmunipanel.tesouro import despesa_funcao, siconfi
 from brmunipanel.tesouro.despesa_funcao import ESQUEMA
 from brmunipanel.tesouro.finbra import processar_tabela
 
@@ -306,7 +306,7 @@ def test_harmonizar_descarte(tmp_path):
     nucleo._gravar_manifesto(tmp_path, manifesto)
     
     relatorio = []
-    df = siconfi.harmonizar(tmp_path, municipios, relatorio=relatorio)
+    siconfi.harmonizar(tmp_path, municipios, relatorio=relatorio)
     assert any(r["cod_municipio"] == "5300108" and r["tipo"] == "distrito_federal" for r in relatorio)
     assert any(r["cod_municipio"] == "9999999" and r["tipo"] == "fora_da_dtb" for r in relatorio)
     

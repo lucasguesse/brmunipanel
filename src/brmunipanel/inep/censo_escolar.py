@@ -153,9 +153,12 @@ def ler_ano_2006(pasta: Path, valid_municipios: set[str]) -> pl.DataFrame:
             educ_cols_to_sum = [f"EP31{i}" for i in range(1, 8)] + [f"EP32{i}" for i in range(1, 8)]
             
             colunas_para_ler = ["MASCARA", "CODMUNIC", "DEP", "LOC", "CODFUNC", "ANO"]
-            for m in matriculas.values(): colunas_para_ler.extend(m)
-            for t in turmas.values(): colunas_para_ler.extend(t)
-            for d in docentes.values(): colunas_para_ler.extend(d)
+            for m in matriculas.values():
+                colunas_para_ler.extend(m)
+            for t in turmas.values():
+                colunas_para_ler.extend(t)
+            for d in docentes.values():
+                colunas_para_ler.extend(d)
             colunas_para_ler = list(set(colunas_para_ler))
             
             lf = pl.scan_csv(

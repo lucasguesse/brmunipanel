@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 
-from brmunipanel.datasus import tabnet
 from brmunipanel.datasus.tabnet import TABULACOES, extrair_tabela, montar_corpo, nome_dbf, validar
 from brmunipanel.nucleo import RespostaInvalida
 

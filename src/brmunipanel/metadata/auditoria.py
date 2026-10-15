@@ -1,6 +1,5 @@
 import polars as pl
-from typing import Any, Dict, List
-import json
+from typing import List
 
 def auditar_tabela_resumo(df: pl.DataFrame, table_name: str, key_cols: List[str]) -> dict:
     linhas = df.height

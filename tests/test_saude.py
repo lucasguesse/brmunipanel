@@ -155,7 +155,6 @@ def test_regras_harmonizacao_saude(tmp_path: Path, df_municipios: pl.DataFrame, 
     """
     ano = 2007
     p_cnes = f"{ano:04d}07"
-    p_sim = str(ano)
 
     _montar_estrutura_padrao(tmp_path, ano)
 

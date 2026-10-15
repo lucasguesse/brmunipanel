@@ -8,7 +8,6 @@ from pathlib import Path
 import subprocess
 import sys
 import types
-import pytest
 import brmunipanel as bmp
 
 

@@ -6,6 +6,7 @@ municipios_limitrofes table, and the educacao table.
 No function here fills nulls, removes rows, modifies values, or calculates derived columns.
 """
 
+import re
 from typing import Sequence
 import polars as pl
 
@@ -30,7 +31,6 @@ def montar_municipios(municipios: pl.DataFrame) -> pl.DataFrame:
             
     return municipios.select(cols).sort("cod_municipio")
 
-import re
 
 def montar_despesa(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
     if list(finbra.columns) != list(siconfi.columns):
