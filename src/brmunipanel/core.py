@@ -226,7 +226,7 @@ def download_at_rate(
 
     A request starts every 1/`rate` seconds, without waiting for the previous one, with at most `concurrent`
     in flight. Each line holds the request key, URL, HTTP status and the response body as received. Lines are
-    appended to `<target>.em_andamento` as responses arrive, so an interrupted run resumes from the keys already there.
+    appended to `<target>.in_progress` as responses arrive, so an interrupted run resumes from the keys already there.
     Network errors and HTTP 5xx are retried with doubled waits; HTTP 429 pauses new requests for `pause_429`
     seconds and retries; a failed certificate verification is raised at once. When every key is present, the lines
     are sorted by key, compressed into `target` and the partial file is removed.
