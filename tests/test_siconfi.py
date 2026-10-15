@@ -116,7 +116,7 @@ def test_process_statement_simple():
     assert ret["exp_04_administration"] == 100.0
     assert ret["exp_total_functions"] == 1000.0
     assert ret["exp_intra_budgetary"] == 10.0
-    assert ret["declara_intraorcamentaria"] is True
+    assert ret["declares_intra_budgetary"] is True
     
     # Budget function only with subfunctions
     items2 = [
@@ -127,7 +127,7 @@ def test_process_statement_simple():
     assert ret2["exp_08_social_assistance"] == 50.0
     assert "function_by_subfunctions:08" in av2
     assert ret2["exp_intra_budgetary"] == 0.0
-    assert ret2["declara_intraorcamentaria"] is False
+    assert ret2["declares_intra_budgetary"] is False
     
     # Budget function without any row counts as zero
     assert ret2["exp_10_health"] == 0.0

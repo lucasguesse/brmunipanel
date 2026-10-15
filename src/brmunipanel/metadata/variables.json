@@ -353,7 +353,7 @@
         "unit": "Categoria",
         "source": "IBGE/Derivado",
         "period": "2006-2023",
-        "methodological_note": "Indica se o dado é original do IBGE ou interpolado."
+        "methodological_note": "Indica se o dado é estimativa do IBGE (`estimate`) ou interpolado (`interpolated`)."
       }
     },
     "inep_school_census": {

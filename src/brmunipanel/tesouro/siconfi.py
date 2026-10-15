@@ -13,7 +13,7 @@ folder, under any name, because the year comes from inside the file. The 2024 fi
 Harmonization uses only "Despesas Empenhadas" rows. A function with its own row uses the row value; without its own
 row, it receives the sum of its subfunctions; with neither, it is zero. `exp_total_functions` is the total row
 without intra-budgetary expenditures and remains null when the declaration does not include it. `exp_intra_budgetary` is the total
-intra-budgetary row, or zero when it does not exist, and `declara_intraorcamentaria` is true when it is greater than
+intra-budgetary row, or zero when it does not exist, and `declares_intra_budgetary` is true when it is greater than
 zero. The "Demais Subfunções" account without function code, which only appears in 2017, is ignored. Municipalities without committed
 expenditure in the year do not generate a row, and Distrito Federal is excluded. Output follows `expenditure_by_function.SCHEMA`.
 
@@ -324,7 +324,7 @@ def process_statement(items: list[dict]) -> tuple[dict | None, list[str]]:
         if len(intra) > 1:
             warnings.append("intra_in_more_than_one_row")
             
-    ret["declara_intraorcamentaria"] = ret["exp_intra_budgetary"] > 0
+    ret["declares_intra_budgetary"] = ret["exp_intra_budgetary"] > 0
     
     return ret, warnings
 

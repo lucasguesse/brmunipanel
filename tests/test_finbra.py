@@ -125,7 +125,7 @@ def test_process_table_2006(municipalities):
         "exp_22_industry", "exp_23_commerce_services", "exp_24_communications",
         "exp_25_energy", "exp_26_transport", "exp_27_sports_leisure",
         "exp_28_special_charges", "exp_total_functions", "exp_intra_budgetary",
-        "declara_intraorcamentaria"
+        "declares_intra_budgetary"
     ]
     
     assert df.schema["municipality_code"] == pl.String
@@ -134,7 +134,7 @@ def test_process_table_2006(municipalities):
     for c in df.columns:
         if c.startswith("exp_"):
             assert df.schema[c] == pl.Float64
-    assert df.schema["declara_intraorcamentaria"] == pl.Boolean
+    assert df.schema["declares_intra_budgetary"] == pl.Boolean
     
     # Order of municipality_code
     assert df["municipality_code"].to_list() == ["1100150", "3550308"]
@@ -143,7 +143,7 @@ def test_process_table_2006(municipalities):
     assert df["exp_01_legislative"].to_list() == [-0.05, 0.1]
     assert df["exp_02_judiciary"].to_list() == [0.0, None]
     assert df["exp_intra_budgetary"].to_list() == [None, None]
-    assert df["declara_intraorcamentaria"].to_list() == [None, None]
+    assert df["declares_intra_budgetary"].to_list() == [None, None]
     assert df["exp_total_functions"].to_list() == [1.0, 2.0]
 
 
@@ -191,14 +191,14 @@ def test_process_table_2010(municipalities):
     assert "0118" not in df.columns
     assert "73424,011" not in df.columns
 
-    # 9999999 -> desp_intra None, declara False
-    # 1100150 -> desp_intra 0, declara False
-    # 3550308 -> desp_intra 5, declara True
+    # 9999999 -> exp_intra_budgetary None, declares_intra_budgetary False
+    # 1100150 -> exp_intra_budgetary 0, declares_intra_budgetary False
+    # 3550308 -> exp_intra_budgetary 5, declares_intra_budgetary True
     
     # Ordered by municipality_code
     assert df["municipality_code"].to_list() == ["1100150", "3550308", "9999999"]
     assert df["exp_intra_budgetary"].to_list() == [0.0, 5.0, None]
-    assert df["declara_intraorcamentaria"].to_list() == [False, True, False]
+    assert df["declares_intra_budgetary"].to_list() == [False, True, False]
 
 
 def test_process_table_errors(municipalities):
@@ -330,9 +330,9 @@ def test_real_samples():
     sp_2010_intra = df_2010.filter(pl.col("municipality_code") == "3550308")["exp_intra_budgetary"][0]
     assert sp_2010_intra == 10311896708400 / 10000.0
     
-    assert df_2010.filter(pl.col("municipality_code") == "3550308")["declara_intraorcamentaria"][0] is True
-    assert df_2010.filter(pl.col("municipality_code") == "1100098")["declara_intraorcamentaria"][0] is True
-    assert df_2010.filter(pl.col("municipality_code") == "1100130")["declara_intraorcamentaria"][0] is False
+    assert df_2010.filter(pl.col("municipality_code") == "3550308")["declares_intra_budgetary"][0] is True
+    assert df_2010.filter(pl.col("municipality_code") == "1100098")["declares_intra_budgetary"][0] is True
+    assert df_2010.filter(pl.col("municipality_code") == "1100130")["declares_intra_budgetary"][0] is False
 
     # Sum of budget functions within 0.1%
     functions_cols = [c for c in df_2006.columns if c.startswith("exp_") and c not in ("exp_total_functions", "exp_intra_budgetary")]
@@ -385,7 +385,7 @@ def test_harmonize(tmp_path, monkeypatch):
     assert "source" not in df.columns
     assert "exp_total_functions" not in df.columns
     assert "exp_intra_budgetary" not in df.columns
-    assert "declara_intraorcamentaria" not in df.columns
+    assert "declares_intra_budgetary" not in df.columns
     
     assert df.is_sorted(["municipality_code", "year"])
     assert df.height == 3 * 7  # 3 municipalities, 7 years (2006-2012)

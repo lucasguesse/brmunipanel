@@ -29,7 +29,7 @@ def test_pyproject_project_metadata():
 
     project = data.get("project", {})
     assert project.get("name") == "brmunipanel"
-    assert project.get("version") == "0.2.0"
+    assert project.get("version") == "0.3.0"
     assert project.get("license") == "MIT"
     assert project.get("license-files") == ["LICENSE"]
     assert project.get("requires-python") == ">=3.10"
@@ -50,10 +50,11 @@ def test_pyproject_project_metadata():
     assert urls.get("Repository") == "https://github.com/lucasguesse/brmunipanel"
     assert urls.get("Issues") == "https://github.com/lucasguesse/brmunipanel/issues"
     assert urls.get("Documentation") == "https://github.com/lucasguesse/brmunipanel#readme"
+    assert urls.get("Changelog") == "https://github.com/lucasguesse/brmunipanel/blob/master/CHANGELOG.md"
 
     opts = project.get("optional-dependencies", {})
     assert "dev" in opts
-    assert "plots" in opts
+    assert "plots" not in opts
 
     dev_deps = opts.get("dev", [])
     assert any(admin.startswith("build") for admin in dev_deps)

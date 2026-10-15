@@ -15,12 +15,12 @@ This library provides the reproducible scientific protocol and supporting codeba
 - **Fully Reproducible ETL:** Transparent code that downloads raw data directly from official sources (IBGE, Tesouro Nacional/SICONFI, DATASUS, IPEA Data, INEP) and processes it systematically.
 - **Harmonized Joins:** Automatically aligns historical data (2006–2023) against the most recent and stable territorial division grid (DTB 2025).
 - **Thematic Modularity:** Provides six standardized tables:
-  - `municipios`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators).
-  - `demografia_economia_social`: Longitudinal panel covering population estimates, municipal GDP, formal employment from CEMPRE, and Bolsa Família beneficiaries and transfers.
-  - `financas_publicas`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) combining FINBRA (2006–2012) and SICONFI (2013–2023).
-  - `saude`: Longitudinal panel covering health infrastructure, human resources, mortality, and live births from DATASUS (CNES, SIM, Sinasc).
-  - `municipios_limitrofes`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
-  - `educacao`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.
+  - `municipalities`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators).
+  - `socioeconomic`: Longitudinal panel covering population estimates, municipal GDP, formal employment from CEMPRE, and Bolsa Família beneficiaries and transfers.
+  - `public_finance`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) combining FINBRA (2006–2012) and SICONFI (2013–2023).
+  - `health`: Longitudinal panel covering health infrastructure, human resources, mortality, and live births from DATASUS (CNES, SIM, Sinasc).
+  - `neighboring_municipalities`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
+  - `education`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.
 - **Extensive Metadata & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
 - **Performance:** Built on `polars`, which reads and aggregates the large municipal microdata files in memory.
 
@@ -58,14 +58,18 @@ print(bmp.__version__)
 # Available namespaces: bmp.ibge, bmp.tesouro, bmp.ipea, bmp.datasus, bmp.inep
 
 # Example: Harmonize population estimates from a local SIDRA raw folder
-# df_pop = population.harmonize(Path("raw/ibge/population"))
+# df_pop = population.harmonize(Path("raw/ibge/sidra"))
 
 # Example: Harmonize Bolsa Família records from an IPEA Data raw folder
-# df_ctp = cash_transf_program.harmonize(Path("raw/ipea"))
+# df_ctp = cash_transf_program.harmonize(Path("raw/ipea/cash-transf-program"))
 
 # Example: Harmonize public school IDEB scores with municipal crosswalk
 # df_ideb = harmonize_ideb(Path("raw/inep/ideb"), municipalities_df)
 ```
+
+## Changes in 0.3.0
+
+Version 0.3.0 names modules, functions, tables, columns, category values and manifest fields in English and is not compatible with 0.2.0. See [CHANGELOG.md](CHANGELOG.md) for the list of changes and for how to migrate a raw data folder downloaded with 0.2.0.
 
 ## Data Sources Handled
 The library currently wraps and harmonizes the following official sources:

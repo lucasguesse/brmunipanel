@@ -13,9 +13,9 @@ property, `access-parser` returns this field as formatted text and errs on value
 and `convert_currency` performs the division by 10,000. The `access-parser` version is pinned because of this.
 
 From 2006 to 2009 the source does not separate intra-budgetary expenditures (payments between agencies of the same municipality):
-they are inside the functions, and `exp_intra_budgetary` and `declara_intraorcamentaria` remain null. From 2010
+they are inside the functions, and `exp_intra_budgetary` and `declares_intra_budgetary` remain null. From 2010
 onward they leave the functions and go to a dedicated source column: `exp_intra_budgetary` brings that
-total, and `declara_intraorcamentaria` is true when it is greater than zero.
+total, and `declares_intra_budgetary` is true when it is greater than zero.
 
 Nothing is imputed or corrected. `exp_total_functions` is the total declared in the source (`Despesas por Função`), without
 recalculation: in 8 municipalities of 2010 it differs from the sum of the 28 functions. In 4 rows of 2011 and 2012, the total and
@@ -171,10 +171,10 @@ def process_table(table: dict[str, list], year: int, municipalities: pl.DataFram
         if name_intra:
             val_intra = convert_currency(table[name_intra][i])
             row["exp_intra_budgetary"] = val_intra
-            row["declara_intraorcamentaria"] = val_intra is not None and val_intra > 0
+            row["declares_intra_budgetary"] = val_intra is not None and val_intra > 0
         else:
             row["exp_intra_budgetary"] = None
-            row["declara_intraorcamentaria"] = None
+            row["declares_intra_budgetary"] = None
             
         valid_rows.append(row)
         

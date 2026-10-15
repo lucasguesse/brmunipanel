@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "brmunipanel"
-version = "0.2.0"
+version = "0.3.0"
 description = "ETL library for a harmonized panel of socioeconomic, fiscal, health, territorial and educational indicators for Brazilian municipalities (IBGE, Tesouro Nacional, IPEA Data, DATASUS, INEP)."
 readme = "README.md"
 license = "MIT"
@@ -47,7 +47,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-plots = ["matplotlib>=3.9.0", "seaborn>=0.13.0"]
 dev = [
     "build>=1.2.0",
     "pytest>=8.0.0",
@@ -61,6 +60,7 @@ Homepage = "https://github.com/lucasguesse/brmunipanel"
 Repository = "https://github.com/lucasguesse/brmunipanel"
 Issues = "https://github.com/lucasguesse/brmunipanel/issues"
 Documentation = "https://github.com/lucasguesse/brmunipanel#readme"
+Changelog = "https://github.com/lucasguesse/brmunipanel/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

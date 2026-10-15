@@ -42,7 +42,7 @@ SCHEMA = {
     **{c_out: pl.Float64 for _, _, c_out in FUNCTIONS},
     "exp_total_functions": pl.Float64,
     "exp_intra_budgetary": pl.Float64,
-    "declara_intraorcamentaria": pl.Boolean,
+    "declares_intra_budgetary": pl.Boolean,
 }
 
 PUBLISHED_COLUMNS = ["municipality_code", "year"] + [f[2] for f in FUNCTIONS]
