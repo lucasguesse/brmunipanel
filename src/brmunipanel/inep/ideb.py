@@ -20,6 +20,7 @@ def package_name(stage: str) -> str:
 
 
 def validate_zip(content: bytes):
+    """Raises `InvalidResponse` if `content` does not start with standard ZIP magic bytes."""
     if not content.startswith(b"PK\x03\x04"):
         raise InvalidResponse("The content is not a valid ZIP file")
 
@@ -115,6 +116,11 @@ def _read_package(package: Path, stage_suffix: str, valid_municipalities: set) -
 
 
 def harmonize(folder: Union[Path, str], municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes IDEB observed scores for public schools across education stages.
+
+    Reads results for early years, final years, and secondary education, returning a DataFrame
+    sorted by `municipality_code` and `year`.
+    """
     folder = Path(folder)
     valid_municipalities = set(municipalities["municipality_code"].to_list())
     

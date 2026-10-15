@@ -21,6 +21,10 @@ DOWNLOAD_YEARS = tuple(year for year in range(2006, 2025) if year not in YEARS_W
 
 
 def download(sidra_folder: Path, **options) -> list[dict]:
+    """Downloads municipal population estimates Table 6579 into `sidra_folder`.
+
+    Returns the list of manifest records for metadata and annual responses.
+    """
     return sidra.download_table(TABLE, DOWNLOAD_YEARS, [VARIABLE], sidra_folder, **options)
 
 

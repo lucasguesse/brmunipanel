@@ -22,6 +22,10 @@ COLUMNS = {
 
 
 def download(sidra_folder: Path, **options) -> list[dict]:
+    """Downloads municipal GDP Table 5938 (2006–2023) into `sidra_folder`.
+
+    Returns the list of manifest records for metadata and annual responses.
+    """
     return sidra.download_table(TABLE, YEARS, DOWNLOAD_VARIABLES, sidra_folder, **options)
 
 

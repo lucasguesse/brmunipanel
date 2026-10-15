@@ -28,6 +28,10 @@ COLUMNS = {
 
 
 def download(sidra_folder: Path, **options) -> list[dict]:
+    """Downloads CEMPRE tables (1685 for 2006–2021 and 9509 for 2022–2023) into `sidra_folder`.
+
+    Returns the list of manifest records for metadata and annual responses.
+    """
     records = []
     for table, years in YEARS_BY_TABLE.items():
         records += sidra.download_table(table, years, DOWNLOAD_VARIABLES, sidra_folder, **options)

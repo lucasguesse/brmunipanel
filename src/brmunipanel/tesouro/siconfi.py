@@ -52,10 +52,12 @@ def api_annex(year: int) -> str:
 
 
 def api_file(year: int) -> str:
+    """Returns the gzip JSON Lines filename used to store API responses for `year`."""
     return f"dca_annex_i_e_{year}.jsonl.gz"
 
 
 def api_requests(year: int, municipalities: Sequence[str]) -> list[core.Request]:
+    """Builds a list of `Request` objects for all municipalities in `year` from the SICONFI API."""
     return [
         core.Request(
             key=f"{year}/{code}",
@@ -67,6 +69,7 @@ def api_requests(year: int, municipalities: Sequence[str]) -> list[core.Request]
 
 
 def validate_api_response(content: bytes) -> None:
+    """Validates that API response `content` is valid JSON containing a single-page items list."""
     try:
         data = json.loads(content)
     except ValueError as error:
@@ -123,6 +126,7 @@ def read_api_year(folder: Path, file: str) -> pl.DataFrame:
 
 
 def read_header(zip_path: Path) -> dict:
+    """Reads and validates the 4-line header from a portal ZIP file, returning metadata."""
     with zipfile.ZipFile(zip_path) as zf:
         members_csv = [n for n in zf.namelist() if n.lower().endswith(".csv")]
         if len(members_csv) != 1:
@@ -169,6 +173,7 @@ def read_header(zip_path: Path) -> dict:
 
 
 def download(folder: Path, **options) -> list[dict]:
+    """Validates and registers manually downloaded portal annual ZIP files in the manifest."""
     folder = Path(folder)
     if not folder.exists():
         folder.mkdir(parents=True)
@@ -206,6 +211,7 @@ def download(folder: Path, **options) -> list[dict]:
 
 
 def read_file(folder: Path, file: str) -> pl.DataFrame:
+    """Reads raw portal CSV statements from `file` into a DataFrame of accounts and values."""
     path = Path(folder) / file
     
     with zipfile.ZipFile(path) as zf:
@@ -250,6 +256,7 @@ def read_file(folder: Path, file: str) -> pl.DataFrame:
 
 
 def process_statement(items: list[dict]) -> tuple[dict | None, list[str]]:
+    """Extracts the 28 functional expenditures and totals from committed expenditure account items."""
     committed = [i for i in items if i["coluna"] == "Despesas Empenhadas"]
     if not committed:
         return None, []
@@ -330,6 +337,7 @@ def process_statement(items: list[dict]) -> tuple[dict | None, list[str]]:
 
 
 def harmonize(folder: Path, municipalities: pl.DataFrame, report: list[dict] | None = None, source: str = "portal") -> pl.DataFrame:
+    """Harmonizes SICONFI municipal expenditures by function for 2013–2023 from portal or API sources."""
     if source not in ("portal", "api"):
         raise ValueError(f"Unknown source: {source}")
     folder = Path(folder)

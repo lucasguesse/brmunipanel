@@ -36,6 +36,7 @@ from brmunipanel.tesouro.expenditure_by_function import PUBLISHED_COLUMNS, SCHEM
 
 
 def convert_currency(value) -> float | None:
+    """Converts an integer Access currency value (scaled by 10,000) to float by dividing by 10,000."""
     if value is None:
         return None
     if isinstance(value, bool):
@@ -46,12 +47,14 @@ def convert_currency(value) -> float | None:
 
 
 def code_6(state, muni_code) -> str | None:
+    """Formats 2-digit state and 4-digit municipality codes into a 6-digit string."""
     if state is None or muni_code is None:
         return None
     return f"{int(float(str(state).strip())):02d}{int(float(str(muni_code).strip())):04d}"
 
 
 def validate_zip(content: bytes) -> None:
+    """Validates that `content` is a ZIP file containing exactly one Access database (.mdb) file."""
     try:
         with zipfile.ZipFile(io.BytesIO(content)) as zf:
             mdb_members = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
@@ -62,6 +65,7 @@ def validate_zip(content: bytes) -> None:
 
 
 def download(folder: Path, **options) -> list[dict]:
+    """Downloads FINBRA annual database ZIP archives (2006–2012) into `folder`."""
     urls = {
         2006: "https://thot-arquivos.tesouro.gov.br/publicacao/26268",
         2007: "https://thot-arquivos.tesouro.gov.br/publicacao/26267",
@@ -85,6 +89,7 @@ def download(folder: Path, **options) -> list[dict]:
 
 
 def read_dsubfuncao(folder: Path, year: int) -> dict[str, list]:
+    """Reads table `DSubFuncao` from the annual Access database, returning column lists."""
     content = read_raw(folder, f"finbra_{year}.zip")
     with zipfile.ZipFile(io.BytesIO(content)) as zf, tempfile.TemporaryDirectory() as tmp:
         (member,) = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
@@ -100,6 +105,7 @@ def read_dsubfuncao(folder: Path, year: int) -> dict[str, list]:
 
 
 def process_table(table: dict[str, list], year: int, municipalities: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
+    """Processes raw `DSubFuncao` columns into a harmonized DataFrame, mapping 6-digit to 7-digit codes."""
     columns = [name.strip() for name in table.keys()]
     
     # Check that columns exist
@@ -194,6 +200,7 @@ def process_table(table: dict[str, list], year: int, municipalities: pl.DataFram
 
 
 def harmonize(folder: Path, municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes FINBRA municipal expenditure by function for 2006–2012, sorted by municipality and year."""
     dfs = []
     for year in range(2006, 2013):
         table = read_dsubfuncao(folder, year)

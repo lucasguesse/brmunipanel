@@ -23,6 +23,7 @@ EXPECTED_UNIT_VAL = "R$ (mil)"
 
 
 def series_request(series: str) -> Request:
+    """Builds a `Request` to download data values for `series` from the IPEA Data API."""
     return Request(
         key=series,
         url=f"{BASE}/ValoresSerie(SERCODIGO='{series}')",
@@ -31,6 +32,7 @@ def series_request(series: str) -> Request:
 
 
 def metadata_request(series: str) -> Request:
+    """Builds a `Request` to download metadata for `series` from the IPEA Data API."""
     return Request(
         key=f"{series}/metadata",
         url=f"{BASE}/Metadados('{series}')",

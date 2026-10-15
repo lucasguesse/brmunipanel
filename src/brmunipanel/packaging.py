@@ -17,6 +17,7 @@ METADATA_TABLES = {
 }
 
 def write_csv_gz(parquet_path: Path, csv_gz_path: Path) -> None:
+    """Converts a Parquet file to a gzip-compressed CSV with deterministic mtime and maximum compression."""
     df = pl.read_parquet(parquet_path)
     csv_bytes = df.write_csv(null_value="").encode('utf-8')
     with open(csv_gz_path, "wb") as f_out:
@@ -24,6 +25,7 @@ def write_csv_gz(parquet_path: Path, csv_gz_path: Path) -> None:
             gz_out.write(csv_bytes)
 
 def compute_sha256(path: Path) -> str:
+    """Computes and returns the SHA-256 hexadecimal checksum of `path`."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         while chunk := f.read(8192):
@@ -31,6 +33,7 @@ def compute_sha256(path: Path) -> str:
     return h.hexdigest()
 
 def validate_critical_audit(quality_checks_path: Path) -> bool:
+    """Returns True if the quality checks CSV exists and contains no FAIL records."""
     if not quality_checks_path.exists():
         return False
     with open(quality_checks_path, "r", encoding="utf-8") as f:
@@ -50,6 +53,7 @@ def build_final_package(
     results_dir: Path,
     datasets_json_path: Path
 ) -> None:
+    """Builds the final public data package in `data/final` with Parquet, CSV, checksums, and metadata."""
     processed_dir = data_dir / "processed"
     final_dir = data_dir / "final"
     temp_dir = data_dir / "final_temp"

@@ -52,10 +52,12 @@ for orig, dest in STAGES:
     COUNT_COLUMNS.append((f"QT_TUR_{orig}", f"classes_{dest}"))
 
 def validate_zip(content: bytes):
+    """Raises `InvalidResponse` if `content` does not start with standard ZIP magic bytes."""
     if not content.startswith(b"PK\x03\x04"):
         raise InvalidResponse("The content is not a valid ZIP file")
 
 def download(folder: Path | str, **options):
+    """Downloads School Census microdata ZIP files (2006–2023) into `folder`."""
     folder = Path(folder)
     reqs = []
     for year in ALL_YEARS:
@@ -79,6 +81,11 @@ def _get_dn(cols):
     return res
 
 def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame:
+    """Reads 2006 School Census microdata from the annual ZIP file using the legacy layout.
+
+    Extracts `CENSOESC_2006.CSV` and `EDUCPROF_2006.CSV`, mapping categories and aggregating
+    school-level counts for valid municipalities.
+    """
     zip_path = folder / "school-census/school-census_2006.zip"
     
     with zipfile.ZipFile(zip_path, 'r') as z:
@@ -315,6 +322,11 @@ def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame
 
 
 def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -> pl.DataFrame:
+    """Reads School Census microdata for `year` (2007–2023) from the annual ZIP file.
+
+    Extracts `microdados_ed_basica`, filters active schools, and maps administrative dependency
+    and location.
+    """
     zip_path = folder / f"school-census/school-census_{year}.zip"
     
     with zipfile.ZipFile(zip_path, 'r') as z:
@@ -396,6 +408,11 @@ def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -
             return df
 
 def harmonize(folder: Path | str, municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes School Census microdata (2006–2023) across all covered years.
+
+    Aggregates active schools, enrollments, teachers, and classes by `municipality_code`, `year`,
+    `admin_dependency`, and `location`.
+    """
     folder = Path(folder)
     valid_municipalities = set(municipalities["municipality_code"].to_list())
     

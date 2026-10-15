@@ -4,6 +4,7 @@ import polars as pl
 
 
 def compute_statistics(df: pl.DataFrame, col_name: str) -> dict[str, Any]:
+    """Computes summary statistics (nulls, null percentage, min, max, domain) for `col_name` in `df`."""
     col = df[col_name]
     nulls = col.null_count()
     percentage_nulls = round((nulls / df.height) * 100, 2) if df.height > 0 else 0.0
@@ -47,6 +48,7 @@ def compute_statistics(df: pl.DataFrame, col_name: str) -> dict[str, Any]:
     }
 
 def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Dict[str, Any], key_cols: list[str]) -> pl.DataFrame:
+    """Builds a standardized variable dictionary DataFrame for `table_name` from metadata and statistics."""
     rows = []
     
     for col_name in df.columns:

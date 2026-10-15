@@ -22,6 +22,7 @@ NO_VALUE_MARKERS = ("...", "..", "X")
 
 
 def year_request(table: int, year: int, variables: Sequence[int]) -> Request:
+    """Builds a `Request` to query all municipalities (`N6[all]`) for `table`, `year`, and `variables`."""
     ids = "|".join(str(v) for v in variables)
     return Request(
         key=f"t{table}/{year}",
@@ -31,6 +32,7 @@ def year_request(table: int, year: int, variables: Sequence[int]) -> Request:
 
 
 def metadata_request(table: int) -> Request:
+    """Builds a `Request` to download metadata for `table`."""
     return Request(
         key=f"t{table}/metadata",
         url=f"{BASE}/{table}/metadados",

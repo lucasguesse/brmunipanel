@@ -2,6 +2,7 @@ import polars as pl
 from typing import List
 
 def audit_summary_table(df: pl.DataFrame, table_name: str, key_cols: List[str]) -> dict:
+    """Computes summary audit metrics for `df`, returning a dictionary of statistics."""
     rows = df.height
     columns = df.width
     key = ", ".join(key_cols)
@@ -38,6 +39,7 @@ def audit_summary_table(df: pl.DataFrame, table_name: str, key_cols: List[str]) 
     }
 
 class QualityAuditor:
+    """Executes and records data quality validation checks across pipeline tables."""
     def __init__(self, municipalities_df: pl.DataFrame):
         self.municipalities_df = municipalities_df
         self.valid_codes = set()
@@ -47,6 +49,7 @@ class QualityAuditor:
         self.has_critical_failure = False
         
     def add_check(self, table: str, rule: str, status: str, observed: str, expected: str, detail: str = ""):
+        """Records an audit check result, setting `has_critical_failure` if a critical check fails."""
         self.checks.append({
             "table": table,
             "rule": rule,
@@ -59,12 +62,14 @@ class QualityAuditor:
             self.has_critical_failure = True
 
     def audit_expected_files(self, stage: str, found_files: List[str], contract: dict):
+        """Validates that all expected files defined in `contract` exist in `found_files`."""
         expected = list(contract.keys())
         for f in expected:
             if f not in found_files:
                 self.add_check(f"[{stage}] {f}", "file exists and opens", "FAIL", "Missing", "Present", "Critical: file missing from the project")
 
     def audit_schema(self, df: pl.DataFrame, table: str, contract: dict):
+        """Audits column names, column order, and data types of `df` against `contract`."""
         clean_name = table.replace("[processed] ", "").replace("[intermediate] ", "")
         if clean_name not in contract:
             self.add_check(table, "schema and column order", "FAIL", "Missing contract", "Expected contract", "Critical: table without a contract")
@@ -93,6 +98,7 @@ class QualityAuditor:
             self.add_check(table, "types match the contract", "FAIL", str(observed), "Correct", "Critical: incompatible types")
 
     def audit_period_and_counts(self, df: pl.DataFrame, table: str, contract: dict):
+        """Audits covered period, row count, and distinct municipalities in `df` against `contract`."""
         clean_name = table.replace("[processed] ", "").replace("[intermediate] ", "")
         if clean_name not in contract:
             return
@@ -123,6 +129,7 @@ class QualityAuditor:
                 self.add_check(table, "distinct municipalities", "FAIL", str(munis), str(c["municipalities"]), "Critical: municipalities differ")
 
     def audit_control_totals(self, df: pl.DataFrame, table: str):
+        """Validates national and state benchmark control totals for table columns."""
         clean_name = table.replace("[processed] ", "").replace("[intermediate] ", "")
         
         if clean_name == "education":
@@ -183,6 +190,7 @@ class QualityAuditor:
             self.add_check(table, "IDEB public secondary not null", "OK" if nn_med == 18493 else "FAIL", str(nn_med), "18493")
         
     def audit_keys(self, df: pl.DataFrame, table: str, key_cols: List[str]):
+        """Audits that primary key columns `key_cols` have neither nulls nor duplicate rows."""
         if not key_cols:
             return
         
@@ -207,6 +215,7 @@ class QualityAuditor:
             self.add_check(table, "key without duplicates", "FAIL", str(dups), "0", "Critical: keys must not be duplicated")
 
     def audit_municipal_codes(self, df: pl.DataFrame, table: str, col_name="municipality_code"):
+        """Validates that all municipality codes in `col_name` belong to the valid municipal registry."""
         if col_name in df.columns and self.valid_codes:
             invalid_count = df.filter(~pl.col(col_name).is_in(self.valid_codes)).height
             if invalid_count == 0:
@@ -215,6 +224,7 @@ class QualityAuditor:
                 self.add_check(table, f"municipality codes ({col_name})", "FAIL", f"{invalid_count} invalid", "0 invalid", "Critical: all must belong to municipalities.parquet")
 
     def audit_negative_values(self, df: pl.DataFrame, table: str):
+        """Checks numeric metric columns in `df` to ensure none contain negative values."""
         numeric_cols = [c for c, dtype in zip(df.columns, df.dtypes) if dtype.is_numeric()]
         failures = []
         for c in numeric_cols:
@@ -229,6 +239,7 @@ class QualityAuditor:
             self.add_check(table, "non-negative values", "FAIL", str(failures), "Nenhum", "Counts must not be negative")
             
     def audit_geographic_domains(self, df: pl.DataFrame, table: str):
+        """Validates geographic bounding boxes, positive areas, and border lengths."""
         clean_name = table.replace("[processed] ", "").replace("[intermediate] ", "")
         if clean_name in ["municipalities", "ibge_municipalities"]:
             area_inv = df.filter(pl.col("area_km2") <= 0).height
@@ -256,6 +267,7 @@ class QualityAuditor:
                 self.add_check(table, "comprimentos positivos", "FAIL", f"{comp_inv} < 0", "0", "Length must be >= 0")
 
     def get_checks_df(self) -> pl.DataFrame:
+        """Returns recorded check results as a Polars DataFrame with the audit schema."""
         schema = {
             "table": pl.String,
             "rule": pl.String,

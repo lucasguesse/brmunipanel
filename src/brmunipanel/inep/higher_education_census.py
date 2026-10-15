@@ -28,10 +28,12 @@ LEGACY_YEARS = list(range(2000, 2009))
 ALL_YEARS = list(range(2000, 2025))
 
 def validate_zip(content: bytes):
+    """Raises `InvalidResponse` if `content` does not start with standard ZIP magic bytes."""
     if not content.startswith(b"PK\x03\x04"):
         raise InvalidResponse("The content is not a valid ZIP file")
 
 def download(folder: Path | str, **options):
+    """Downloads Higher Education Census microdata ZIP files (2000–2024) into `folder`."""
     folder = Path(folder)
     reqs = []
     for year in ALL_YEARS:
@@ -48,6 +50,11 @@ def download(folder: Path | str, **options):
     download_batch(reqs, folder, session=session, validate=validate_zip, interval=1.0, **options)
 
 def read_legacy_year(folder: Path, year: int, valid_municipalities: set[str]) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Reads legacy layout (2000–2008) microdata from the annual ZIP file.
+
+    Extracts pipe-delimited course and institution tables, filters in-person offerings, and returns
+    a tuple of `(df_courses, df_hei)`.
+    """
     zip_path = folder / f"higher-education-census/higher-education-census_{year}.zip"
     
     with zipfile.ZipFile(zip_path, 'r') as z:
@@ -224,6 +231,11 @@ def read_legacy_year(folder: Path, year: int, valid_municipalities: set[str]) ->
         return df_courses, df_hei
 
 def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Reads current layout (2009–2024) microdata from the annual ZIP file.
+
+    Extracts semicolon-delimited course and institution tables, filters in-person offerings, and returns
+    a tuple of `(df_courses, df_hei_on_campus)`.
+    """
     zip_path = folder / f"higher-education-census/higher-education-census_{year}.zip"
     
     with zipfile.ZipFile(zip_path, 'r') as z:
@@ -336,6 +348,11 @@ def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -
             return df_courses, df_hei_on_campus
 
 def aggregate(df_courses: pl.DataFrame, df_hei_on_campus: pl.DataFrame, year: int) -> pl.DataFrame:
+    """Aggregates courses and institutions by `municipality_code` and `category` for `year`.
+
+    Returns a DataFrame with columns `municipality_code`, `category`, `institutions`, `enrollments`,
+    `hq_institutions`, `hq_teachers`, and `year`.
+    """
     # Courses aggregation
     agg_courses = (
         df_courses
@@ -374,6 +391,11 @@ def aggregate(df_courses: pl.DataFrame, df_hei_on_campus: pl.DataFrame, year: in
     return res
 
 def harmonize(folder: Path | str, municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes Higher Education Census microdata (2000–2024) across all covered years.
+
+    Returns a DataFrame sorted by `municipality_code`, `year`, and `category`, containing
+    `institutions`, `enrollments`, `hq_institutions`, and `hq_teachers`.
+    """
     folder = Path(folder)
     valid_municipalities = set(municipalities["municipality_code"].to_list())
     

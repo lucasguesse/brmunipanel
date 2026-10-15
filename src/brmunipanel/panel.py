@@ -13,6 +13,7 @@ import polars as pl
 PANEL_YEARS = tuple(range(2006, 2024))
 
 def build_municipalities(municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Builds the canonical municipalities table, validating uniqueness and ordering by `municipality_code`."""
     if "municipality_code" not in municipalities.columns:
         raise ValueError("Missing municipality_code")
     
@@ -33,6 +34,7 @@ def build_municipalities(municipalities: pl.DataFrame) -> pl.DataFrame:
 
 
 def build_expenditure(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
+    """Combines FINBRA and SICONFI expenditures, normalizes column names, and sorts by municipality and year."""
     if list(finbra.columns) != list(siconfi.columns):
         raise ValueError(f"Different columns or column order between finbra and siconfi. finbra: {finbra.columns}, siconfi: {siconfi.columns}")
         
@@ -58,6 +60,7 @@ def build_expenditure(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFra
     return output.rename(rename_map).sort(["municipality_code", "year"])
 
 def build_longitudinal_table(municipalities: pl.DataFrame, sources: list[pl.DataFrame], years: Sequence[int] = PANEL_YEARS, table_name: str = "longitudinal_table") -> pl.DataFrame:
+    """Builds a longitudinal panel on a municipality-year grid by sequentially left-joining source tables."""
     valid_codes = set(municipalities["municipality_code"])
     
     # Grid of municipalities and years
@@ -96,6 +99,7 @@ def build_longitudinal_table(municipalities: pl.DataFrame, sources: list[pl.Data
     return output.sort(["municipality_code", "year"])
 
 def build_neighboring(municipalities: pl.DataFrame, neighboring: pl.DataFrame) -> pl.DataFrame:
+    """Validates and sorts the neighboring municipalities adjacency table."""
     dups = neighboring.filter(neighboring.select(["municipality_code", "neighbor_municipality_code"]).is_duplicated())
     if not dups.is_empty():
         raise ValueError(f"neighboring: {dups.select(['municipality_code', 'neighbor_municipality_code']).n_unique()} repeated pairs. Examples: {dups.head(3).to_dicts()}")
@@ -108,6 +112,7 @@ def build_neighboring(municipalities: pl.DataFrame, neighboring: pl.DataFrame) -
     return neighboring.sort(["municipality_code", "neighbor_municipality_code"])
 
 def consolidate_education(school_census: pl.DataFrame, higher_education_census: pl.DataFrame, ideb: pl.DataFrame) -> pl.DataFrame:
+    """Consolidates School Census, Higher Education Census, and IDEB into the education panel table."""
     # Censo Escolar
     school_cols = ["municipality_code", "year", "admin_dependency", "location", "schools", "enroll_early_childhood", "enroll_elementary", "enroll_secondary", "teachers_basic_edu"]
     for c in school_cols:

@@ -48,6 +48,7 @@ class Request:
 
 
 def read_manifest(folder: Path) -> dict[str, dict]:
+    """Reads and returns the manifest dictionary from `folder`, or an empty dictionary if it does not exist."""
     path = Path(folder) / MANIFEST
     if not path.exists():
         return {}
