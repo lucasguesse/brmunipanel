@@ -75,7 +75,7 @@ class QualityAuditor:
         
         actual_cols = df.columns
         if actual_cols == expected_cols:
-            self.add_check(table, "schema and column order", "OK", "Correto", "Correto")
+            self.add_check(table, "schema and column order", "OK", "Correct", "Correct")
         else:
             self.add_check(table, "schema and column order", "FAIL", str(actual_cols), str(expected_cols), "Critical: does not match the contract")
             
@@ -88,9 +88,9 @@ class QualityAuditor:
                     types_ok = False
                     observed.append(f"{c}: {dtype}")
         if types_ok:
-            self.add_check(table, "types match the contract", "OK", "Correto", "Correto")
+            self.add_check(table, "types match the contract", "OK", "Correct", "Correct")
         else:
-            self.add_check(table, "types match the contract", "FAIL", str(observed), "Correto", "Critical: incompatible types")
+            self.add_check(table, "types match the contract", "FAIL", str(observed), "Correct", "Critical: incompatible types")
 
     def audit_period_and_counts(self, df: pl.DataFrame, table: str, contract: dict):
         clean_name = table.replace("[processed] ", "").replace("[intermediate] ", "")
@@ -238,7 +238,7 @@ class QualityAuditor:
             lat_inv = df.filter((pl.col("latitude") < -35) | (pl.col("latitude") > 6)).height
             lon_inv = df.filter((pl.col("longitude") < -75) | (pl.col("longitude") > -30)).height
             if area_inv == 0 and lat_inv == 0 and lon_inv == 0:
-                self.add_check(table, "geographic domains", "OK", "Correto", "Correto")
+                self.add_check(table, "geographic domains", "OK", "Correct", "Correct")
             else:
                 self.add_check(table, "geographic domains", "FAIL", f"area_inv={area_inv}, lat_inv={lat_inv}, lon_inv={lon_inv}", "0", "Brazil bounds")
         
@@ -246,12 +246,12 @@ class QualityAuditor:
             if self.valid_codes:
                 inv_code_lim = df.filter(~pl.col("neighbor_municipality_code").is_in(self.valid_codes)).height
                 if inv_code_lim == 0:
-                    self.add_check(table, "neighboring codes", "OK", "Correto", "Correto")
+                    self.add_check(table, "neighboring codes", "OK", "Correct", "Correct")
                 else:
                     self.add_check(table, "neighboring codes", "FAIL", f"{inv_code_lim} invalid", "0", "Must belong to the registry")
             comp_inv = df.filter(pl.col("border_length_km") < 0).height # 0 is accepted
             if comp_inv == 0:
-                self.add_check(table, "comprimentos positivos", "OK", "Correto", "Correto")
+                self.add_check(table, "comprimentos positivos", "OK", "Correct", "Correct")
             else:
                 self.add_check(table, "comprimentos positivos", "FAIL", f"{comp_inv} < 0", "0", "Length must be >= 0")
 

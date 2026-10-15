@@ -187,7 +187,7 @@ def download(folder: Path, **options) -> list[dict]:
         
         record, _ = core.record_manual(
             folder, 
-            key=f"contas_anuais_{year}", 
+            key=f"annual_accounts_{year}", 
             file=z.name, 
             url=PORTAL_URL, 
             parameters={"fiscal_year": str(year), "scope": SCOPE, "table": TABLE}
@@ -339,7 +339,7 @@ def harmonize(folder: Path, municipalities: pl.DataFrame, report: list[dict] | N
     valid_codes = set(municipalities.select("municipality_code").to_series().to_list())
     
     for year in YEARS:
-        key = f"dca_{year}" if source == "api" else f"contas_anuais_{year}"
+        key = f"dca_{year}" if source == "api" else f"annual_accounts_{year}"
         if key not in manifest:
             raise FileNotFoundError(f"Key {key} not found in the manifest. Run the download first")
             

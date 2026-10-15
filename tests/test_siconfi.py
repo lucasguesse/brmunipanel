@@ -73,8 +73,8 @@ def test_download_different_name(tmp_path):
     with pytest.raises(FileNotFoundError):
         siconfi.download(tmp_path)
     manifest = core.read_manifest(tmp_path)
-    assert "contas_anuais_2015" in manifest
-    assert manifest["contas_anuais_2015"]["file"] == "any.zip"
+    assert "annual_accounts_2015" in manifest
+    assert manifest["annual_accounts_2015"]["file"] == "any.zip"
 
 def test_download_two_files(tmp_path):
     with zipfile.ZipFile(tmp_path / "a.zip", "w") as zf:
@@ -251,14 +251,14 @@ def test_harmonize_real_samples(tmp_path):
         zip_path = tmp_path / f"a_{year}.zip"
         with zipfile.ZipFile(zip_path, "w") as zf:
             zf.write(p, "f.csv")
-        manifest[f"contas_anuais_{year}"] = {"file": zip_path.name}
+        manifest[f"annual_accounts_{year}"] = {"file": zip_path.name}
     
     for year in siconfi.YEARS:
-        if f"contas_anuais_{year}" not in manifest:
+        if f"annual_accounts_{year}" not in manifest:
             zip_path = tmp_path / f"a_{year}.zip"
             with zipfile.ZipFile(zip_path, "w") as zf:
                 zf.writestr("f.csv", f"Exercício: {year}\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
-            manifest[f"contas_anuais_{year}"] = {"file": zip_path.name}
+            manifest[f"annual_accounts_{year}"] = {"file": zip_path.name}
             
     core._write_manifest(tmp_path, manifest)
     
@@ -269,7 +269,7 @@ def test_harmonize_real_samples(tmp_path):
     assert sp_2013.height == 1
     sum_sp = sum(sp_2013[0, col] for _, _, col in expenditure_by_function.FUNCTIONS)
     
-    df_raw_2013 = siconfi.read_file(tmp_path, manifest["contas_anuais_2013"]["file"])
+    df_raw_2013 = siconfi.read_file(tmp_path, manifest["annual_accounts_2013"]["file"])
     items_2013 = df_raw_2013.filter(pl.col("municipality_code") == "3550308").to_dicts()
     ret_2013, _ = siconfi.process_statement(items_2013)
     assert abs(sum_sp - ret_2013["exp_total_functions"]) < 0.01
@@ -278,7 +278,7 @@ def test_harmonize_real_samples(tmp_path):
     assert sp_2022.height == 1
     sum_sp2 = sum(sp_2022[0, col] for _, _, col in expenditure_by_function.FUNCTIONS)
     
-    df_raw_2022 = siconfi.read_file(tmp_path, manifest["contas_anuais_2022"]["file"])
+    df_raw_2022 = siconfi.read_file(tmp_path, manifest["annual_accounts_2022"]["file"])
     items_2022 = df_raw_2022.filter(pl.col("municipality_code") == "3550308").to_dicts()
     ret_2022, _ = siconfi.process_statement(items_2022)
     assert abs(sum_sp2 - ret_2022["exp_total_functions"]) < 0.01
@@ -297,12 +297,12 @@ def test_harmonize_discard(tmp_path):
     manifest = {}
     for year in siconfi.YEARS:
         if year == 2013:
-            manifest[f"contas_anuais_{year}"] = {"file": "a_2013.zip"}
+            manifest[f"annual_accounts_{year}"] = {"file": "a_2013.zip"}
         else:
             zip_path = tmp_path / f"a_{year}.zip"
             with zipfile.ZipFile(zip_path, "w") as zf:
                 zf.writestr("f.csv", f"Exercício: {year}\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
-            manifest[f"contas_anuais_{year}"] = {"file": zip_path.name}
+            manifest[f"annual_accounts_{year}"] = {"file": zip_path.name}
     core._write_manifest(tmp_path, manifest)
     
     report = []
@@ -402,7 +402,7 @@ def test_harmonize_api_equals_portal(tmp_path):
         zip_path = folder_portal / f"a_{year}.zip"
         with zipfile.ZipFile(zip_path, "w") as zf:
             zf.write(p, "f.csv")
-        manifest_portal[f"contas_anuais_{year}"] = {"file": zip_path.name}
+        manifest_portal[f"annual_accounts_{year}"] = {"file": zip_path.name}
 
         df_year = siconfi.read_file(folder_portal, zip_path.name)
         rows_jsonl = []
@@ -430,11 +430,11 @@ def test_harmonize_api_equals_portal(tmp_path):
         manifest_api[f"dca_{year}"] = {"file": file_api_year}
 
     for year in siconfi.YEARS:
-        if f"contas_anuais_{year}" not in manifest_portal:
+        if f"annual_accounts_{year}" not in manifest_portal:
             zip_path = folder_portal / f"a_{year}.zip"
             with zipfile.ZipFile(zip_path, "w") as zf:
                 zf.writestr("f.csv", f"Exercício: {year}\nEscopo: Municípios\nTabela: Despesas por Função (Anexo I-E)\nInstituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Conta;Valor\n".encode("latin-1"))
-            manifest_portal[f"contas_anuais_{year}"] = {"file": zip_path.name}
+            manifest_portal[f"annual_accounts_{year}"] = {"file": zip_path.name}
 
         if f"dca_{year}" not in manifest_api:
             file_api_year = siconfi.api_file(year)
