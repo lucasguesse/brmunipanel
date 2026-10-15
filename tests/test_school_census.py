@@ -86,8 +86,8 @@ def test_school_census_aggregation_and_empty(raw_folder_2007, municipalities_moc
     # Group ('1100205', '4', '1') (privada, urbana) has 1 school with empty value
     row_p_u = df.filter(
         (pl.col("municipality_code") == "1100205") &
-        (pl.col("admin_dependency") == "privada") &
-        (pl.col("location") == "urbana")
+        (pl.col("admin_dependency") == "private") &
+        (pl.col("location") == "urban")
     )
     assert row_p_u["schools"][0] == 1
     assert row_p_u["enroll_basic_edu"][0] == 8
@@ -248,8 +248,8 @@ def test_school_census_2006_cases(raw_folder_2006, municipalities_mock, monkeypa
     fourteen = [
         "enroll_basic_edu", "classes_basic_edu", "teachers_early_childhood", "teachers_elementary_early_years",
         "teachers_elementary_final_years", "teachers_eja_elementary", "teachers_eja_secondary",
-        "teachers_special_ed_inclusive", "teachers_special_ed_exclusive", "classes_vocational",
-        "classes_vocational_technical", "classes_special_ed", "classes_special_ed_inclusive", "classes_special_ed_exclusive"
+        "teachers_inclusive_ed_common_classes", "teachers_inclusive_ed_exclusive_classes", "classes_vocational",
+        "classes_vocational_technical", "classes_inclusive_ed", "classes_inclusive_ed_common_classes", "classes_inclusive_ed_exclusive_classes"
     ]
     for c in fourteen:
         assert df.select(pl.col(c).is_null().all())[c][0] is True
@@ -274,7 +274,7 @@ def test_school_census_2006_cases(raw_folder_2006, municipalities_mock, monkeypa
     assert row_muni_rural["enroll_elementary_early_years"] == 28 # Has DE9F11C to DE9F11G = 28 in school 54264611
     
     # Inactive school does not count in group privada and urbana of 1100205
-    row_priv_urb = df.filter((pl.col("admin_dependency") == "privada") & (pl.col("municipality_code") == "1100205") & (pl.col("location") == "urbana")).to_dicts()[0]
+    row_priv_urb = df.filter((pl.col("admin_dependency") == "private") & (pl.col("municipality_code") == "1100205") & (pl.col("location") == "urban")).to_dicts()[0]
     assert row_priv_urb["schools"] == 2 # 54261222 and 54262913 (54261227 inactive does not count)
     assert row_priv_urb["enroll_daycare"] == 18 # Has DPE119 = 18 in 54262913
     
@@ -283,28 +283,28 @@ def test_school_census_2006_cases(raw_folder_2006, municipalities_mock, monkeypa
     assert row["enroll_eja"] == 0
     
     # Case 5: Normal school course is not added to upper secondary
-    # ('1100205', 'estadual', 'urbana') has the school with normal school course (DCN)
-    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "estadual") & (pl.col("location") == "urbana")).to_dicts()[0]
+    # ('1100205', 'state', 'urban') has the school with normal school course (DCN)
+    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "state") & (pl.col("location") == "urban")).to_dicts()[0]
     assert row["enroll_secondary"] == 147
     
     # Case 6: EJA sums in-person and blended, and EJA classes count in-person
-    # ('1100338', 'estadual', 'urbana') has blended EJA (VES12A3)
-    row = df.filter((pl.col("municipality_code") == "1100338") & (pl.col("admin_dependency") == "estadual") & (pl.col("location") == "urbana")).to_dicts()[0]
+    # ('1100338', 'state', 'urban') has blended EJA (VES12A3)
+    row = df.filter((pl.col("municipality_code") == "1100338") & (pl.col("admin_dependency") == "state") & (pl.col("location") == "urban")).to_dicts()[0]
     assert row["enroll_eja"] == 712
     assert row["classes_eja"] == 8
     
     # Case 7: Special education follows prefixes
     # inclusive: '1100205', privada, urbana
-    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "privada") & (pl.col("location") == "urbana")).to_dicts()[0]
-    assert row["enroll_special_ed_inclusive"] == 6
-    assert row["enroll_special_ed_exclusive"] == 0
+    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "private") & (pl.col("location") == "urban")).to_dicts()[0]
+    assert row["enroll_inclusive_ed_common_classes"] == 6
+    assert row["enroll_inclusive_ed_exclusive_classes"] == 0
     # exclusive: '1100205', estadual, urbana
-    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "estadual") & (pl.col("location") == "urbana")).to_dicts()[0]
-    assert row["enroll_special_ed_inclusive"] == 0
-    assert row["enroll_special_ed_exclusive"] == 190
+    row = df.filter((pl.col("municipality_code") == "1100205") & (pl.col("admin_dependency") == "state") & (pl.col("location") == "urban")).to_dicts()[0]
+    assert row["enroll_inclusive_ed_common_classes"] == 0
+    assert row["enroll_inclusive_ed_exclusive_classes"] == 190
     
     # Case 8: Vocational education comes from the courses file, and inactive course does not count
-    row = df.filter((pl.col("admin_dependency") == "privada") & (pl.col("location") == "urbana") & (pl.col("municipality_code") == "1100023")).to_dicts()[0]
+    row = df.filter((pl.col("admin_dependency") == "private") & (pl.col("location") == "urban") & (pl.col("municipality_code") == "1100023")).to_dicts()[0]
     assert row["enroll_vocational"] == 43
     
     # In case 8, the inactive course is set up in the test
@@ -317,7 +317,7 @@ def test_school_census_2006_cases(raw_folder_2006, municipalities_mock, monkeypa
         z.write(DATA / "school_census_2006_sample.csv", "CENSOESC_2006.CSV")
         z.writestr("EDUCPROF_2006.CSV", edu_csv)
     df_inactive = school_census.harmonize(tmp_path / "school-census_inactive", municipalities_mock)
-    row_inactive = df_inactive.filter((pl.col("admin_dependency") == "privada") & (pl.col("location") == "urbana") & (pl.col("municipality_code") == "1100023")).to_dicts()[0]
+    row_inactive = df_inactive.filter((pl.col("admin_dependency") == "private") & (pl.col("location") == "urban") & (pl.col("municipality_code") == "1100023")).to_dicts()[0]
     assert row_inactive["enroll_vocational"] == 0
 
 def test_school_census_2006_errors(raw_folder_2006, municipalities_mock, monkeypatch, tmp_path):

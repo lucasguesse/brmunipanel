@@ -89,7 +89,7 @@ def test_values(base_dir, sample_dir, monkeypatch):
     if len(on_campus) > 0:
         muni = on_campus["CO_MUNICIPIO"][0]
         cat_id = on_campus["TP_CATEGORIA_ADMINISTRATIVA"][0]
-        cat_map = {"1": "federal", "2": "estadual", "3": "municipal", "4": "privada", "5": "privada", "6": "privada", "8": "privada", "9": "privada", "7": "special_ed"}
+        cat_map = {"1": "federal", "2": "state", "3": "municipal", "4": "private", "5": "private", "6": "private", "8": "private", "9": "private", "7": "special"}
         cat = cat_map[cat_id]
         
         on_campus_group = on_campus.filter((pl.col("CO_MUNICIPIO") == muni) & (pl.col("TP_CATEGORIA_ADMINISTRATIVA") == cat_id))
@@ -126,7 +126,7 @@ def test_two_institutions_same_muni(base_dir, sample_dir, monkeypatch):
         mock_munis = pl.DataFrame({"municipality_code": list(munis)})
         df = higher_education_census.harmonize(base_dir, mock_munis)
         
-        cat_map = {"1": "federal", "2": "estadual", "3": "municipal", "4": "privada", "5": "privada", "6": "privada", "8": "privada", "9": "privada", "7": "special_ed"}
+        cat_map = {"1": "federal", "2": "state", "3": "municipal", "4": "private", "5": "private", "6": "private", "8": "private", "9": "private", "7": "special"}
         cat = cat_map[row1["TP_CATEGORIA_ADMINISTRATIVA"]]
         
         row_agg = df.filter((pl.col("municipality_code") == row1["CO_MUNICIPIO"]) & (pl.col("category") == cat))
@@ -213,7 +213,7 @@ def test_legacy_codes_2009(base_dir, sample_dir, monkeypatch):
     mock_munis = pl.DataFrame({"municipality_code": ["1100205"]})
     df = higher_education_census.harmonize(base_dir, mock_munis)
     
-    assert df["category"][0] == "privada"
+    assert df["category"][0] == "private"
     assert df["hq_teachers"][0] == 50
 
 def test_sorting_and_uniqueness(base_dir, sample_dir, monkeypatch):
@@ -410,7 +410,7 @@ def _get_year(year, tmp_path, sample_dir):
 
 def test_legacy_case_02_simple(tmp_path, sample_dir):
     df_year = _get_year(2000, tmp_path, sample_dir)
-    res = df_year.filter((pl.col("municipality_code") == "3205309") & (pl.col("category") == "privada")).row(0, named=True)
+    res = df_year.filter((pl.col("municipality_code") == "3205309") & (pl.col("category") == "private")).row(0, named=True)
     assert res["institutions"] == 2
     assert res["enrollments"] == 1127
     assert res["hq_institutions"] == 2
@@ -418,11 +418,11 @@ def test_legacy_case_02_simple(tmp_path, sample_dir):
 
 def test_legacy_case_03_sequential(tmp_path, sample_dir):
     df_2000 = _get_year(2000, tmp_path, sample_dir)
-    res = df_2000.filter((pl.col("municipality_code") == "4318309") & (pl.col("category") == "privada")).row(0, named=True)
+    res = df_2000.filter((pl.col("municipality_code") == "4318309") & (pl.col("category") == "private")).row(0, named=True)
     assert res["enrollments"] == 1262
     
     df_2007 = _get_year(2007, tmp_path, sample_dir)
-    res = df_2007.filter((pl.col("municipality_code") == "3550308") & (pl.col("category") == "privada")).row(0, named=True)
+    res = df_2007.filter((pl.col("municipality_code") == "3550308") & (pl.col("category") == "private")).row(0, named=True)
     assert res["institutions"] == 1
     assert res["enrollments"] == 154
     assert res["hq_institutions"] == 1
@@ -438,19 +438,19 @@ def test_legacy_case_04_empty_counts_as_zero(tmp_path, sample_dir):
 
 def test_legacy_case_05_teachers(tmp_path, sample_dir):
     df_2000 = _get_year(2000, tmp_path, sample_dir)
-    res = df_2000.filter((pl.col("municipality_code") == "3548708") & (pl.col("category") == "privada")).row(0, named=True)
+    res = df_2000.filter((pl.col("municipality_code") == "3548708") & (pl.col("category") == "private")).row(0, named=True)
     assert res["hq_teachers"] == 25
     
-    res2 = df_2000.filter((pl.col("municipality_code") == "4301602") & (pl.col("category") == "privada")).row(0, named=True)
+    res2 = df_2000.filter((pl.col("municipality_code") == "4301602") & (pl.col("category") == "private")).row(0, named=True)
     assert res2["hq_teachers"] == 875
     
     df_2007 = _get_year(2007, tmp_path, sample_dir)
-    res3 = df_2007.filter((pl.col("municipality_code") == "4204202") & (pl.col("category") == "privada")).row(0, named=True)
+    res3 = df_2007.filter((pl.col("municipality_code") == "4204202") & (pl.col("category") == "private")).row(0, named=True)
     assert res3["hq_teachers"] == 452
 
 def test_legacy_case_06_leading_zeros(tmp_path, sample_dir):
     df_2007 = _get_year(2007, tmp_path, sample_dir)
-    res = df_2007.filter((pl.col("municipality_code") == "5107040") & (pl.col("category") == "privada")).row(0, named=True)
+    res = df_2007.filter((pl.col("municipality_code") == "5107040") & (pl.col("category") == "private")).row(0, named=True)
     assert res["institutions"] == 1
     assert res["enrollments"] == 382
     assert res["hq_institutions"] == 1

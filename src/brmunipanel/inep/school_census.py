@@ -38,9 +38,9 @@ STAGES = [
     ("EJA", "eja"),
     ("EJA_FUND", "eja_elementary"),
     ("EJA_MED", "eja_secondary"),
-    ("ESP", "special_ed"),
-    ("ESP_CC", "special_ed_inclusive"),
-    ("ESP_CE", "special_ed_exclusive"),
+    ("ESP", "inclusive_ed"),
+    ("ESP_CC", "inclusive_ed_common_classes"),
+    ("ESP_CE", "inclusive_ed_exclusive_classes"),
 ]
 
 COUNT_COLUMNS = []
@@ -123,9 +123,9 @@ def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame
             enrollments['eja_secondary'] = eja_secondary
             enrollments['eja'] = enrollments['eja_elementary'] + enrollments['eja_secondary']
             
-            enrollments['special_ed_exclusive'] = [c for c in columns_all if any(c.startswith(p) for p in ['VEE10', 'VEE11', 'VEE16', 'VEE17'])]
-            enrollments['special_ed_inclusive'] = [c for c in columns_all if any(c.startswith(p) for p in ['VEE12', 'VEE13', 'VEE18', 'VEE19'])]
-            enrollments['special_ed'] = enrollments['special_ed_exclusive'] + enrollments['special_ed_inclusive']
+            enrollments['inclusive_ed_exclusive_classes'] = [c for c in columns_all if any(c.startswith(p) for p in ['VEE10', 'VEE11', 'VEE16', 'VEE17'])]
+            enrollments['inclusive_ed_common_classes'] = [c for c in columns_all if any(c.startswith(p) for p in ['VEE12', 'VEE13', 'VEE18', 'VEE19'])]
+            enrollments['inclusive_ed'] = enrollments['inclusive_ed_exclusive_classes'] + enrollments['inclusive_ed_common_classes']
             
             classes = {}
             classes['daycare'] = _get_dn(['DPE113'])
@@ -145,7 +145,7 @@ def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame
             teachers['preschool'] = ['VDG1C1']
             teachers['elementary'] = ['VDG1C3']
             teachers['secondary'] = ['VDG1C4']
-            teachers['special_ed'] = ['VDG1C5']
+            teachers['inclusive_ed'] = ['VDG1C5']
             teachers['eja'] = ['VDG1C6']
             teachers['vocational_technical'] = ['VDG1C9']
             teachers['vocational'] = ['VDG1C9']
@@ -171,8 +171,8 @@ def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame
             lf = lf.select([pl.col(c).str.strip_chars() for c in columns_to_read])
             lf = lf.filter(pl.col("CODFUNC") == "Ativo")
             
-            dep_map = {"Federal": "federal", "Estadual": "estadual", "Municipal": "municipal", "Particular": "privada"}
-            loc_map = {"Urbana": "urbana", "Rural": "rural"}
+            dep_map = {"Federal": "federal", "Estadual": "state", "Municipal": "municipal", "Particular": "private"}
+            loc_map = {"Urbana": "urban", "Rural": "rural"}
             
             lf = lf.with_columns(
                 (pl.col("CODMUNIC").str.slice(0, 2) + pl.col("CODMUNIC").str.slice(-5)).alias("municipality_code")
@@ -254,13 +254,13 @@ def read_year_2006(folder: Path, valid_municipalities: set[str]) -> pl.DataFrame
                 pl.lit(None).cast(pl.Int64).alias("teachers_elementary_final_years"),
                 pl.lit(None).cast(pl.Int64).alias("teachers_eja_elementary"),
                 pl.lit(None).cast(pl.Int64).alias("teachers_eja_secondary"),
-                pl.lit(None).cast(pl.Int64).alias("teachers_special_ed_inclusive"),
-                pl.lit(None).cast(pl.Int64).alias("teachers_special_ed_exclusive"),
+                pl.lit(None).cast(pl.Int64).alias("teachers_inclusive_ed_common_classes"),
+                pl.lit(None).cast(pl.Int64).alias("teachers_inclusive_ed_exclusive_classes"),
                 pl.lit(None).cast(pl.Int64).alias("classes_vocational"),
                 pl.lit(None).cast(pl.Int64).alias("classes_vocational_technical"),
-                pl.lit(None).cast(pl.Int64).alias("classes_special_ed"),
-                pl.lit(None).cast(pl.Int64).alias("classes_special_ed_inclusive"),
-                pl.lit(None).cast(pl.Int64).alias("classes_special_ed_exclusive")
+                pl.lit(None).cast(pl.Int64).alias("classes_inclusive_ed"),
+                pl.lit(None).cast(pl.Int64).alias("classes_inclusive_ed_common_classes"),
+                pl.lit(None).cast(pl.Int64).alias("classes_inclusive_ed_exclusive_classes")
             )
             
             # Rename derived columns
@@ -358,8 +358,8 @@ def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -
             
             df = df.filter(pl.col("TP_SITUACAO_FUNCIONAMENTO") == "1")
             
-            dep_map = {"1": "federal", "2": "estadual", "3": "municipal", "4": "privada"}
-            loc_map = {"1": "urbana", "2": "rural"}
+            dep_map = {"1": "federal", "2": "state", "3": "municipal", "4": "private"}
+            loc_map = {"1": "urban", "2": "rural"}
             
             invalid_admin = df.filter(~pl.col("TP_DEPENDENCIA").is_in(dep_map.keys()) | pl.col("TP_DEPENDENCIA").is_null())
             if len(invalid_admin) > 0:

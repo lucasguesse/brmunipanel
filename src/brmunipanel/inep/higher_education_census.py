@@ -8,7 +8,7 @@ Key: municipality, year, administrative category
 Caveats:
 - Only in-person education enters the columns. Distance-learning courses are not counted.
 - Teachers are those of the entire institution, in the seat municipality, and include those working in distance-learning courses of an institution that also offers in-person courses.
-- The 'special_ed' category was created by INEP in 2012.
+- The 'special' category was created by INEP in 2012.
 - The absence of a row in a covered year means that there is no institution with an in-person course or seat in the municipality for that category.
 - From 2000 to 2008: the layout is different; enrollment is that of the first semester; teachers from 2000 to 2003 are the total minus those on leave, and those from 2004 to 2008 come from the practicing teachers variable; the old layout records offerings in more small municipalities than the new one (1,365 municipalities with courses in 2008 and 1,159 in 2009); teachers increase from 321 thousand in 2008 to 341 thousand in 2009, when INEP began collecting the census per teacher; and the sum of undergraduate enrollments is about 0.05% below the published total.
 """
@@ -147,9 +147,9 @@ def read_legacy_year(folder: Path, year: int, valid_municipalities: set[str]) ->
             
         cat_map = {
             "FEDERAL": "federal", 
-            "ESTADUAL": "estadual", 
+            "ESTADUAL": "state", 
             "MUNICIPAL": "municipal", 
-            "PRIVADA": "privada"
+            "PRIVADA": "private"
         }
         
         invalid_cat = df_hei.filter(~pl.col("CATEGADM").is_in(cat_map.keys()) | pl.col("CATEGADM").is_null())
@@ -274,14 +274,14 @@ def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -
             # Category mapping
             cat_map = {
                 "1": "federal", 
-                "2": "estadual", 
+                "2": "state", 
                 "3": "municipal", 
-                "4": "privada", 
-                "5": "privada", 
-                "6": "privada", 
-                "8": "privada", 
-                "9": "privada", 
-                "7": "special_ed"
+                "4": "private", 
+                "5": "private", 
+                "6": "private", 
+                "8": "private", 
+                "9": "private", 
+                "7": "special"
             }
             
             for name, df, muni_col in [("courses", df_courses, "CO_MUNICIPIO"), ("IES", df_hei, "CO_MUNICIPIO_IES")]:

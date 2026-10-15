@@ -501,7 +501,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "enroll_special_ed": {
+      "enroll_inclusive_ed": {
         "description_pt": "Matriculas - Especial",
         "description_en": "Enrollments - Especial",
         "unit": "Matrículas",
@@ -509,7 +509,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "enroll_special_ed_inclusive": {
+      "enroll_inclusive_ed_common_classes": {
         "description_pt": "Matriculas - Especial inclusiva",
         "description_en": "Enrollments - Especial inclusiva",
         "unit": "Matrículas",
@@ -517,7 +517,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "enroll_special_ed_exclusive": {
+      "enroll_inclusive_ed_exclusive_classes": {
         "description_pt": "Matriculas - Especial exclusiva",
         "description_en": "Enrollments - Especial exclusiva",
         "unit": "Matrículas",
@@ -629,7 +629,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "teachers_special_ed": {
+      "teachers_inclusive_ed": {
         "description_pt": "Docentes - Especial",
         "description_en": "Faculty - Especial",
         "unit": "Pessoas",
@@ -637,7 +637,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "teachers_special_ed_inclusive": {
+      "teachers_inclusive_ed_common_classes": {
         "description_pt": "Docentes - Especial inclusiva",
         "description_en": "Faculty - Especial inclusiva",
         "unit": "Pessoas",
@@ -645,7 +645,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "teachers_special_ed_exclusive": {
+      "teachers_inclusive_ed_exclusive_classes": {
         "description_pt": "Docentes - Especial exclusiva",
         "description_en": "Faculty - Especial exclusiva",
         "unit": "Pessoas",
@@ -757,7 +757,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "classes_special_ed": {
+      "classes_inclusive_ed": {
         "description_pt": "Turmas - Especial",
         "description_en": "Classes - Especial",
         "unit": "Turmas",
@@ -765,7 +765,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "classes_special_ed_inclusive": {
+      "classes_inclusive_ed_common_classes": {
         "description_pt": "Turmas - Especial inclusiva",
         "description_en": "Classes - Especial inclusiva",
         "unit": "Turmas",
@@ -773,7 +773,7 @@
         "period": "2006-2023",
         "methodological_note": ""
       },
-      "classes_special_ed_exclusive": {
+      "classes_inclusive_ed_exclusive_classes": {
         "description_pt": "Turmas - Especial exclusiva",
         "description_en": "Classes - Especial exclusiva",
         "unit": "Turmas",
