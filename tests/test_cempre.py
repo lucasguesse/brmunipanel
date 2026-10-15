@@ -11,55 +11,55 @@ import pytest
 
 from brmunipanel.ibge import cempre, sidra
 
-PASTA_DADOS = Path(__file__).resolve().parent / "dados"
+FOLDER_DATA = Path(__file__).resolve().parent / "data"
 
 
 @pytest.fixture
-def pasta_sidra_cempre(tmp_path: Path) -> Path:
-    caminho_amostra = PASTA_DADOS / "sidra_cempre_amostra.json"
-    amostras = json.loads(caminho_amostra.read_text(encoding="utf-8"))
-    for chave, blocos in amostras.items():
-        tabela, ano = chave.split("_")
-        pasta_tab = tmp_path / f"t{tabela}"
-        pasta_tab.mkdir(parents=True, exist_ok=True)
-        conteudo = json.dumps(blocos).encode("utf-8")
-        (pasta_tab / f"t{tabela}_{ano}.json.gz").write_bytes(gzip.compress(conteudo, mtime=0))
+def folder_sidra_cempre(tmp_path: Path) -> Path:
+    path_sample = FOLDER_DATA / "sidra_cempre_sample.json"
+    samples = json.loads(path_sample.read_text(encoding="utf-8"))
+    for key, blocks in samples.items():
+        table, year = key.split("_")
+        folder_tab = tmp_path / f"t{table}"
+        folder_tab.mkdir(parents=True, exist_ok=True)
+        content = json.dumps(blocks).encode("utf-8")
+        (folder_tab / f"t{table}_{year}.json.gz").write_bytes(gzip.compress(content, mtime=0))
     return tmp_path
 
 
-def test_harmonizar_cempre_esquema(pasta_sidra_cempre: Path) -> None:
-    painel = cempre.harmonizar(pasta_sidra_cempre)
+def test_harmonize_cempre_schema(folder_sidra_cempre: Path) -> None:
+    panel = cempre.harmonize(folder_sidra_cempre)
 
-    # 1. Expected schema: cod_municipio, ano, and the 5 harmonized columns
-    esquema_esperado = {
-        "cod_municipio": pl.String,
-        "ano": pl.Int16,
-        "unidades_locais": pl.Int64,
-        "pessoal_ocupado_total": pl.Int64,
-        "pessoal_ocupado_assalariado": pl.Int64,
-        "pessoal_assalariado_medio": pl.Float64,
-        "salarios_mil_reais": pl.Float64,
+    # 1. Expected schema: municipality_code, year, and the 5 harmonized columns
+    expected_schema = {
+        "municipality_code": pl.String,
+        "year": pl.Int16,
+        "establishments_number": pl.Int64,
+        "employed_total": pl.Int64,
+        "employed_salaried": pl.Int64,
+        "salaried_employees_avg": pl.Float64,
+        "wages_thousand_brl": pl.Float64,
     }
-    assert painel.schema == esquema_esperado
+    assert panel.schema == expected_schema
 
     # 2. Window strictly 2006–2023
-    assert painel["ano"].min() == 2006
-    assert painel["ano"].max() == 2023
+    assert panel["year"].min() == 2006
+    assert panel["year"].max() == 2023
 
     # 3. There are rows for years from both source tables (e.g. 2021 and 2022)
-    assert 2021 in painel["ano"].unique().to_list()
-    assert 2022 in painel["ano"].unique().to_list()
+    assert 2021 in panel["year"].unique().to_list()
+    assert 2022 in panel["year"].unique().to_list()
 
     # 4. Unique key and sorting
-    dups = painel.group_by(["cod_municipio", "ano"]).agg(pl.len().alias("n")).filter(pl.col("n") > 1)
+    dups = panel.group_by(["municipality_code", "year"]).agg(pl.len().alias("n")).filter(pl.col("n") > 1)
     assert dups.height == 0
-    assert painel.equals(painel.sort(["cod_municipio", "ano"]))
+    assert panel.equals(panel.sort(["municipality_code", "year"]))
 
 
-def test_requisicao_baixar_cempre() -> None:
-    req_2021 = sidra.requisicao_ano(1685, 2021, cempre.VARIAVEIS_DOWNLOAD)
+def test_cempre_download_request() -> None:
+    req_2021 = sidra.year_request(1685, 2021, cempre.DOWNLOAD_VARIABLES)
     assert req_2021.url.endswith("1685/periodos/2021/variaveis/706|367|707|708|5944|662|1606|10143?localidades=N6[all]")
     
-    req_2022 = sidra.requisicao_ano(9509, 2022, cempre.VARIAVEIS_DOWNLOAD)
+    req_2022 = sidra.year_request(9509, 2022, cempre.DOWNLOAD_VARIABLES)
     assert req_2022.url.endswith("9509/periodos/2022/variaveis/706|367|707|708|5944|662|1606|10143?localidades=N6[all]")
 

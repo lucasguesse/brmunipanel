@@ -66,8 +66,8 @@ Documentation = "https://github.com/lucasguesse/brmunipanel#readme"
 where = ["src"]
 
 [tool.setuptools.package-data]
-brmunipanel = ["metadata/variaveis.json"]
-"brmunipanel.inep" = ["certificados/*.pem"]
+brmunipanel = ["metadata/variables.json"]
+"brmunipanel.inep" = ["certificates/*.pem"]
 
 [tool.ruff]
 target-version = "py310"

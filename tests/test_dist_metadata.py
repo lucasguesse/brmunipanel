@@ -56,19 +56,19 @@ def test_pyproject_project_metadata():
     assert "plots" in opts
 
     dev_deps = opts.get("dev", [])
-    assert any(dep.startswith("build") for dep in dev_deps)
-    assert any(dep.startswith("pytest") for dep in dev_deps)
-    assert any(dep.startswith("twine") for dep in dev_deps)
-    assert any(dep.startswith("tomli") for dep in dev_deps)
+    assert any(admin.startswith("build") for admin in dev_deps)
+    assert any(admin.startswith("pytest") for admin in dev_deps)
+    assert any(admin.startswith("twine") for admin in dev_deps)
+    assert any(admin.startswith("tomli") for admin in dev_deps)
 
     package_data = data.get("tool", {}).get("setuptools", {}).get("package-data", {})
-    assert "metadata/variaveis.json" in package_data.get("brmunipanel", [])
+    assert "metadata/variables.json" in package_data.get("brmunipanel", [])
 
 
-def test_variaveis_json_data_asset():
+def test_variables_json_data_asset():
     root = Path(__file__).resolve().parent.parent
-    var_json = root / "src" / "brmunipanel" / "metadata" / "variaveis.json"
-    assert var_json.exists(), "metadata/variaveis.json deve existir no pacote fonte"
+    var_json = root / "src" / "brmunipanel" / "metadata" / "variables.json"
+    assert var_json.exists(), "metadata/variables.json must exist in the source package"
 
     with open(var_json, "r", encoding="utf-8") as f:
         meta_dict = json.load(f)
@@ -76,7 +76,7 @@ def test_variaveis_json_data_asset():
     assert len(meta_dict) > 0
 
     # Resource loading through importlib.resources
-    resource = importlib.resources.files("brmunipanel.metadata") / "variaveis.json"
+    resource = importlib.resources.files("brmunipanel.metadata") / "variables.json"
     assert resource.is_file()
     loaded = json.loads(resource.read_text(encoding="utf-8"))
     assert isinstance(loaded, dict)
@@ -96,18 +96,18 @@ def test_manifest_in_declarations():
     assert "recursive-include src/brmunipanel/metadata *.json" in content
 
 
-def test_certificado_inep_data_asset():
+def test_certificate_inep_data_asset():
     root = Path(__file__).resolve().parent.parent
-    cert_path = root / "src" / "brmunipanel" / "inep" / "certificados" / "rnp_icpedu_gr46_ov_tls_ca_2025.pem"
-    assert cert_path.exists(), "Certificado deve existir em src/brmunipanel/inep/certificados/"
+    cert_path = root / "src" / "brmunipanel" / "inep" / "certificates" / "rnp_icpedu_gr46_ov_tls_ca_2025.pem"
+    assert cert_path.exists(), "Certificate must exist in src/brmunipanel/inep/certificates/"
 
     pyproject_path = root / "pyproject.toml"
     with open(pyproject_path, "rb") as f:
         data = tomllib.load(f)
     package_data = data.get("tool", {}).get("setuptools", {}).get("package-data", {})
-    assert "certificados/*.pem" in package_data.get("brmunipanel.inep", [])
+    assert "certificates/*.pem" in package_data.get("brmunipanel.inep", [])
 
     manifest_path = root / "MANIFEST.in"
     manifest_content = manifest_path.read_text(encoding="utf-8")
-    assert "recursive-include src/brmunipanel/inep/certificados *.pem" in manifest_content
+    assert "recursive-include src/brmunipanel/inep/certificates *.pem" in manifest_content
 

@@ -4,20 +4,20 @@ The output contains only the 28 functions of the functional classification.
 Declared total and intra-budgetary expenditure are used only in internal checks.
 
 Downloads the seven FINBRA (Finanças do Brasil) databases, one `.zip` per year with an Access database (`.mdb`),
-from `thot-arquivos.tesouro.gov.br`, and reads table `DSubFuncao`, which has one row per municipality and one column
+from `thot-files.tesouro.gov.br`, and reads table `DSubFuncao`, which has one row per municipality and one column
 for each of the 28 functions of the functional classification. Values are committed expenditure, in current reais.
 
 The Access currency field is an integer representing the value multiplied by 10,000. With the column's `Format`
 property, `access-parser` returns this field as formatted text and errs on values below 10 cents
-(reads 0.08 as 0.80). Therefore `ler_dsubfuncao` empties `extra_props` on the parser instance, receives the integer,
-and `converter_moeda` performs the division by 10,000. The `access-parser` version is pinned because of this.
+(reads 0.08 as 0.80). Therefore `read_dsubfuncao` empties `extra_props` on the parser instance, receives the integer,
+and `convert_currency` performs the division by 10,000. The `access-parser` version is pinned because of this.
 
 From 2006 to 2009 the source does not separate intra-budgetary expenditures (payments between agencies of the same municipality):
-they are inside the functions, and `desp_intraorcamentaria` and `declara_intraorcamentaria` remain null. From 2010
-onward they leave the functions and go to a dedicated source column: `desp_intraorcamentaria` brings that
+they are inside the functions, and `exp_intra_budgetary` and `declara_intraorcamentaria` remain null. From 2010
+onward they leave the functions and go to a dedicated source column: `exp_intra_budgetary` brings that
 total, and `declara_intraorcamentaria` is true when it is greater than zero.
 
-Nothing is imputed or corrected. `desp_total_funcoes` is the total declared in the source (`Despesas por Função`), without
+Nothing is imputed or corrected. `exp_total_functions` is the total declared in the source (`Despesas por Função`), without
 recalculation: in 8 municipalities of 2010 it differs from the sum of the 28 functions. In 4 rows of 2011 and 2012, the total and
 all functions are zero, and the entire expenditure is in the intra-budgetary column.
 """
@@ -31,37 +31,37 @@ from pathlib import Path
 import polars as pl
 from access_parser import AccessParser
 
-from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote, ler_bruto
-from brmunipanel.tesouro.despesa_funcao import COLUNAS_PUBLICADAS, ESQUEMA, FUNCOES
+from brmunipanel.core import Request, InvalidResponse, download_batch, read_raw
+from brmunipanel.tesouro.expenditure_by_function import PUBLISHED_COLUMNS, SCHEMA, FUNCTIONS
 
 
-def converter_moeda(valor) -> float | None:
-    if valor is None:
+def convert_currency(value) -> float | None:
+    if value is None:
         return None
-    if isinstance(valor, bool):
-        raise TypeError(f"Tipo inválido para moeda: {type(valor).__name__} (valor: {valor})")
-    if isinstance(valor, int):
-        return valor / 10000.0
-    raise TypeError(f"Tipo inválido para moeda: {type(valor).__name__} (valor: {valor})")
+    if isinstance(value, bool):
+        raise TypeError(f"Invalid type for currency: {type(value).__name__} (value: {value})")
+    if isinstance(value, int):
+        return value / 10000.0
+    raise TypeError(f"Invalid type for currency: {type(value).__name__} (value: {value})")
 
 
-def codigo_6(uf, cod_mun) -> str | None:
-    if uf is None or cod_mun is None:
+def code_6(state, muni_code) -> str | None:
+    if state is None or muni_code is None:
         return None
-    return f"{int(float(str(uf).strip())):02d}{int(float(str(cod_mun).strip())):04d}"
+    return f"{int(float(str(state).strip())):02d}{int(float(str(muni_code).strip())):04d}"
 
 
-def validar_zip(conteudo: bytes) -> None:
+def validate_zip(content: bytes) -> None:
     try:
-        with zipfile.ZipFile(io.BytesIO(conteudo)) as zf:
+        with zipfile.ZipFile(io.BytesIO(content)) as zf:
             mdb_members = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
             if len(mdb_members) != 1:
-                raise RespostaInvalida(f"ZIP deve conter exatamente 1 arquivo .mdb, encontrados: {len(mdb_members)}")
+                raise InvalidResponse(f"ZIP must contain exactly 1 .mdb file, found: {len(mdb_members)}")
     except zipfile.BadZipFile:
-        raise RespostaInvalida("Conteúdo não é um ZIP válido")
+        raise InvalidResponse("The content is not a valid ZIP file")
 
 
-def baixar(pasta: Path, **opcoes) -> list[dict]:
+def download(folder: Path, **options) -> list[dict]:
     urls = {
         2006: "https://thot-arquivos.tesouro.gov.br/publicacao/26268",
         2007: "https://thot-arquivos.tesouro.gov.br/publicacao/26267",
@@ -71,138 +71,138 @@ def baixar(pasta: Path, **opcoes) -> list[dict]:
         2011: "https://thot-arquivos.tesouro.gov.br/publicacao/26256",
         2012: "https://thot-arquivos.tesouro.gov.br/publicacao/26244",
     }
-    requisicoes = [
-        Requisicao(
-            chave=f"finbra_{ano}",
+    reqs = [
+        Request(
+            key=f"finbra_{year}",
             url=url,
-            arquivo=f"finbra_{ano}.zip",
-            metodo="GET",
-            cabecalhos={"User-Agent": "Mozilla/5.0"},
-            compactar=False
-        ) for ano, url in urls.items()
+            file=f"finbra_{year}.zip",
+            method="GET",
+            headers={"User-Agent": "Mozilla/5.0"},
+            compress=False
+        ) for year, url in urls.items()
     ]
-    return baixar_lote(requisicoes, pasta, validar=validar_zip, intervalo=2.0, **opcoes)
+    return download_batch(reqs, folder, validate=validate_zip, interval=2.0, **options)
 
 
-def ler_dsubfuncao(pasta: Path, ano: int) -> dict[str, list]:
-    conteudo = ler_bruto(pasta, f"finbra_{ano}.zip")
-    with zipfile.ZipFile(io.BytesIO(conteudo)) as zf, tempfile.TemporaryDirectory() as tmp:
-        (membro,) = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
-        caminho = Path(zf.extract(membro, tmp))
-        banco = AccessParser(str(caminho))
-        banco.extra_props = {}  # without the Format property, the currency field arrives as an integer (value × 10,000)
-        tabela = banco.parse_table("DSubFuncao")
+def read_dsubfuncao(folder: Path, year: int) -> dict[str, list]:
+    content = read_raw(folder, f"finbra_{year}.zip")
+    with zipfile.ZipFile(io.BytesIO(content)) as zf, tempfile.TemporaryDirectory() as tmp:
+        (member,) = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
+        path = Path(zf.extract(member, tmp))
+        database = AccessParser(str(path))
+        database.extra_props = {}  # without the Format property, the currency field arrives as an integer (value × 10,000)
+        table = database.parse_table("DSubFuncao")
         
-    if not tabela:
-        raise ValueError(f"Tabela DSubFuncao vazia ou não encontrada no ano {ano}")
+    if not table:
+        raise ValueError(f"DSubFuncao table empty or not found in year {year}")
         
-    return {str(nome).strip(): list(valores) for nome, valores in tabela.items()}
+    return {str(name).strip(): list(values) for name, values in table.items()}
 
 
-def processar_tabela(tabela: dict[str, list], ano: int, municipios: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
-    colunas = [nome.strip() for nome in tabela.keys()]
+def process_table(table: dict[str, list], year: int, municipalities: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
+    columns = [name.strip() for name in table.keys()]
     
     # Check that columns exist
-    faltantes = [f for _, f, _ in FUNCOES if f not in colunas]
-    if "UF" not in colunas:
-        faltantes.append("UF")
-    if "Cod Mun" not in colunas:
-        faltantes.append("Cod Mun")
-    if "Despesas por Função" not in colunas:
-        faltantes.append("Despesas por Função")
+    missing = [f for _, f, _ in FUNCTIONS if f not in columns]
+    if "UF" not in columns:
+        missing.append("UF")
+    if "Cod Mun" not in columns:
+        missing.append("Cod Mun")
+    if "Despesas por Função" not in columns:
+        missing.append("Despesas por Função")
         
-    if faltantes:
-        raise ValueError(f"Colunas faltando na tabela: {faltantes}")
+    if missing:
+        raise ValueError(f"Missing columns in the table: {missing}")
         
     # Intra-budgetary column
-    col_intra = [c for c in colunas if "intra" in c.lower()]
+    col_intra = [c for c in columns if "intra" in c.lower()]
     if len(col_intra) > 1:
-        raise ValueError(f"Múltiplas colunas intraorçamentárias encontradas: {col_intra}")
-    nome_intra = col_intra[0] if col_intra else None
+        raise ValueError(f"Multiple intra-budgetary columns found: {col_intra}")
+    name_intra = col_intra[0] if col_intra else None
     
     # Check that columns have the same size
-    colunas_usadas = ["UF", "Cod Mun", "Despesas por Função"] + [f for _, f, _ in FUNCOES]
-    if nome_intra:
-        colunas_usadas.append(nome_intra)
+    used_columns = ["UF", "Cod Mun", "Despesas por Função"] + [f for _, f, _ in FUNCTIONS]
+    if name_intra:
+        used_columns.append(name_intra)
         
-    tamanhos = {c: len(tabela[c]) for c in colunas_usadas}
-    if len(set(tamanhos.values())) > 1:
-        raise ValueError(f"Tamanhos de colunas inconsistentes: {tamanhos}")
+    sizes = {c: len(table[c]) for c in used_columns}
+    if len(set(sizes.values())) > 1:
+        raise ValueError(f"Inconsistent column sizes: {sizes}")
         
-    n_linhas = next(iter(tamanhos.values()))
+    n_rows = next(iter(sizes.values()))
     
-    descartes = []
-    linhas_validas = []
+    discarded = []
+    valid_rows = []
     
-    municipios_dict = dict(zip(municipios["cod_municipio_6"].to_list(), municipios["cod_municipio"].to_list()))
-    chaves_vistas = []
+    municipalities_dict = dict(zip(municipalities["municipality_code_6"].to_list(), municipalities["municipality_code"].to_list()))
+    seen_keys = []
     
-    for i in range(n_linhas):
-        uf = tabela["UF"][i]
-        cod = tabela["Cod Mun"][i]
+    for i in range(n_rows):
+        state = table["UF"][i]
+        code = table["Cod Mun"][i]
         
         # Assemble key
-        chave = codigo_6(uf, cod)
-        if chave is None:
-            descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "chave nula"})
+        key = code_6(state, code)
+        if key is None:
+            discarded.append({"year": year, "state": state, "muni_code": code, "reason": "null key"})
             continue
             
-        chaves_vistas.append(chave)
+        seen_keys.append(key)
         
         # Convert to 7 digits
-        if chave not in municipios_dict:
-            descartes.append({"ano": ano, "uf": uf, "cod_mun": cod, "motivo": "fora da DTB"})
+        if key not in municipalities_dict:
+            discarded.append({"year": year, "state": state, "muni_code": code, "reason": "outside DTB"})
             continue
             
-        cod_7 = municipios_dict[chave]
+        code_7 = municipalities_dict[key]
         
-        linha = {
-            "cod_municipio": cod_7,
-            "ano": ano,
-            "fonte": "finbra",
+        row = {
+            "municipality_code": code_7,
+            "year": year,
+            "source": "finbra",
         }
         
         # Convert monetary columns
-        for _, f, c_out in FUNCOES:
-            linha[c_out] = converter_moeda(tabela[f][i])
+        for _, f, c_out in FUNCTIONS:
+            row[c_out] = convert_currency(table[f][i])
             
-        linha["desp_total_funcoes"] = converter_moeda(tabela["Despesas por Função"][i])
+        row["exp_total_functions"] = convert_currency(table["Despesas por Função"][i])
         
-        if nome_intra:
-            val_intra = converter_moeda(tabela[nome_intra][i])
-            linha["desp_intraorcamentaria"] = val_intra
-            linha["declara_intraorcamentaria"] = val_intra is not None and val_intra > 0
+        if name_intra:
+            val_intra = convert_currency(table[name_intra][i])
+            row["exp_intra_budgetary"] = val_intra
+            row["declara_intraorcamentaria"] = val_intra is not None and val_intra > 0
         else:
-            linha["desp_intraorcamentaria"] = None
-            linha["declara_intraorcamentaria"] = None
+            row["exp_intra_budgetary"] = None
+            row["declara_intraorcamentaria"] = None
             
-        linhas_validas.append(linha)
+        valid_rows.append(row)
         
     # Repeated key in year
-    contagem_chaves = Counter(chaves_vistas)
-    repetidas = [k for k, v in contagem_chaves.items() if v > 1]
-    if repetidas:
-        raise ValueError(f"Chaves repetidas: {repetidas}")
+    count_keys = Counter(seen_keys)
+    repeated = [k for k, v in count_keys.items() if v > 1]
+    if repeated:
+        raise ValueError(f"Repeated keys: {repeated}")
         
     # Assemble schema and sort
-    if not linhas_validas:
-        df = pl.DataFrame(schema=ESQUEMA)
+    if not valid_rows:
+        df = pl.DataFrame(schema=SCHEMA)
     else:
-        df = pl.DataFrame(linhas_validas, schema=ESQUEMA).sort("cod_municipio")
+        df = pl.DataFrame(valid_rows, schema=SCHEMA).sort("municipality_code")
         
-    return df, descartes
+    return df, discarded
 
 
-def harmonizar(pasta: Path, municipios: pl.DataFrame) -> pl.DataFrame:
+def harmonize(folder: Path, municipalities: pl.DataFrame) -> pl.DataFrame:
     dfs = []
-    for ano in range(2006, 2013):
-        tabela = ler_dsubfuncao(pasta, ano)
-        df_ano, descartes = processar_tabela(tabela, ano, municipios)
-        dfs.append(df_ano)
+    for year in range(2006, 2013):
+        table = read_dsubfuncao(folder, year)
+        df_year, discarded = process_table(table, year, municipalities)
+        dfs.append(df_year)
         
-        if descartes:
-            motivos = Counter(d["motivo"] for d in descartes)
-            print(f"{ano}: {sum(motivos.values())} descartes ({', '.join(f'{k}: {v}' for k, v in motivos.items())})")
+        if discarded:
+            reasons = Counter(d["reason"] for d in discarded)
+            print(f"{year}: {sum(reasons.values())} discarded ({', '.join(f'{k}: {v}' for k, v in reasons.items())})")
             
-    df_final = pl.concat(dfs).select(COLUNAS_PUBLICADAS).sort(["cod_municipio", "ano"])
+    df_final = pl.concat(dfs).select(PUBLISHED_COLUMNS).sort(["municipality_code", "year"])
     return df_final

@@ -6,161 +6,157 @@ import tempfile
 import zipfile
 from typing import Union
 
-from brmunipanel.inep.conexao import criar_sessao
-from brmunipanel.nucleo import Requisicao, RespostaInvalida, baixar_lote
+from brmunipanel.inep.connection import create_session
+from brmunipanel.core import Request, InvalidResponse, download_batch
 
-EDICAO = 2025
-ETAPAS = ["anos_iniciais", "anos_finais", "ensino_medio"]
-URL_BASE = "https://download.inep.gov.br/ideb/resultados"
+EDITION = 2025
+STAGES = {"anos_iniciais": "early_years", "anos_finais": "final_years", "ensino_medio": "secondary"}
+BASE_URL = "https://download.inep.gov.br/ideb/resultados"
 
 
-def nome_pacote(etapa: str) -> str:
+def package_name(stage: str) -> str:
     """Returns the file name of the package of one stage in the release in use."""
-    return f"divulgacao_{etapa}_municipios_{EDICAO}.zip"
+    return f"divulgacao_{stage}_municipios_{EDITION}.zip"
 
 
-def validar_zip(conteudo: bytes):
-    if not conteudo.startswith(b"PK\x03\x04"):
-        raise RespostaInvalida("O conteúdo não é um arquivo ZIP válido.")
+def validate_zip(content: bytes):
+    if not content.startswith(b"PK\x03\x04"):
+        raise InvalidResponse("The content is not a valid ZIP file")
 
 
-def baixar(pasta: Union[Path, str], **opcoes):
+def download(folder: Union[Path, str], **options):
     """Downloads the three packages of the release, one per stage. Each package carries the whole series of its stage."""
-    pasta = Path(pasta)
+    folder = Path(folder)
     reqs = [
-        Requisicao(
-            chave=f"{etapa}/{EDICAO}",
-            url=f"{URL_BASE}/{nome_pacote(etapa)}",
-            arquivo=nome_pacote(etapa),
-            metodo="GET",
-            compactar=False,
+        Request(
+            key=f"{STAGES[stage]}/{EDITION}",
+            url=f"{BASE_URL}/{package_name(stage)}",
+            file=package_name(stage),
+            method="GET",
+            compress=False,
         )
-        for etapa in ETAPAS
+        for stage in STAGES
     ]
-    sessao = opcoes.pop("sessao", None) or criar_sessao()
-    baixar_lote(reqs, pasta, sessao=sessao, validar=validar_zip, intervalo=1.0, **opcoes)
+    session = options.pop("session", None) or create_session()
+    download_batch(reqs, folder, session=session, validate=validate_zip, interval=1.0, **options)
 
-def _encontrar_linha_cabecalho(caminho: Path) -> int:
+def _find_header_row(path: Path) -> int:
     """Finds the header row scanning the first 20 rows."""
-    df_head = pd.read_excel(caminho, nrows=20, header=None)
+    df_head = pd.read_excel(path, nrows=20, header=None)
     for i, row in df_head.iterrows():
         if "SG_UF" in row.values:
             return i
-    raise ValueError(f"Cabeçalho não encontrado em {caminho}")
+    raise ValueError(f"Header not found in {path}")
 
-def _ler_planilha(caminho: Path, etapa_sufixo: str, valid_municipios: set) -> pl.DataFrame:
-    linha_cab = _encontrar_linha_cabecalho(caminho)
+def _read_spreadsheet(path: Path, stage_suffix: str, valid_municipalities: set) -> pl.DataFrame:
+    row_hdr = _find_header_row(path)
     # Read with the correct header, dtype=str prevents mixed inference and improper conversions
-    df_pd = pd.read_excel(caminho, header=linha_cab, dtype=str)
+    df_pd = pd.read_excel(path, header=row_hdr, dtype=str)
     df = pl.from_pandas(df_pd)
     
-    colunas_obrigatorias = ["CO_MUNICIPIO", "REDE"]
-    for col in colunas_obrigatorias:
+    required_columns = ["CO_MUNICIPIO", "REDE"]
+    for col in required_columns:
         if col not in df.columns:
-            raise ValueError(f"Coluna {col} ausente em {caminho}")
+            raise ValueError(f"Column {col} missing in {path}")
             
     df = df.filter(pl.col("REDE").is_not_null() & pl.col("CO_MUNICIPIO").is_not_null())
     df = df.with_columns(pl.col("REDE").cast(pl.Utf8).str.strip_chars())
     df = df.filter(pl.col("REDE") == "Pública")
     if df.height == 0:
-        raise ValueError(f"Rede 'Pública' não encontrada em {caminho}")
+        raise ValueError(f"Network 'Pública' not found in {path}")
         
     df = df.with_columns(pl.col("CO_MUNICIPIO").str.strip_chars())
         
-    codigos_invalidos = df.filter(~pl.col("CO_MUNICIPIO").is_in(valid_municipios))
-    if codigos_invalidos.height > 0:
-        raise ValueError(f"Existem códigos fora do cadastro municipal em {caminho}")
+    invalid_codes = df.filter(~pl.col("CO_MUNICIPIO").is_in(valid_municipalities))
+    if invalid_codes.height > 0:
+        raise ValueError(f"There are codes outside the municipal registry in {path}")
         
-    colunas_obs = [c for c in df.columns if re.match(r"^VL_OBSERVADO_\d{4}$", c)]
-    if not colunas_obs:
-        raise ValueError(f"Nenhuma coluna VL_OBSERVADO_AAAA encontrada em {caminho}")
+    columns_obs = [c for c in df.columns if re.match(r"^VL_OBSERVADO_\d{4}$", c)]
+    if not columns_obs:
+        raise ValueError(f"No VL_OBSERVADO_AAAA column found in {path}")
         
-    df_sel = df.select(["CO_MUNICIPIO"] + colunas_obs)
+    df_sel = df.select(["CO_MUNICIPIO"] + columns_obs)
     
     df_long = df_sel.unpivot(
         index="CO_MUNICIPIO",
-        on=colunas_obs,
-        variable_name="coluna_ano",
-        value_name=f"ideb_{etapa_sufixo}_publica"
+        on=columns_obs,
+        variable_name="year_column",
+        value_name=f"ideb_{stage_suffix}_public"
     )
     
     df_long = df_long.with_columns(
-        pl.col("coluna_ano").str.replace("VL_OBSERVADO_", "").cast(pl.Int16).alias("ano")
-    ).drop("coluna_ano")
+        pl.col("year_column").str.replace("VL_OBSERVADO_", "").cast(pl.Int16).alias("year")
+    ).drop("year_column")
     
-    val_col = f"ideb_{etapa_sufixo}_publica"
+    val_col = f"ideb_{stage_suffix}_public"
     # Original values '-' and 'ND' will fail cast(strict=False) and return null, which is the desired behavior.
     # Replace comma with dot to prevent scores from being read as invalid strings.
     df_long = df_long.with_columns(
         pl.col(val_col).str.strip_chars().str.replace(",", ".").cast(pl.Float64, strict=False)
     )
         
-    df_long = df_long.rename({"CO_MUNICIPIO": "cod_municipio"})
+    df_long = df_long.rename({"CO_MUNICIPIO": "municipality_code"})
     
-    duplicatas = df_long.group_by(["cod_municipio", "ano"]).len().filter(pl.col("len") > 1)
-    if duplicatas.height > 0:
-        raise ValueError(f"Chave cod_municipio-ano duplicada encontrada em {caminho}")
+    duplicates = df_long.group_by(["municipality_code", "year"]).len().filter(pl.col("len") > 1)
+    if duplicates.height > 0:
+        raise ValueError(f"Duplicate municipality_code-year key in {path}")
     
     return df_long
 
-def _ler_pacote(pacote: Path, etapa_sufixo: str, valid_municipios: set) -> pl.DataFrame:
+def _read_package(package: Path, stage_suffix: str, valid_municipalities: set) -> pl.DataFrame:
     """Reads the spreadsheet of one stage from inside the package, extracting it to a temporary folder."""
-    with zipfile.ZipFile(pacote) as z:
-        planilhas = [m for m in z.namelist() if m.lower().endswith(".xlsx")]
-        if len(planilhas) != 1:
-            raise ValueError(f"O pacote {pacote} deveria ter uma planilha .xlsx e tem {len(planilhas)}")
-        with tempfile.TemporaryDirectory() as temporaria:
-            caminho = Path(z.extract(planilhas[0], temporaria))
-            return _ler_planilha(caminho, etapa_sufixo, valid_municipios)
+    with zipfile.ZipFile(package) as z:
+        spreadsheets = [m for m in z.namelist() if m.lower().endswith(".xlsx")]
+        if len(spreadsheets) != 1:
+            raise ValueError(f"Package {package} should have one spreadsheet (.xlsx) and has {len(spreadsheets)}")
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(z.extract(spreadsheets[0], temp))
+            return _read_spreadsheet(path, stage_suffix, valid_municipalities)
 
 
-def harmonizar(pasta: Union[Path, str], municipios: pl.DataFrame) -> pl.DataFrame:
-    pasta = Path(pasta)
-    valid_municipios = set(municipios["cod_municipio"].to_list())
+def harmonize(folder: Union[Path, str], municipalities: pl.DataFrame) -> pl.DataFrame:
+    folder = Path(folder)
+    valid_municipalities = set(municipalities["municipality_code"].to_list())
     
-    etapas = {
-        "anos_iniciais": "anos_iniciais",
-        "anos_finais": "anos_finais",
-        "ensino_medio": "ensino_medio"
-    }
+    stages = STAGES
     
     dfs = []
-    for pasta_etapa, sufixo in etapas.items():
-        pacote = pasta / nome_pacote(pasta_etapa)
-        if pacote.exists():
-            dfs.append(_ler_pacote(pacote, sufixo, valid_municipios))
+    for folder_stage, suffix in stages.items():
+        package = folder / package_name(folder_stage)
+        if package.exists():
+            dfs.append(_read_package(package, suffix, valid_municipalities))
             continue
 
-        caminho_dir = pasta / pasta_etapa
-        if not caminho_dir.exists():
-            raise FileNotFoundError(f"Pasta da etapa não encontrada: {caminho_dir}")
+        path_dir = folder / folder_stage
+        if not path_dir.exists():
+            raise FileNotFoundError(f"Stage folder not found: {path_dir}")
             
-        arquivos_xlsx = list(caminho_dir.rglob("*.xlsx"))
-        if not arquivos_xlsx:
-            raise FileNotFoundError(f"Nenhum .xlsx encontrado para etapa {pasta_etapa}")
-        if len(arquivos_xlsx) > 1:
-            raise ValueError(f"Mais de um arquivo .xlsx encontrado para etapa {pasta_etapa}: {arquivos_xlsx}")
+        files_xlsx = list(path_dir.rglob("*.xlsx"))
+        if not files_xlsx:
+            raise FileNotFoundError(f"No .xlsx found for stage {folder_stage}")
+        if len(files_xlsx) > 1:
+            raise ValueError(f"More than one .xlsx file found for stage {folder_stage}: {files_xlsx}")
             
-        caminho_xlsx = arquivos_xlsx[0]
-        df_etapa = _ler_planilha(caminho_xlsx, sufixo, valid_municipios)
-        dfs.append(df_etapa)
+        path_xlsx = files_xlsx[0]
+        df_stage = _read_spreadsheet(path_xlsx, suffix, valid_municipalities)
+        dfs.append(df_stage)
         
     df_final = dfs[0]
     for df_next in dfs[1:]:
-        df_final = df_final.join(df_next, on=["cod_municipio", "ano"], how="full", coalesce=True)
+        df_final = df_final.join(df_next, on=["municipality_code", "year"], how="full", coalesce=True)
         
-    df_final = df_final.sort(["cod_municipio", "ano"])
+    df_final = df_final.sort(["municipality_code", "year"])
     
     df_final = df_final.select([
-        "cod_municipio",
-        "ano",
-        "ideb_anos_iniciais_publica",
-        "ideb_anos_finais_publica",
-        "ideb_ensino_medio_publica"
+        "municipality_code",
+        "year",
+        "ideb_early_years_public",
+        "ideb_final_years_public",
+        "ideb_secondary_public"
     ])
     
-    duplicatas_finais = df_final.group_by(["cod_municipio", "ano"]).len().filter(pl.col("len") > 1)
-    if duplicatas_finais.height > 0:
-        raise ValueError("Chave cod_municipio-ano duplicada encontrada no painel final harmonizado")
+    final_duplicates = df_final.group_by(["municipality_code", "year"]).len().filter(pl.col("len") > 1)
+    if final_duplicates.height > 0:
+        raise ValueError("Duplicate municipality_code-year key in the harmonized final panel")
     
     return df_final

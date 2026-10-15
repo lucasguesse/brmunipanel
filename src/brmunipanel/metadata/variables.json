@@ -1,0 +1,2092 @@
+{
+  "intermediate": {
+    "datasus_health": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "inpatient_beds": {
+        "description_pt": "Leitos de internação",
+        "description_en": "Inpatient beds",
+        "unit": "Leitos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "icu_beds": {
+        "description_pt": "Leitos de UTI",
+        "description_en": "ICU beds",
+        "unit": "Leitos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": "Exclui leitos exclusivos COVID-19."
+      },
+      "imaging_equipment": {
+        "description_pt": "Equipamentos de diagnóstico por imagem",
+        "description_en": "Diagnostic imaging equipment",
+        "unit": "Equipamentos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "physicians": {
+        "description_pt": "Médicos",
+        "description_en": "Physicians",
+        "unit": "Profissionais",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": "CBOs agregados. Mudança de classificação em 2007 tratada."
+      },
+      "primary_care_units": {
+        "description_pt": "Unidades Básicas de Saúde",
+        "description_en": "Basic Health Units",
+        "unit": "Unidades",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "health_posts": {
+        "description_pt": "Postos de Saúde",
+        "description_en": "Health Posts",
+        "unit": "Unidades",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "assault_deaths": {
+        "description_pt": "Óbitos por agressão",
+        "description_en": "Deaths by assault",
+        "unit": "Óbitos",
+        "source": "DATASUS - SIM",
+        "period": "2006-2023",
+        "methodological_note": "CID-10 X85 a Y09."
+      },
+      "infant_deaths": {
+        "description_pt": "Óbitos infantis",
+        "description_en": "Infant deaths",
+        "unit": "Óbitos",
+        "source": "DATASUS - SIM",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "live_births": {
+        "description_pt": "Nascidos vivos",
+        "description_en": "Live births",
+        "unit": "Nascimentos",
+        "source": "DATASUS - Sinasc",
+        "period": "2006-2023",
+        "methodological_note": ""
+      }
+    },
+    "ibge_cempre": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "establishments_number": {
+        "description_pt": "Unidades locais de empresas atuantes",
+        "description_en": "Local units of active enterprises",
+        "unit": "Unidades",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": "Quebra de série do IBGE em 2022 não tratada."
+      },
+      "employed_total": {
+        "description_pt": "Pessoal ocupado total",
+        "description_en": "Total employed personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "employed_salaried": {
+        "description_pt": "Pessoal assalariado",
+        "description_en": "Salaried personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "salaried_employees_avg": {
+        "description_pt": "Pessoal assalariado médio",
+        "description_en": "Average salaried personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "wages_thousand_brl": {
+        "description_pt": "Salários e outras remunerações",
+        "description_en": "Salaries and other remunerations",
+        "unit": "Mil Reais",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      }
+    },
+    "ibge_municipalities": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "municipality_code_6": {
+        "description_pt": "Código do Município (6 dígitos)",
+        "description_en": "Municipality Code (6 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "municipality_name": {
+        "description_pt": "Nome do município",
+        "description_en": "Municipality name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_code": {
+        "description_pt": "Código da UF",
+        "description_en": "State Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_abbr": {
+        "description_pt": "Sigla da UF",
+        "description_en": "State Acronym",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_name": {
+        "description_pt": "Nome da UF",
+        "description_en": "State name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "intermediate_region_code": {
+        "description_pt": "Código da Região Intermediária",
+        "description_en": "Intermediate Region Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "intermediate_region_name": {
+        "description_pt": "Nome da Região Intermediária",
+        "description_en": "Intermediate Region Name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "immediate_region_code": {
+        "description_pt": "Código da Região Imediata",
+        "description_en": "Immediate Region Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "immediate_region_name": {
+        "description_pt": "Nome da Região Imediata",
+        "description_en": "Immediate Region Name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "international_border": {
+        "description_pt": "Fronteira internacional",
+        "description_en": "International border",
+        "unit": "Booleano",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "coastal": {
+        "description_pt": "Município litorâneo",
+        "description_en": "Coastal municipality",
+        "unit": "Booleano",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "area_km2": {
+        "description_pt": "Área territorial",
+        "description_en": "Territorial area",
+        "unit": "km²",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "latitude": {
+        "description_pt": "Latitude da sede",
+        "description_en": "Headquarters latitude",
+        "unit": "Graus decimais",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "longitude": {
+        "description_pt": "Longitude da sede",
+        "description_en": "Headquarters longitude",
+        "unit": "Graus decimais",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      }
+    },
+    "ibge_neighboring_municipalities": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "neighbor_municipality_code": {
+        "description_pt": "Código do Município Limítrofe",
+        "description_en": "Bordering Municipality Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "border_length_km": {
+        "description_pt": "Comprimento da fronteira",
+        "description_en": "Border length",
+        "unit": "km",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      }
+    },
+    "ibge_gdp": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "gdp": {
+        "description_pt": "Produto Interno Bruto",
+        "description_en": "Gross Domestic Product",
+        "unit": "Mil Reais",
+        "source": "IBGE - PIB Municipal",
+        "period": "2006-2023",
+        "methodological_note": "PIB a preços correntes."
+      }
+    },
+    "ibge_population": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "population": {
+        "description_pt": "População Residente",
+        "description_en": "Resident Population",
+        "unit": "Habitantes",
+        "source": "IBGE - Estimativas",
+        "period": "2006-2023",
+        "methodological_note": "Anos de censo/contagem interpolados geometricamente."
+      },
+      "population_source": {
+        "description_pt": "Origem do dado populacional",
+        "description_en": "Origin of population data",
+        "unit": "Categoria",
+        "source": "IBGE/Derivado",
+        "period": "2006-2023",
+        "methodological_note": "Indica se o dado é original do IBGE ou interpolado."
+      }
+    },
+    "inep_school_census": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "admin_dependency": {
+        "description_pt": "Dependência administrativa",
+        "description_en": "Administrative dependency",
+        "unit": "Categoria",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "location": {
+        "description_pt": "Localização",
+        "description_en": "Location",
+        "unit": "Categoria",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "schools": {
+        "description_pt": "Escolas ativas",
+        "description_en": "Active schools",
+        "unit": "Unidades",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_basic_edu": {
+        "description_pt": "Matriculas - Basica",
+        "description_en": "Enrollments - Basica",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_early_childhood": {
+        "description_pt": "Matriculas - Infantil",
+        "description_en": "Enrollments - Infantil",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_daycare": {
+        "description_pt": "Matriculas - Creche",
+        "description_en": "Enrollments - Creche",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_preschool": {
+        "description_pt": "Matriculas - Pre escola",
+        "description_en": "Enrollments - Pre escola",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_elementary": {
+        "description_pt": "Matriculas - Fundamental",
+        "description_en": "Enrollments - Fundamental",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_elementary_early_years": {
+        "description_pt": "Matriculas - Fund anos iniciais",
+        "description_en": "Enrollments - Fund anos iniciais",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_elementary_final_years": {
+        "description_pt": "Matriculas - Fund anos finais",
+        "description_en": "Enrollments - Fund anos finais",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_secondary": {
+        "description_pt": "Matriculas - Medio",
+        "description_en": "Enrollments - Medio",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_vocational": {
+        "description_pt": "Matriculas - Profissional",
+        "description_en": "Enrollments - Profissional",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_vocational_technical": {
+        "description_pt": "Matriculas - Prof tecnica",
+        "description_en": "Enrollments - Prof tecnica",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_eja": {
+        "description_pt": "Matriculas - Eja",
+        "description_en": "Enrollments - Eja",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_eja_elementary": {
+        "description_pt": "Matriculas - Eja fundamental",
+        "description_en": "Enrollments - Eja fundamental",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_eja_secondary": {
+        "description_pt": "Matriculas - Eja medio",
+        "description_en": "Enrollments - Eja medio",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_special_ed": {
+        "description_pt": "Matriculas - Especial",
+        "description_en": "Enrollments - Especial",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_special_ed_inclusive": {
+        "description_pt": "Matriculas - Especial inclusiva",
+        "description_en": "Enrollments - Especial inclusiva",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_special_ed_exclusive": {
+        "description_pt": "Matriculas - Especial exclusiva",
+        "description_en": "Enrollments - Especial exclusiva",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_basic_edu": {
+        "description_pt": "Docentes - Basica",
+        "description_en": "Faculty - Basica",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_early_childhood": {
+        "description_pt": "Docentes - Infantil",
+        "description_en": "Faculty - Infantil",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_daycare": {
+        "description_pt": "Docentes - Creche",
+        "description_en": "Faculty - Creche",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_preschool": {
+        "description_pt": "Docentes - Pre escola",
+        "description_en": "Faculty - Pre escola",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_elementary": {
+        "description_pt": "Docentes - Fundamental",
+        "description_en": "Faculty - Fundamental",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_elementary_early_years": {
+        "description_pt": "Docentes - Fund anos iniciais",
+        "description_en": "Faculty - Fund anos iniciais",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_elementary_final_years": {
+        "description_pt": "Docentes - Fund anos finais",
+        "description_en": "Faculty - Fund anos finais",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_secondary": {
+        "description_pt": "Docentes - Medio",
+        "description_en": "Faculty - Medio",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_vocational": {
+        "description_pt": "Docentes - Profissional",
+        "description_en": "Faculty - Profissional",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_vocational_technical": {
+        "description_pt": "Docentes - Prof tecnica",
+        "description_en": "Faculty - Prof tecnica",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_eja": {
+        "description_pt": "Docentes - Eja",
+        "description_en": "Faculty - Eja",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_eja_elementary": {
+        "description_pt": "Docentes - Eja fundamental",
+        "description_en": "Faculty - Eja fundamental",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_eja_secondary": {
+        "description_pt": "Docentes - Eja medio",
+        "description_en": "Faculty - Eja medio",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_special_ed": {
+        "description_pt": "Docentes - Especial",
+        "description_en": "Faculty - Especial",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_special_ed_inclusive": {
+        "description_pt": "Docentes - Especial inclusiva",
+        "description_en": "Faculty - Especial inclusiva",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_special_ed_exclusive": {
+        "description_pt": "Docentes - Especial exclusiva",
+        "description_en": "Faculty - Especial exclusiva",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_basic_edu": {
+        "description_pt": "Turmas - Basica",
+        "description_en": "Classes - Basica",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_early_childhood": {
+        "description_pt": "Turmas - Infantil",
+        "description_en": "Classes - Infantil",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_daycare": {
+        "description_pt": "Turmas - Creche",
+        "description_en": "Classes - Creche",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_preschool": {
+        "description_pt": "Turmas - Pre escola",
+        "description_en": "Classes - Pre escola",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_elementary": {
+        "description_pt": "Turmas - Fundamental",
+        "description_en": "Classes - Fundamental",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_elementary_early_years": {
+        "description_pt": "Turmas - Fund anos iniciais",
+        "description_en": "Classes - Fund anos iniciais",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_elementary_final_years": {
+        "description_pt": "Turmas - Fund anos finais",
+        "description_en": "Classes - Fund anos finais",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_secondary": {
+        "description_pt": "Turmas - Medio",
+        "description_en": "Classes - Medio",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_vocational": {
+        "description_pt": "Turmas - Profissional",
+        "description_en": "Classes - Profissional",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_vocational_technical": {
+        "description_pt": "Turmas - Prof tecnica",
+        "description_en": "Classes - Prof tecnica",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_eja": {
+        "description_pt": "Turmas - Eja",
+        "description_en": "Classes - Eja",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_eja_elementary": {
+        "description_pt": "Turmas - Eja fundamental",
+        "description_en": "Classes - Eja fundamental",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_eja_secondary": {
+        "description_pt": "Turmas - Eja medio",
+        "description_en": "Classes - Eja medio",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_special_ed": {
+        "description_pt": "Turmas - Especial",
+        "description_en": "Classes - Especial",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_special_ed_inclusive": {
+        "description_pt": "Turmas - Especial inclusiva",
+        "description_en": "Classes - Especial inclusiva",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "classes_special_ed_exclusive": {
+        "description_pt": "Turmas - Especial exclusiva",
+        "description_en": "Classes - Especial exclusiva",
+        "unit": "Turmas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      }
+    },
+    "inep_higher_education_census": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "category": {
+        "description_pt": "Categoria administrativa",
+        "description_en": "Administrative category",
+        "unit": "Categoria",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "institutions": {
+        "description_pt": "Instituições de ensino superior presencial",
+        "description_en": "In-person higher education institutions",
+        "unit": "Unidades",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enrollments": {
+        "description_pt": "Matrículas em cursos superiores presenciais",
+        "description_en": "Enrollments in in-person higher education",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "hq_institutions": {
+        "description_pt": "Instituições onde a sede fica no município",
+        "description_en": "Institutions headquartered in the municipality",
+        "unit": "Unidades",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "hq_teachers": {
+        "description_pt": "Docentes das instituições sede",
+        "description_en": "Faculty of headquartered institutions",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      }
+    },
+    "inep_ideb": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "ideb_early_years_public": {
+        "description_pt": "IDEB - Anos Iniciais (Pública)",
+        "description_en": "IDEB - Early Years (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      },
+      "ideb_final_years_public": {
+        "description_pt": "IDEB - Anos Finais (Pública)",
+        "description_en": "IDEB - Final Years (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      },
+      "ideb_secondary_public": {
+        "description_pt": "IDEB - Ensino Médio (Pública)",
+        "description_en": "IDEB - High School (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      }
+    },
+    "ipea_cash_transf_program": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "cash_transf_benefits": {
+        "description_pt": "Benefícios do Programa Bolsa Família",
+        "description_en": "Bolsa Familia Program benefits",
+        "unit": "Benefícios",
+        "source": "IPEA / MDS",
+        "period": "2006-2023",
+        "methodological_note": "Dezembro de cada ano."
+      },
+      "cash_transf_value_thousand_brl": {
+        "description_pt": "Valor pago no Bolsa Família",
+        "description_en": "Amount paid in Bolsa Familia",
+        "unit": "Mil Reais",
+        "source": "IPEA / MDS",
+        "period": "2006-2023",
+        "methodological_note": "Valores nominais."
+      }
+    },
+    "ms_health_regions": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "health_region_code": {
+        "description_pt": "Código da Região de Saúde",
+        "description_en": "Health Region Code",
+        "unit": "Código",
+        "source": "DATASUS",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "health_region_name": {
+        "description_pt": "Nome da Região de Saúde",
+        "description_en": "Health Region Name",
+        "unit": "Texto",
+        "source": "DATASUS",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "health_macroregion_code": {
+        "description_pt": "Código da Macrorregião de Saúde",
+        "description_en": "Health Macro-region Code",
+        "unit": "Código",
+        "source": "DATASUS",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "health_macroregion_name": {
+        "description_pt": "Nome da Macrorregião de Saúde",
+        "description_en": "Health Macro-region Name",
+        "unit": "Texto",
+        "source": "DATASUS",
+        "period": "N/A",
+        "methodological_note": ""
+      }
+    },
+    "tesouro_expenditure_by_function_finbra": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "exp_01_legislative": {
+        "description_pt": "Despesa: Legislativa",
+        "description_en": "Expenditure: Legislative",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_02_judiciary": {
+        "description_pt": "Despesa: Judiciaria",
+        "description_en": "Expenditure: Judicial",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_03_essential_to_justice": {
+        "description_pt": "Despesa: Essencial justica",
+        "description_en": "Expenditure: Essential to Justice",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_04_administration": {
+        "description_pt": "Despesa: Administracao",
+        "description_en": "Expenditure: Administration",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_05_national_defense": {
+        "description_pt": "Despesa: Defesa nacional",
+        "description_en": "Expenditure: National Defense",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_06_public_security": {
+        "description_pt": "Despesa: Seguranca publica",
+        "description_en": "Expenditure: Public Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_07_foreign_affairs": {
+        "description_pt": "Despesa: Relacoes exteriores",
+        "description_en": "Expenditure: Foreign Affairs",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_08_social_assistance": {
+        "description_pt": "Despesa: Assistencia social",
+        "description_en": "Expenditure: Social Assistance",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_09_social_security": {
+        "description_pt": "Despesa: Previdencia social",
+        "description_en": "Expenditure: Social Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_10_health": {
+        "description_pt": "Despesa: Saude",
+        "description_en": "Expenditure: Health",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_11_labor": {
+        "description_pt": "Despesa: Trabalho",
+        "description_en": "Expenditure: Labor",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_12_education": {
+        "description_pt": "Despesa: Educacao",
+        "description_en": "Expenditure: Education",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_13_culture": {
+        "description_pt": "Despesa: Cultura",
+        "description_en": "Expenditure: Culture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_14_citizenship_rights": {
+        "description_pt": "Despesa: Direitos cidadania",
+        "description_en": "Expenditure: Citizenship Rights",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_15_urban_planning": {
+        "description_pt": "Despesa: Urbanismo",
+        "description_en": "Expenditure: Urbanism",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_16_housing": {
+        "description_pt": "Despesa: Habitacao",
+        "description_en": "Expenditure: Housing",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_17_sanitation": {
+        "description_pt": "Despesa: Saneamento",
+        "description_en": "Expenditure: Sanitation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_18_environmental_management": {
+        "description_pt": "Despesa: Gestao ambiental",
+        "description_en": "Expenditure: Environmental Management",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_19_science_technology": {
+        "description_pt": "Despesa: Ciencia tecnologia",
+        "description_en": "Expenditure: Science and Technology",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_20_agriculture": {
+        "description_pt": "Despesa: Agricultura",
+        "description_en": "Expenditure: Agriculture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_21_agrarian_organization": {
+        "description_pt": "Despesa: Organizacao agraria",
+        "description_en": "Expenditure: Agrarian Organization",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_22_industry": {
+        "description_pt": "Despesa: Industria",
+        "description_en": "Expenditure: Industry",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_23_commerce_services": {
+        "description_pt": "Despesa: Comercio servicos",
+        "description_en": "Expenditure: Commerce and Services",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_24_communications": {
+        "description_pt": "Despesa: Comunicacoes",
+        "description_en": "Expenditure: Communications",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_25_energy": {
+        "description_pt": "Despesa: Energia",
+        "description_en": "Expenditure: Energy",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_26_transport": {
+        "description_pt": "Despesa: Transporte",
+        "description_en": "Expenditure: Transportation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_27_sports_leisure": {
+        "description_pt": "Despesa: Desporto lazer",
+        "description_en": "Expenditure: Sports and Leisure",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_28_special_charges": {
+        "description_pt": "Despesa: Encargos especiais",
+        "description_en": "Expenditure: Special Charges",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      }
+    },
+    "tesouro_expenditure_by_function_siconfi": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "exp_01_legislative": {
+        "description_pt": "Despesa: Legislativa",
+        "description_en": "Expenditure: Legislative",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_02_judiciary": {
+        "description_pt": "Despesa: Judiciaria",
+        "description_en": "Expenditure: Judicial",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_03_essential_to_justice": {
+        "description_pt": "Despesa: Essencial justica",
+        "description_en": "Expenditure: Essential to Justice",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_04_administration": {
+        "description_pt": "Despesa: Administracao",
+        "description_en": "Expenditure: Administration",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_05_national_defense": {
+        "description_pt": "Despesa: Defesa nacional",
+        "description_en": "Expenditure: National Defense",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_06_public_security": {
+        "description_pt": "Despesa: Seguranca publica",
+        "description_en": "Expenditure: Public Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_07_foreign_affairs": {
+        "description_pt": "Despesa: Relacoes exteriores",
+        "description_en": "Expenditure: Foreign Affairs",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_08_social_assistance": {
+        "description_pt": "Despesa: Assistencia social",
+        "description_en": "Expenditure: Social Assistance",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_09_social_security": {
+        "description_pt": "Despesa: Previdencia social",
+        "description_en": "Expenditure: Social Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_10_health": {
+        "description_pt": "Despesa: Saude",
+        "description_en": "Expenditure: Health",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_11_labor": {
+        "description_pt": "Despesa: Trabalho",
+        "description_en": "Expenditure: Labor",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_12_education": {
+        "description_pt": "Despesa: Educacao",
+        "description_en": "Expenditure: Education",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_13_culture": {
+        "description_pt": "Despesa: Cultura",
+        "description_en": "Expenditure: Culture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_14_citizenship_rights": {
+        "description_pt": "Despesa: Direitos cidadania",
+        "description_en": "Expenditure: Citizenship Rights",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_15_urban_planning": {
+        "description_pt": "Despesa: Urbanismo",
+        "description_en": "Expenditure: Urbanism",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_16_housing": {
+        "description_pt": "Despesa: Habitacao",
+        "description_en": "Expenditure: Housing",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_17_sanitation": {
+        "description_pt": "Despesa: Saneamento",
+        "description_en": "Expenditure: Sanitation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_18_environmental_management": {
+        "description_pt": "Despesa: Gestao ambiental",
+        "description_en": "Expenditure: Environmental Management",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_19_science_technology": {
+        "description_pt": "Despesa: Ciencia tecnologia",
+        "description_en": "Expenditure: Science and Technology",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_20_agriculture": {
+        "description_pt": "Despesa: Agricultura",
+        "description_en": "Expenditure: Agriculture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_21_agrarian_organization": {
+        "description_pt": "Despesa: Organizacao agraria",
+        "description_en": "Expenditure: Agrarian Organization",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_22_industry": {
+        "description_pt": "Despesa: Industria",
+        "description_en": "Expenditure: Industry",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_23_commerce_services": {
+        "description_pt": "Despesa: Comercio servicos",
+        "description_en": "Expenditure: Commerce and Services",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_24_communications": {
+        "description_pt": "Despesa: Comunicacoes",
+        "description_en": "Expenditure: Communications",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_25_energy": {
+        "description_pt": "Despesa: Energia",
+        "description_en": "Expenditure: Energy",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_26_transport": {
+        "description_pt": "Despesa: Transporte",
+        "description_en": "Expenditure: Transportation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_27_sports_leisure": {
+        "description_pt": "Despesa: Desporto lazer",
+        "description_en": "Expenditure: Sports and Leisure",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_28_special_charges": {
+        "description_pt": "Despesa: Encargos especiais",
+        "description_en": "Expenditure: Special Charges",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      }
+    }
+  },
+  "processed": {
+    "socioeconomic": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "population": {
+        "description_pt": "População Residente",
+        "description_en": "Resident Population",
+        "unit": "Habitantes",
+        "source": "IBGE - Estimativas",
+        "period": "2006-2023",
+        "methodological_note": "Anos de censo/contagem interpolados geometricamente."
+      },
+      "gdp": {
+        "description_pt": "Produto Interno Bruto",
+        "description_en": "Gross Domestic Product",
+        "unit": "Mil Reais",
+        "source": "IBGE - PIB Municipal",
+        "period": "2006-2023",
+        "methodological_note": "PIB a preços correntes."
+      },
+      "establishments_number": {
+        "description_pt": "Unidades locais de empresas atuantes",
+        "description_en": "Local units of active enterprises",
+        "unit": "Unidades",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": "Quebra de série do IBGE em 2022 não tratada."
+      },
+      "employed_total": {
+        "description_pt": "Pessoal ocupado total",
+        "description_en": "Total employed personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "employed_salaried": {
+        "description_pt": "Pessoal assalariado",
+        "description_en": "Salaried personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "salaried_employees_avg": {
+        "description_pt": "Pessoal assalariado médio",
+        "description_en": "Average salaried personnel",
+        "unit": "Pessoas",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "wages_thousand_brl": {
+        "description_pt": "Salários e outras remunerações",
+        "description_en": "Salaries and other remunerations",
+        "unit": "Mil Reais",
+        "source": "IBGE - CEMPRE",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "cash_transf_benefits": {
+        "description_pt": "Benefícios do Programa Bolsa Família",
+        "description_en": "Bolsa Familia Program benefits",
+        "unit": "Benefícios",
+        "source": "IPEA / MDS",
+        "period": "2006-2023",
+        "methodological_note": "Dezembro de cada ano."
+      },
+      "cash_transf_value_thousand_brl": {
+        "description_pt": "Valor pago no Bolsa Família",
+        "description_en": "Amount paid in Bolsa Familia",
+        "unit": "Mil Reais",
+        "source": "IPEA / MDS",
+        "period": "2006-2023",
+        "methodological_note": "Valores nominais."
+      }
+    },
+    "education": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "basic_edu_schools": {
+        "description_pt": "Instituições de ensino básico",
+        "description_en": "Basic education institutions",
+        "unit": "Unidades",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": "Agregado do Censo Escolar."
+      },
+      "enroll_early_childhood": {
+        "description_pt": "Matriculas - Infantil",
+        "description_en": "Enrollments - Infantil",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_elementary": {
+        "description_pt": "Matriculas - Fundamental",
+        "description_en": "Enrollments - Fundamental",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "enroll_secondary": {
+        "description_pt": "Matriculas - Medio",
+        "description_en": "Enrollments - Medio",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "teachers_basic_edu": {
+        "description_pt": "Docentes - Basica",
+        "description_en": "Faculty - Basica",
+        "unit": "Pessoas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "higher_edu_institutions": {
+        "description_pt": "Instituições de ensino superior",
+        "description_en": "Higher education institutions",
+        "unit": "Unidades",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": "Agregado do Censo Superior."
+      },
+      "enroll_higher_edu": {
+        "description_pt": "Matrículas no ensino superior",
+        "description_en": "Higher education enrollments",
+        "unit": "Matrículas",
+        "source": "INEP",
+        "period": "2006-2023",
+        "methodological_note": "Agregado do Censo Superior."
+      },
+      "ideb_early_years_public": {
+        "description_pt": "IDEB - Anos Iniciais (Pública)",
+        "description_en": "IDEB - Early Years (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      },
+      "ideb_final_years_public": {
+        "description_pt": "IDEB - Anos Finais (Pública)",
+        "description_en": "IDEB - Final Years (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      },
+      "ideb_secondary_public": {
+        "description_pt": "IDEB - Ensino Médio (Pública)",
+        "description_en": "IDEB - High School (Public)",
+        "unit": "Índice (0-10)",
+        "source": "INEP - IDEB",
+        "period": "2006-2023",
+        "methodological_note": "Somente anos ímpares."
+      }
+    },
+    "public_finance": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "exp_legislative": {
+        "description_pt": "Despesa: Legislativa",
+        "description_en": "Expenditure: Legislative",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_judiciary": {
+        "description_pt": "Despesa: Judiciaria",
+        "description_en": "Expenditure: Judicial",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_essential_to_justice": {
+        "description_pt": "Despesa: Essencial justica",
+        "description_en": "Expenditure: Essential to Justice",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_administration": {
+        "description_pt": "Despesa: Administracao",
+        "description_en": "Expenditure: Administration",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_national_defense": {
+        "description_pt": "Despesa: Defesa nacional",
+        "description_en": "Expenditure: National Defense",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_public_security": {
+        "description_pt": "Despesa: Seguranca publica",
+        "description_en": "Expenditure: Public Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_foreign_affairs": {
+        "description_pt": "Despesa: Relacoes exteriores",
+        "description_en": "Expenditure: Foreign Affairs",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_social_assistance": {
+        "description_pt": "Despesa: Assistencia social",
+        "description_en": "Expenditure: Social Assistance",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_social_security": {
+        "description_pt": "Despesa: Previdencia social",
+        "description_en": "Expenditure: Social Security",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_health": {
+        "description_pt": "Despesa: Saude",
+        "description_en": "Expenditure: Health",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_labor": {
+        "description_pt": "Despesa: Trabalho",
+        "description_en": "Expenditure: Labor",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_education": {
+        "description_pt": "Despesa: Educacao",
+        "description_en": "Expenditure: Education",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_culture": {
+        "description_pt": "Despesa: Cultura",
+        "description_en": "Expenditure: Culture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_citizenship_rights": {
+        "description_pt": "Despesa: Direitos cidadania",
+        "description_en": "Expenditure: Citizenship Rights",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_urban_planning": {
+        "description_pt": "Despesa: Urbanismo",
+        "description_en": "Expenditure: Urbanism",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_housing": {
+        "description_pt": "Despesa: Habitacao",
+        "description_en": "Expenditure: Housing",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_sanitation": {
+        "description_pt": "Despesa: Saneamento",
+        "description_en": "Expenditure: Sanitation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_environmental_management": {
+        "description_pt": "Despesa: Gestao ambiental",
+        "description_en": "Expenditure: Environmental Management",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_science_technology": {
+        "description_pt": "Despesa: Ciencia tecnologia",
+        "description_en": "Expenditure: Science and Technology",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_agriculture": {
+        "description_pt": "Despesa: Agricultura",
+        "description_en": "Expenditure: Agriculture",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_agrarian_organization": {
+        "description_pt": "Despesa: Organizacao agraria",
+        "description_en": "Expenditure: Agrarian Organization",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_industry": {
+        "description_pt": "Despesa: Industria",
+        "description_en": "Expenditure: Industry",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_commerce_services": {
+        "description_pt": "Despesa: Comercio servicos",
+        "description_en": "Expenditure: Commerce and Services",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_communications": {
+        "description_pt": "Despesa: Comunicacoes",
+        "description_en": "Expenditure: Communications",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_energy": {
+        "description_pt": "Despesa: Energia",
+        "description_en": "Expenditure: Energy",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_transport": {
+        "description_pt": "Despesa: Transporte",
+        "description_en": "Expenditure: Transportation",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_sports_leisure": {
+        "description_pt": "Despesa: Desporto lazer",
+        "description_en": "Expenditure: Sports and Leisure",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "exp_special_charges": {
+        "description_pt": "Despesa: Encargos especiais",
+        "description_en": "Expenditure: Special Charges",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Despesas orçamentárias empenhadas."
+      }
+    },
+    "municipalities": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "municipality_name": {
+        "description_pt": "Nome do município",
+        "description_en": "Municipality name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_code": {
+        "description_pt": "Código da UF",
+        "description_en": "State Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_abbr": {
+        "description_pt": "Sigla da UF",
+        "description_en": "State Acronym",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "state_name": {
+        "description_pt": "Nome da UF",
+        "description_en": "State name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "intermediate_region_name": {
+        "description_pt": "Nome da Região Intermediária",
+        "description_en": "Intermediate Region Name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "immediate_region_name": {
+        "description_pt": "Nome da Região Imediata",
+        "description_en": "Immediate Region Name",
+        "unit": "Texto",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "international_border": {
+        "description_pt": "Fronteira internacional",
+        "description_en": "International border",
+        "unit": "Booleano",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "coastal": {
+        "description_pt": "Município litorâneo",
+        "description_en": "Coastal municipality",
+        "unit": "Booleano",
+        "source": "IBGE",
+        "period": "N/A",
+        "methodological_note": ""
+      },
+      "area_km2": {
+        "description_pt": "Área territorial",
+        "description_en": "Territorial area",
+        "unit": "km²",
+        "source": "IBGE",
+        "period": "2025",
+        "methodological_note": ""
+      },
+      "latitude": {
+        "description_pt": "Latitude da sede",
+        "description_en": "Headquarters latitude",
+        "unit": "Graus decimais",
+        "source": "IBGE",
+        "period": "2022",
+        "methodological_note": ""
+      },
+      "longitude": {
+        "description_pt": "Longitude da sede",
+        "description_en": "Headquarters longitude",
+        "unit": "Graus decimais",
+        "source": "IBGE",
+        "period": "2022",
+        "methodological_note": ""
+      }
+    },
+    "neighboring_municipalities": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2024",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "neighbor_municipality_code": {
+        "description_pt": "Código do Município Limítrofe",
+        "description_en": "Bordering Municipality Code",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2024",
+        "methodological_note": ""
+      },
+      "border_length_km": {
+        "description_pt": "Comprimento da fronteira",
+        "description_en": "Border length",
+        "unit": "km",
+        "source": "IBGE",
+        "period": "2024",
+        "methodological_note": ""
+      }
+    },
+    "health": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "inpatient_beds": {
+        "description_pt": "Leitos de internação",
+        "description_en": "Inpatient beds",
+        "unit": "Leitos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "icu_beds": {
+        "description_pt": "Leitos de UTI",
+        "description_en": "ICU beds",
+        "unit": "Leitos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": "Exclui leitos exclusivos COVID-19."
+      },
+      "imaging_equipment": {
+        "description_pt": "Equipamentos de diagnóstico por imagem",
+        "description_en": "Diagnostic imaging equipment",
+        "unit": "Equipamentos",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "physicians": {
+        "description_pt": "Médicos",
+        "description_en": "Physicians",
+        "unit": "Profissionais",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": "CBOs agregados. Mudança de classificação em 2007 tratada."
+      },
+      "primary_care_units": {
+        "description_pt": "Unidades Básicas de Saúde",
+        "description_en": "Basic Health Units",
+        "unit": "Unidades",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "health_posts": {
+        "description_pt": "Postos de Saúde",
+        "description_en": "Health Posts",
+        "unit": "Unidades",
+        "source": "DATASUS - CNES",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "assault_deaths": {
+        "description_pt": "Óbitos por agressão",
+        "description_en": "Deaths by assault",
+        "unit": "Óbitos",
+        "source": "DATASUS - SIM",
+        "period": "2006-2023",
+        "methodological_note": "CID-10 X85 a Y09."
+      },
+      "infant_deaths": {
+        "description_pt": "Óbitos infantis",
+        "description_en": "Infant deaths",
+        "unit": "Óbitos",
+        "source": "DATASUS - SIM",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "live_births": {
+        "description_pt": "Nascidos vivos",
+        "description_en": "Live births",
+        "unit": "Nascimentos",
+        "source": "DATASUS - Sinasc",
+        "period": "2006-2023",
+        "methodological_note": ""
+      }
+    }
+  }
+}

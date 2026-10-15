@@ -14,221 +14,221 @@ import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .. import nucleo
-from ..nucleo import Requisicao, RespostaInvalida
+from .. import core
+from ..core import Request, InvalidResponse
 
 
 @dataclass(frozen=True)
-class Tabulacao:
+class Tabulation:
     """Configuration for a TabNet tabulation."""
 
-    nome: str
-    definicao: str
-    coluna: str
-    incrementos: tuple[str, ...]
-    prefixo: str
-    periodos: tuple[str, ...]
-    filtros: dict[str, str] = field(default_factory=dict)
+    name: str
+    definition: str
+    column: str
+    increments: tuple[str, ...]
+    prefix: str
+    periods: tuple[str, ...]
+    filters: dict[str, str] = field(default_factory=dict)
 
 
-TABULACOES: tuple[Tabulacao, ...] = (
-    Tabulacao(
-        nome="cnes_leitos_internacao",
-        definicao="cnes/cnv/leiintbr",
-        coluna="--Não-Ativa--",
-        incrementos=("Quantidade_existente", "Quantidade_SUS"),
-        prefixo="ltbr",
-        periodos=tuple(f"{ano:04d}07" for ano in range(2006, 2024)),
+TABULATIONS: tuple[Tabulation, ...] = (
+    Tabulation(
+        name="cnes_inpatient_beds",
+        definition="cnes/cnv/leiintbr",
+        column="--Não-Ativa--",
+        increments=("Quantidade_existente", "Quantidade_SUS"),
+        prefix="ltbr",
+        periods=tuple(f"{year:04d}07" for year in range(2006, 2024)),
     ),
-    Tabulacao(
-        nome="cnes_leitos_complementares",
-        definicao="cnes/cnv/leiutibr",
-        coluna="Leitos_complementares",
-        incrementos=("Quantidade_existente",),
-        prefixo="lubr",
-        periodos=tuple(f"{ano:04d}07" for ano in range(2006, 2024)),
+    Tabulation(
+        name="cnes_complementary_beds",
+        definition="cnes/cnv/leiutibr",
+        column="Leitos_complementares",
+        increments=("Quantidade_existente",),
+        prefix="lubr",
+        periods=tuple(f"{year:04d}07" for year in range(2006, 2024)),
     ),
-    Tabulacao(
-        nome="cnes_estabelecimentos",
-        definicao="cnes/cnv/estabbr",
-        coluna="Tipo_de_Estabelecimento",
-        incrementos=("Quantidade",),
-        prefixo="stbr",
-        periodos=tuple(f"{ano:04d}07" for ano in range(2006, 2024)),
+    Tabulation(
+        name="cnes_facilities",
+        definition="cnes/cnv/estabbr",
+        column="Tipo_de_Estabelecimento",
+        increments=("Quantidade",),
+        prefix="stbr",
+        periods=tuple(f"{year:04d}07" for year in range(2006, 2024)),
     ),
-    Tabulacao(
-        nome="cnes_equipamentos_grupo",
-        definicao="cnes/cnv/equipobr",
-        coluna="Grupo_de_Equipamentos",
-        incrementos=("Equipamentos_Existentes",),
-        prefixo="eqbr",
-        periodos=tuple(f"{ano:04d}07" for ano in range(2006, 2024)),
+    Tabulation(
+        name="cnes_equipment_group",
+        definition="cnes/cnv/equipobr",
+        column="Grupo_de_Equipamentos",
+        increments=("Equipamentos_Existentes",),
+        prefix="eqbr",
+        periods=tuple(f"{year:04d}07" for year in range(2006, 2024)),
     ),
-    Tabulacao(
-        nome="cnes_medicos_cbo1994",
-        definicao="cnes/cnv/profidbr",
-        coluna="Médicos",
-        incrementos=("Quantidade",),
-        prefixo="pfbr",
-        periodos=("200607", "200707"),
+    Tabulation(
+        name="cnes_physicians_cbo1994",
+        definition="cnes/cnv/profidbr",
+        column="Médicos",
+        increments=("Quantidade",),
+        prefix="pfbr",
+        periods=("200607", "200707"),
     ),
-    Tabulacao(
-        nome="cnes_medicos_cbo2002",
-        definicao="cnes/cnv/prid02br",
-        coluna="Médicos",
-        incrementos=("Quantidade",),
-        prefixo="pfbr",
-        periodos=("200708",) + tuple(f"{ano:04d}07" for ano in range(2008, 2024)),
+    Tabulation(
+        name="cnes_physicians_cbo2002",
+        definition="cnes/cnv/prid02br",
+        column="Médicos",
+        increments=("Quantidade",),
+        prefix="pfbr",
+        periods=("200708",) + tuple(f"{year:04d}07" for year in range(2008, 2024)),
     ),
-    Tabulacao(
-        nome="sim_obitos_agressao",
-        definicao="sim/cnv/obt10br",
-        coluna="--Não-Ativa--",
-        incrementos=("Óbitos_p/Residênc",),
-        prefixo="obtbr",
-        periodos=tuple(str(ano) for ano in range(2006, 2024)),
-        filtros={"SGrupo_CID-10": "246"},
+    Tabulation(
+        name="sim_assault_deaths",
+        definition="sim/cnv/obt10br",
+        column="--Não-Ativa--",
+        increments=("Óbitos_p/Residênc",),
+        prefix="obtbr",
+        periods=tuple(str(year) for year in range(2006, 2024)),
+        filters={"SGrupo_CID-10": "246"},
     ),
-    Tabulacao(
-        nome="sim_obitos_infantis",
-        definicao="sim/cnv/inf10br",
-        coluna="--Não-Ativa--",
-        incrementos=("Óbitos_p/Residênc",),
-        prefixo="infbr",
-        periodos=tuple(str(ano) for ano in range(2006, 2024)),
+    Tabulation(
+        name="sim_infant_deaths",
+        definition="sim/cnv/inf10br",
+        column="--Não-Ativa--",
+        increments=("Óbitos_p/Residênc",),
+        prefix="infbr",
+        periods=tuple(str(year) for year in range(2006, 2024)),
     ),
-    Tabulacao(
-        nome="sinasc_nascidos_vivos",
-        definicao="sinasc/cnv/nvbr",
-        coluna="--Não-Ativa--",
-        incrementos=("Nascim_p/resid.mãe",),
-        prefixo="nvbr",
-        periodos=tuple(str(ano) for ano in range(2006, 2024)),
+    Tabulation(
+        name="sinasc_live_births",
+        definition="sinasc/cnv/nvbr",
+        column="--Não-Ativa--",
+        increments=("Nascim_p/resid.mãe",),
+        prefix="nvbr",
+        periods=tuple(str(year) for year in range(2006, 2024)),
     ),
 )
 
 
-def _codificar(texto: str) -> str:
+def _encode(text: str) -> str:
     """Encodes URL parameter in Latin-1 for compatibility with the TabNet server."""
-    return urllib.parse.quote(str(texto), safe="", encoding="latin-1")
+    return urllib.parse.quote(str(text), safe="", encoding="latin-1")
 
 
-def nome_dbf(tabulacao: Tabulacao, periodo: str | int) -> str:
+def dbf_name(tabulation: Tabulation, period: str | int) -> str:
     """Returns the name of the .dbf file on the server for the tabulation and period."""
-    p = str(periodo).strip()
-    if len(p) == 4 and tabulacao.definicao.startswith("cnes/"):
+    p = str(period).strip()
+    if len(p) == 4 and tabulation.definition.startswith("cnes/"):
         p = f"{p}07"
     if len(p) == 6:
         # YYYYMM format (e.g. 200607 -> 0607, 200708 -> 0708)
-        return f"{tabulacao.prefixo}{p[2:4]}{p[4:6]}.dbf"
+        return f"{tabulation.prefix}{p[2:4]}{p[4:6]}.dbf"
     # YYYY format (e.g. 2006 -> 06, 2023 -> 23)
-    return f"{tabulacao.prefixo}{p[2:4]}.dbf"
+    return f"{tabulation.prefix}{p[2:4]}.dbf"
 
 
-def montar_corpo(tabulacao: Tabulacao, periodo: str | int) -> str:
+def build_body(tabulation: Tabulation, period: str | int) -> str:
     """Builds the Latin-1 encoded POST form string in the order required by TabNet."""
-    partes = [
-        f"{_codificar('Linha')}={_codificar('Município')}",
-        f"{_codificar('Coluna')}={_codificar(tabulacao.coluna)}",
+    parts = [
+        f"{_encode('Linha')}={_encode('Município')}",
+        f"{_encode('Coluna')}={_encode(tabulation.column)}",
     ]
-    for inc in tabulacao.incrementos:
-        partes.append(f"{_codificar('Incremento')}={_codificar(inc)}")
+    for inc in tabulation.increments:
+        parts.append(f"{_encode('Incremento')}={_encode(inc)}")
 
-    partes.append(f"{_codificar('Arquivos')}={_codificar(nome_dbf(tabulacao, periodo))}")
+    parts.append(f"{_encode('Arquivos')}={_encode(dbf_name(tabulation, period))}")
 
-    for chave, valor in tabulacao.filtros.items():
-        partes.append(f"{_codificar(chave)}={_codificar(valor)}")
+    for key, value in tabulation.filters.items():
+        parts.append(f"{_encode(key)}={_encode(value)}")
 
-    partes.append(f"{_codificar('formato')}={_codificar('prn')}")
-    partes.append(f"{_codificar('mostre')}={_codificar('Mostra')}")
+    parts.append(f"{_encode('formato')}={_encode('prn')}")
+    parts.append(f"{_encode('mostre')}={_encode('Mostra')}")
 
-    return "&".join(partes)
+    return "&".join(parts)
 
 
-def requisicao(tabulacao: Tabulacao, periodo: str | int) -> Requisicao:
-    """Creates the Requisicao object for the tabulation and period."""
-    periodo_str = str(periodo).strip()
-    chave = f"{tabulacao.nome}/{periodo_str}"
-    url = f"http://tabnet.datasus.gov.br/cgi/tabcgi.exe?{tabulacao.definicao}.def"
-    arquivo = f"{tabulacao.nome}/{tabulacao.nome}_{periodo_str}.html.gz"
-    corpo = montar_corpo(tabulacao, periodo_str)
-    cabecalhos = {"Content-Type": "application/x-www-form-urlencoded"}
-    return Requisicao(
-        chave=chave,
+def request(tabulation: Tabulation, period: str | int) -> Request:
+    """Creates the Request object for the tabulation and period."""
+    period_str = str(period).strip()
+    key = f"{tabulation.name}/{period_str}"
+    url = f"http://tabnet.datasus.gov.br/cgi/tabcgi.exe?{tabulation.definition}.def"
+    file = f"{tabulation.name}/{tabulation.name}_{period_str}.html.gz"
+    body = build_body(tabulation, period_str)
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    return Request(
+        key=key,
         url=url,
-        arquivo=arquivo,
-        metodo="POST",
-        corpo=corpo,
-        cabecalhos=cabecalhos,
-        compactar=True,
+        file=file,
+        method="POST",
+        body=body,
+        headers=headers,
+        compress=True,
     )
 
 
-def extrair_tabela(conteudo: bytes) -> tuple[list[str], list[list[str]]]:
+def extract_table(content: bytes) -> tuple[list[str], list[list[str]]]:
     """Extracts header and rows from the HTML table generated by TabNet within <PRE>...</PRE>."""
-    texto = conteudo.decode("latin-1", errors="replace")
-    m = re.search(r"<pre[^>]*>([\s\S]*?)</pre>", texto, re.IGNORECASE)
+    text = content.decode("latin-1", errors="replace")
+    m = re.search(r"<pre[^>]*>([\s\S]*?)</pre>", text, re.IGNORECASE)
     if not m:
-        raise RespostaInvalida("Tag <PRE> não encontrada na resposta do TabNet")
+        raise InvalidResponse("<PRE> tag not found in the TabNet response")
 
-    bloco_pre = m.group(1).strip()
-    leitor = csv.reader(io.StringIO(bloco_pre), delimiter=";")
-    linhas_brutas = [row for row in leitor if any(c.strip() for c in row)]
+    block_pre = m.group(1).strip()
+    reader = csv.reader(io.StringIO(block_pre), delimiter=";")
+    raw_rows = [row for row in reader if any(c.strip() for c in row)]
 
-    if not linhas_brutas:
-        raise RespostaInvalida("Bloco <PRE> vazio na resposta do TabNet")
+    if not raw_rows:
+        raise InvalidResponse("Empty <PRE> block in the TabNet response")
 
-    cabecalho = [html.unescape(c.strip().strip('"')) for c in linhas_brutas[0]]
-    linhas = [[html.unescape(c.strip().strip('"')) for c in row] for row in linhas_brutas[1:]]
+    header = [html.unescape(c.strip().strip('"')) for c in raw_rows[0]]
+    rows = [[html.unescape(c.strip().strip('"')) for c in row] for row in raw_rows[1:]]
 
     # Filter any footer rows with divergent number of columns after 'Total'
-    linhas_validas = []
-    atingiu_total = False
-    for row in linhas:
-        if atingiu_total:
+    valid_rows = []
+    reached_total = False
+    for row in rows:
+        if reached_total:
             break
-        if len(row) != len(cabecalho):
-            rotulo = row[0].strip() if row else ""
-            raise RespostaInvalida(
-                f"Linha malformada antes do Total: rótulo '{rotulo}' com {len(row)} colunas (esperado {len(cabecalho)})"
+        if len(row) != len(header):
+            label = row[0].strip() if row else ""
+            raise InvalidResponse(
+                f"Malformed row before Total: label '{label}' with {len(row)} columns (expected {len(header)})"
             )
-        linhas_validas.append(row)
+        valid_rows.append(row)
         if row and row[0].strip().lower() == "total":
-            atingiu_total = True
+            reached_total = True
 
-    return cabecalho, linhas_validas
+    return header, valid_rows
 
 
-def validar(conteudo: bytes, *, min_linhas: int = 1000) -> None:
+def validate(content: bytes, *, min_rows: int = 1000) -> None:
     """Validates whether the TabNet response contains valid tabular data with total and uniform columns."""
-    texto = conteudo.decode("latin-1", errors="replace")
-    if "Nenhum registro selecionado" in texto:
-        raise RespostaInvalida("TabNet retornou 'Nenhum registro selecionado'")
+    text = content.decode("latin-1", errors="replace")
+    if "Nenhum registro selecionado" in text:
+        raise InvalidResponse("TabNet returned 'Nenhum registro selecionado'")
 
-    cabecalho, linhas = extrair_tabela(conteudo)
-    if not cabecalho:
-        raise RespostaInvalida("Cabeçalho vazio na tabela do TabNet")
+    header, rows = extract_table(content)
+    if not header:
+        raise InvalidResponse("Empty header in the TabNet table")
 
-    linhas_municipio = [r for r in linhas if r and re.match(r"^\d{6}", r[0].strip())]
-    if len(linhas_municipio) < min_linhas:
-        raise RespostaInvalida(
-            f"Tabela do TabNet possui poucas linhas de município ({len(linhas_municipio)} < {min_linhas})"
+    rows_municipality = [r for r in rows if r and re.match(r"^\d{6}", r[0].strip())]
+    if len(rows_municipality) < min_rows:
+        raise InvalidResponse(
+            f"TabNet table has too few municipality rows ({len(rows_municipality)} < {min_rows})"
         )
 
-    linha_total = [r for r in linhas if r and r[0].strip().lower() == "total"]
-    if not linha_total:
-        raise RespostaInvalida("Linha 'Total' não encontrada na tabela do TabNet")
+    row_total = [r for r in rows if r and r[0].strip().lower() == "total"]
+    if not row_total:
+        raise InvalidResponse("'Total' row not found in the TabNet table")
 
-    for i, row in enumerate(linhas):
-        if len(row) != len(cabecalho):
-            raise RespostaInvalida(
-                f"Linha {i} com número de colunas ({len(row)}) diferente do cabeçalho ({len(cabecalho)})"
+    for i, row in enumerate(rows):
+        if len(row) != len(header):
+            raise InvalidResponse(
+                f"Row {i} has a number of columns ({len(row)}) different from the header ({len(header)})"
             )
 
 
-def baixar(pasta: Path, **opcoes) -> list[dict]:
+def download(folder: Path, **options) -> list[dict]:
     """Downloads all registered tabulations and periods to the raw data folder."""
-    pasta = Path(pasta)
-    requisicoes = [requisicao(tab, p) for tab in TABULACOES for p in tab.periodos]
-    intervalo = opcoes.pop("intervalo", 1.0)
-    return nucleo.baixar_lote(requisicoes, pasta, validar=validar, intervalo=intervalo, **opcoes)
+    folder = Path(folder)
+    reqs = [request(tab, p) for tab in TABULATIONS for p in tab.periods]
+    interval = options.pop("interval", 1.0)
+    return core.download_batch(reqs, folder, validate=validate, interval=interval, **options)

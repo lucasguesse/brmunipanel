@@ -4,99 +4,99 @@ from pathlib import Path
 
 import pytest
 
-from brmunipanel.datasus.tabnet import TABULACOES, extrair_tabela, montar_corpo, nome_dbf, validar
-from brmunipanel.nucleo import RespostaInvalida
+from brmunipanel.datasus.tabnet import TABULATIONS, extract_table, build_body, dbf_name, validate
+from brmunipanel.core import InvalidResponse
 
-PASTA_DADOS = Path(__file__).parent / "dados"
+FOLDER_DATA = Path(__file__).parent / "data"
 
 
-def _obter_tabulacao(nome: str):
-    for tab in TABULACOES:
-        if tab.nome == nome:
+def _get_tabulation(name: str):
+    for tab in TABULATIONS:
+        if tab.name == name:
             return tab
-    raise KeyError(nome)
+    raise KeyError(name)
 
 
-def test_montar_corpo_cnes_leitos_internacao_2006():
-    """1. montar_corpo for cnes_leitos_internacao in 2006 returns the exact expected body."""
-    tab = _obter_tabulacao("cnes_leitos_internacao")
-    corpo = montar_corpo(tab, "2006")
-    esperado = (
+def test_build_body_cnes_inpatient_beds_2006():
+    """1. build_body for cnes_inpatient_beds in 2006 returns the exact expected body."""
+    tab = _get_tabulation("cnes_inpatient_beds")
+    body = build_body(tab, "2006")
+    expected = (
         "Linha=Munic%EDpio&Coluna=--N%E3o-Ativa--&Incremento=Quantidade_existente"
         "&Incremento=Quantidade_SUS&Arquivos=ltbr0607.dbf&formato=prn&mostre=Mostra"
     )
-    assert corpo == esperado
+    assert body == expected
 
-    corpo_07 = montar_corpo(tab, "200607")
-    assert corpo_07 == esperado
-
-
-def test_montar_corpo_sim_obitos_agressao_2023():
-    """2. montar_corpo for sim_obitos_agressao in 2023 contains expected parameters and filters."""
-    tab = _obter_tabulacao("sim_obitos_agressao")
-    corpo = montar_corpo(tab, "2023")
-    assert "Incremento=%D3bitos_p%2FResid%EAnc" in corpo
-    assert "Arquivos=obtbr23.dbf" in corpo
-    assert "SGrupo_CID-10=246" in corpo
-    assert "formato=prn" in corpo
-    assert "mostre=Mostra" in corpo
+    body_07 = build_body(tab, "200607")
+    assert body_07 == expected
 
 
-def test_nome_dbf_por_tabulacao_e_periodo():
+def test_build_body_sim_assault_deaths_2023():
+    """2. build_body for sim_assault_deaths in 2023 contains expected parameters and filters."""
+    tab = _get_tabulation("sim_assault_deaths")
+    body = build_body(tab, "2023")
+    assert "Incremento=%D3bitos_p%2FResid%EAnc" in body
+    assert "Arquivos=obtbr23.dbf" in body
+    assert "SGrupo_CID-10=246" in body
+    assert "formato=prn" in body
+    assert "mostre=Mostra" in body
+
+
+def test_dbf_name_by_tabulation_and_period():
     """3. The .dbf file name by tabulation and period, including pfbr0708.dbf."""
-    t_leitos = _obter_tabulacao("cnes_leitos_internacao")
-    assert nome_dbf(t_leitos, "200607") == "ltbr0607.dbf"
-    assert nome_dbf(t_leitos, "202307") == "ltbr2307.dbf"
+    t_beds = _get_tabulation("cnes_inpatient_beds")
+    assert dbf_name(t_beds, "200607") == "ltbr0607.dbf"
+    assert dbf_name(t_beds, "202307") == "ltbr2307.dbf"
 
-    t_med_antigo = _obter_tabulacao("cnes_medicos_cbo1994")
-    assert nome_dbf(t_med_antigo, "200607") == "pfbr0607.dbf"
-    assert nome_dbf(t_med_antigo, "200707") == "pfbr0707.dbf"
+    t_legacy_sec = _get_tabulation("cnes_physicians_cbo1994")
+    assert dbf_name(t_legacy_sec, "200607") == "pfbr0607.dbf"
+    assert dbf_name(t_legacy_sec, "200707") == "pfbr0707.dbf"
 
-    t_med_novo = _obter_tabulacao("cnes_medicos_cbo2002")
-    assert nome_dbf(t_med_novo, "200708") == "pfbr0708.dbf"
-    assert nome_dbf(t_med_novo, "200807") == "pfbr0807.dbf"
-    assert nome_dbf(t_med_novo, "202307") == "pfbr2307.dbf"
+    t_sec_new = _get_tabulation("cnes_physicians_cbo2002")
+    assert dbf_name(t_sec_new, "200708") == "pfbr0708.dbf"
+    assert dbf_name(t_sec_new, "200807") == "pfbr0807.dbf"
+    assert dbf_name(t_sec_new, "202307") == "pfbr2307.dbf"
 
-    t_obitos = _obter_tabulacao("sim_obitos_agressao")
-    assert nome_dbf(t_obitos, "2006") == "obtbr06.dbf"
-    assert nome_dbf(t_obitos, "2023") == "obtbr23.dbf"
+    t_deaths = _get_tabulation("sim_assault_deaths")
+    assert dbf_name(t_deaths, "2006") == "obtbr06.dbf"
+    assert dbf_name(t_deaths, "2023") == "obtbr23.dbf"
 
-    t_infantil = _obter_tabulacao("sim_obitos_infantis")
-    assert nome_dbf(t_infantil, "2006") == "infbr06.dbf"
+    t_early_childhood = _get_tabulation("sim_infant_deaths")
+    assert dbf_name(t_early_childhood, "2006") == "infbr06.dbf"
 
-    t_nascidos = _obter_tabulacao("sinasc_nascidos_vivos")
-    assert nome_dbf(t_nascidos, "2006") == "nvbr06.dbf"
-    assert nome_dbf(t_nascidos, "2023") == "nvbr23.dbf"
+    t_born = _get_tabulation("sinasc_live_births")
+    assert dbf_name(t_born, "2006") == "nvbr06.dbf"
+    assert dbf_name(t_born, "2023") == "nvbr23.dbf"
 
 
-def test_extrair_tabela_e_validar_amostras_reais():
-    """4. extrair_tabela and validar on real samples and rejection of 'Nenhum registro selecionado'."""
+def test_extract_table_and_validate_real_samples():
+    """4. extract_table and validate on real samples and rejection of 'Nenhum record selecionado'."""
     # Sample without active column
-    conteudo_sem_coluna = (PASTA_DADOS / "tabnet_sem_coluna_amostra.html").read_bytes()
-    cabecalho, linhas = extrair_tabela(conteudo_sem_coluna)
-    assert cabecalho == ["Município", "Quantidade existente", "Quantidade SUS"]
-    assert len(linhas) == 11  # 10 municipalities + Total
-    assert linhas[-1][0].lower() == "total"
-    validar(conteudo_sem_coluna, min_linhas=10)
+    content_without_column = (FOLDER_DATA / "tabnet_without_column_sample.html").read_bytes()
+    header, rows = extract_table(content_without_column)
+    assert header == ["Município", "Quantidade existente", "Quantidade SUS"]
+    assert len(rows) == 11  # 10 municipalities + Total
+    assert rows[-1][0].lower() == "total"
+    validate(content_without_column, min_rows=10)
 
     # Sample with active column
-    conteudo_com_coluna = (PASTA_DADOS / "tabnet_com_coluna_amostra.html").read_bytes()
-    cab_col, linhas_col = extrair_tabela(conteudo_com_coluna)
+    content_with_column = (FOLDER_DATA / "tabnet_with_column_sample.html").read_bytes()
+    cab_col, rows_col = extract_table(content_with_column)
     assert cab_col[0] == "Município"
     assert len(cab_col) > 2
-    assert len(linhas_col) == 11  # 10 municipalities + Total
-    assert linhas_col[-1][0].lower() == "total"
-    validar(conteudo_com_coluna, min_linhas=10)
+    assert len(rows_col) == 11  # 10 municipalities + Total
+    assert rows_col[-1][0].lower() == "total"
+    validate(content_with_column, min_rows=10)
 
-    # Empty sample ("Nenhum registro selecionado")
-    conteudo_vazio = (PASTA_DADOS / "tabnet_vazio_amostra.html").read_bytes()
-    with pytest.raises(RespostaInvalida, match="Nenhum registro selecionado"):
-        validar(conteudo_vazio, min_linhas=10)
+    # Empty sample ("Nenhum record selecionado")
+    empty_content = (FOLDER_DATA / "tabnet_empty_sample.html").read_bytes()
+    with pytest.raises(InvalidResponse, match="Nenhum registro selecionado"):
+        validate(empty_content, min_rows=10)
 
 
-def test_extrair_tabela_linha_malformada_antes_do_total_levanta_erro():
-    """Malformed row before Total with mismatched column count raises RespostaInvalida with label."""
-    html_malformado = (
+def test_extract_table_malformed_row_before_total_raises_error():
+    """Malformed row before Total with mismatched column count raises InvalidResponse with label."""
+    malformed_html = (
         b"<PRE>"
         b'"Municipio";"Col1";"Col2"\n'
         b'"110001 ALTA FLORESTA";10;20\n'
@@ -104,11 +104,11 @@ def test_extrair_tabela_linha_malformada_antes_do_total_levanta_erro():
         b'"Total";25;20\n'
         b"</PRE>"
     )
-    with pytest.raises(RespostaInvalida, match="Linha malformada antes do Total: rótulo '110002 ARIQUEMES'"):
-        extrair_tabela(html_malformado)
+    with pytest.raises(InvalidResponse, match="Malformed row before Total: label '110002 ARIQUEMES'"):
+        extract_table(malformed_html)
 
     # Divergent rows AFTER Total are ignored without raising error
-    html_rodape_divergente = (
+    html_divergent_footer = (
         b"<PRE>"
         b'"Municipio";"Col1";"Col2"\n'
         b'"110001 ALTA FLORESTA";10;20\n'
@@ -116,7 +116,7 @@ def test_extrair_tabela_linha_malformada_antes_do_total_levanta_erro():
         b"Fonte: DATASUS - TabNet\n"
         b"</PRE>"
     )
-    cab, linhas = extrair_tabela(html_rodape_divergente)
-    assert len(linhas) == 2
-    assert linhas[-1][0].lower() == "total"
+    hdr, rows = extract_table(html_divergent_footer)
+    assert len(rows) == 2
+    assert rows[-1][0].lower() == "total"
 

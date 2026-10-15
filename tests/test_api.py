@@ -22,10 +22,10 @@ def test_package_version():
 def test_public_api_all():
     """Validate that __all__ declares the version and canonical source namespaces."""
     assert hasattr(bmp, "__all__")
-    esperados = {"__version__", "datasus", "ibge", "inep", "ipea", "tesouro"}
-    assert set(bmp.__all__) == esperados
-    for nome in bmp.__all__:
-        assert hasattr(bmp, nome), f"Símbolo {nome} declarado em __all__ não existe no módulo"
+    expected = {"__version__", "datasus", "ibge", "inep", "ipea", "tesouro"}
+    assert set(bmp.__all__) == expected
+    for name in bmp.__all__:
+        assert hasattr(bmp, name), f"Symbol {name} declared in __all__ does not exist in the module"
 
 
 def test_source_namespaces():
@@ -39,26 +39,26 @@ def test_source_namespaces():
 
 def test_readme_quickstart_imports_and_callables():
     """Validate that all imports and functions documented in the README Quick Start are valid and callable."""
-    from brmunipanel.ibge import populacao, pib
-    from brmunipanel.ipea import pbf
+    from brmunipanel.ibge import population, gdp
+    from brmunipanel.ipea import cash_transf_program
     from brmunipanel.inep import (
-        harmonizar_censo_escolar,
-        harmonizar_censo_superior,
-        harmonizar_ideb,
+        harmonize_school_census,
+        harmonize_higher_education_census,
+        harmonize_ideb,
     )
     from brmunipanel.tesouro import siconfi, finbra
-    from brmunipanel.datasus import saude
+    from brmunipanel.datasus import health
 
     # Harmonization functions documented in the README
-    assert callable(populacao.harmonizar)
-    assert callable(pib.harmonizar)
-    assert callable(pbf.harmonizar)
-    assert callable(harmonizar_censo_escolar)
-    assert callable(harmonizar_censo_superior)
-    assert callable(harmonizar_ideb)
-    assert callable(siconfi.harmonizar)
-    assert callable(finbra.harmonizar)
-    assert callable(saude.harmonizar)
+    assert callable(population.harmonize)
+    assert callable(gdp.harmonize)
+    assert callable(cash_transf_program.harmonize)
+    assert callable(harmonize_school_census)
+    assert callable(harmonize_higher_education_census)
+    assert callable(harmonize_ideb)
+    assert callable(siconfi.harmonize)
+    assert callable(finbra.harmonize)
+    assert callable(health.harmonize)
 
 
 def test_from_import_submodules():
@@ -79,13 +79,13 @@ def test_lazy_imports_clean_subprocess():
         "import sys\n"
         f"if {src_dir!r} not in sys.path: sys.path.insert(0, {src_dir!r})\n"
         "import brmunipanel\n"
-        "heavy_modules = {'polars', 'pandas', 'brmunipanel.nucleo', "
-        "'brmunipanel.inep.censo_escolar', "
-        "'brmunipanel.inep.censo_superior', "
+        "heavy_modules = {'polars', 'pandas', 'brmunipanel.core', "
+        "'brmunipanel.inep.school_census', "
+        "'brmunipanel.inep.higher_education_census', "
         "'brmunipanel.inep.ideb'}\n"
         "loaded_heavy = heavy_modules.intersection(sys.modules)\n"
         "if loaded_heavy:\n"
-        "    print(f'Módulos carregados indevidamente: {sorted(loaded_heavy)}')\n"
+        "    print(f'Modules loaded unexpectedly: {sorted(loaded_heavy)}')\n"
         "    sys.exit(1)\n"
     )
     result = subprocess.run(

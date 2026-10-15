@@ -43,28 +43,28 @@ The library exposes version metadata and source namespaces at top level, along w
 ```python
 from pathlib import Path
 import brmunipanel as bmp
-from brmunipanel.ibge import populacao, pib
-from brmunipanel.ipea import pbf
+from brmunipanel.ibge import population, gdp
+from brmunipanel.ipea import cash_transf_program
 from brmunipanel.inep import (
-    harmonizar_censo_escolar,
-    harmonizar_censo_superior,
-    harmonizar_ideb,
+    harmonize_school_census,
+    harmonize_higher_education_census,
+    harmonize_ideb,
 )
 from brmunipanel.tesouro import siconfi, finbra
-from brmunipanel.datasus import saude
+from brmunipanel.datasus import health
 
 # Package version and source namespaces
 print(bmp.__version__)
 # Available namespaces: bmp.ibge, bmp.tesouro, bmp.ipea, bmp.datasus, bmp.inep
 
 # Example: Harmonize population estimates from a local SIDRA raw folder
-# df_pop = populacao.harmonizar(Path("raw/ibge/populacao"))
+# df_pop = population.harmonize(Path("raw/ibge/population"))
 
 # Example: Harmonize Bolsa Família records from an IPEA Data raw folder
-# df_pbf = pbf.harmonizar(Path("raw/ipea"))
+# df_ctp = cash_transf_program.harmonize(Path("raw/ipea"))
 
 # Example: Harmonize public school IDEB scores with municipal crosswalk
-# df_ideb = harmonizar_ideb(Path("raw/inep/ideb"), municipios_df)
+# df_ideb = harmonize_ideb(Path("raw/inep/ideb"), municipalities_df)
 ```
 
 ## Data Sources Handled

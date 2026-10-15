@@ -12,101 +12,101 @@ from typing import Mapping, Sequence
 
 import polars as pl
 
-from ..nucleo import Requisicao, RespostaInvalida, baixar_lote, ler_bruto
+from ..core import Request, InvalidResponse, download_batch, read_raw
 
 BASE = "https://servicodados.ibge.gov.br/api/v3/agregados"
 
 # SIDRA markers instead of value: absolute zero, unavailable, not applicable, and confidentiality.
-ZERO_ABSOLUTO = "-"
-MARCADORES_SEM_VALOR = ("...", "..", "X")
+ABSOLUTE_ZERO = "-"
+NO_VALUE_MARKERS = ("...", "..", "X")
 
 
-def requisicao_ano(tabela: int, ano: int, variaveis: Sequence[int]) -> Requisicao:
-    ids = "|".join(str(v) for v in variaveis)
-    return Requisicao(
-        chave=f"t{tabela}/{ano}",
-        url=f"{BASE}/{tabela}/periodos/{ano}/variaveis/{ids}?localidades=N6[all]",
-        arquivo=f"t{tabela}/t{tabela}_{ano}.json.gz",
+def year_request(table: int, year: int, variables: Sequence[int]) -> Request:
+    ids = "|".join(str(v) for v in variables)
+    return Request(
+        key=f"t{table}/{year}",
+        url=f"{BASE}/{table}/periodos/{year}/variaveis/{ids}?localidades=N6[all]",
+        file=f"t{table}/t{table}_{year}.json.gz",
     )
 
 
-def requisicao_metadados(tabela: int) -> Requisicao:
-    return Requisicao(
-        chave=f"t{tabela}/metadados",
-        url=f"{BASE}/{tabela}/metadados",
-        arquivo=f"t{tabela}/t{tabela}_metadados.json.gz",
+def metadata_request(table: int) -> Request:
+    return Request(
+        key=f"t{table}/metadata",
+        url=f"{BASE}/{table}/metadados",
+        file=f"t{table}/t{table}_metadata.json.gz",
     )
 
 
-def validar_valores(conteudo: bytes, minimo_municipios: int = 5000) -> None:
+def validate_values(content: bytes, min_municipalities: int = 5000) -> None:
     """Rejects responses that do not bring the list of variables with municipal series."""
     try:
-        blocos = json.loads(conteudo)
-    except ValueError as erro:
-        raise RespostaInvalida(f"resposta não é JSON: {conteudo[:80]!r}") from erro
-    if not isinstance(blocos, list) or not blocos:
-        raise RespostaInvalida(f"resposta sem variáveis: {conteudo[:80]!r}")
-    for bloco in blocos:
-        series = bloco["resultados"][0]["series"]
-        if len(series) < minimo_municipios:
-            raise RespostaInvalida(f"variável {bloco['id']} com {len(series)} municípios")
+        blocks = json.loads(content)
+    except ValueError as error:
+        raise InvalidResponse(f"response is not JSON: {content[:80]!r}") from error
+    if not isinstance(blocks, list) or not blocks:
+        raise InvalidResponse(f"response without variables: {content[:80]!r}")
+    for block in blocks:
+        series = block["resultados"][0]["series"]
+        if len(series) < min_municipalities:
+            raise InvalidResponse(f"variable {block['id']} with {len(series)} municipalities")
 
 
-def baixar_tabela(tabela: int, anos: Sequence[int], variaveis: Sequence[int], pasta: Path, **opcoes) -> list[dict]:
-    """Downloads table metadata and one response per year into `pasta` (the SIDRA folder)."""
-    metadados = baixar_lote([requisicao_metadados(tabela)], pasta, **opcoes)
-    requisicoes = [requisicao_ano(tabela, ano, variaveis) for ano in anos]
-    return metadados + baixar_lote(requisicoes, pasta, validar=validar_valores, **opcoes)
+def download_table(table: int, years: Sequence[int], variables: Sequence[int], folder: Path, **options) -> list[dict]:
+    """Downloads table metadata and one response per year into `folder` (the SIDRA folder)."""
+    metadata = download_batch([metadata_request(table)], folder, **options)
+    reqs = [year_request(table, year, variables) for year in years]
+    return metadata + download_batch(reqs, folder, validate=validate_values, **options)
 
 
-def ler_tabela(pasta: Path, tabela: int, anos: Sequence[int]) -> pl.DataFrame:
+def read_table(folder: Path, table: int, years: Sequence[int]) -> pl.DataFrame:
     """Reads raw data from a table in long format: municipality, year, variable, and the value as received (text)."""
-    linhas = []
-    for ano in anos:
-        blocos = json.loads(ler_bruto(pasta, requisicao_ano(tabela, ano, ()).arquivo))
-        for bloco in blocos:
-            variavel = int(bloco["id"])
-            for serie in bloco["resultados"][0]["series"]:
-                municipio = serie["localidade"]["id"]
-                for periodo, valor in serie["serie"].items():
-                    linhas.append((municipio, int(periodo), variavel, valor))
+    rows = []
+    for year in years:
+        blocks = json.loads(read_raw(folder, year_request(table, year, ()).file))
+        for block in blocks:
+            variable = int(block["id"])
+            for series in block["resultados"][0]["series"]:
+                municipality = series["localidade"]["id"]
+                for period, value in series["serie"].items():
+                    rows.append((municipality, int(period), variable, value))
     return pl.DataFrame(
-        linhas,
-        schema={"cod_municipio": pl.String, "ano": pl.Int16, "variavel": pl.Int32, "valor_bruto": pl.String},
+        rows,
+        schema={"municipality_code": pl.String, "year": pl.Int16, "variable": pl.Int32, "raw_value": pl.String},
         orient="row",
     )
 
 
-def para_painel(longo: pl.DataFrame, colunas: Mapping[int, tuple[str, pl.DataType]]) -> tuple[pl.DataFrame, pl.DataFrame]:
+def to_panel(long: pl.DataFrame, columns: Mapping[int, tuple[str, pl.DataType]]) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Converts long format into a panel (one row per municipality and year) and separates markers.
 
-    `colunas` associates each variable ID with the column name and type. Absolute zero (`-`) becomes 0;
+    `columns` associates each variable ID with the column name and type. Absolute zero (`-`) becomes 0;
     unavailable (`...`), not applicable (`..`), and confidentiality (`X`) become null in the panel and are returned in the
     second table, one row per cell, so that the reason for the null is not lost.
     """
-    nomes = pl.DataFrame(
-        {"variavel": list(colunas), "coluna": [nome for nome, _ in colunas.values()]},
-        schema={"variavel": pl.Int32, "coluna": pl.String},
+    names = pl.DataFrame(
+        {"variable": list(columns), "column": [name for name, _ in columns.values()]},
+        schema={"variable": pl.Int32, "column": pl.String},
     )
-    longo = longo.join(nomes, on="variavel", how="inner")
-    sem_valor = pl.col("valor_bruto").is_in(MARCADORES_SEM_VALOR)
-    marcadores = (
-        longo.filter(sem_valor)
-        .select("cod_municipio", "ano", "coluna", pl.col("valor_bruto").alias("marcador"))
-        .sort("cod_municipio", "ano", "coluna")
+    long = long.join(names, on="variable", how="inner")
+    without_value = pl.col("raw_value").is_in(NO_VALUE_MARKERS)
+    markers = (
+        long.filter(without_value)
+        .select("municipality_code", "year", "column", pl.col("raw_value").alias("marker"))
+        .sort("municipality_code", "year", "column")
     )
-    numerico = (
-        pl.when(sem_valor)
+    numeric = (
+        pl.when(without_value)
         .then(None)
-        .when(pl.col("valor_bruto") == ZERO_ABSOLUTO)
+        .when(pl.col("raw_value") == ABSOLUTE_ZERO)
         .then(pl.lit("0"))
-        .otherwise(pl.col("valor_bruto"))
+        .otherwise(pl.col("raw_value"))
         .cast(pl.Float64)
     )
-    painel = (
-        longo.with_columns(numerico.alias("valor"))
-        .pivot(on="coluna", index=["cod_municipio", "ano"], values="valor")
-        .select("cod_municipio", "ano", *[pl.col(nome).cast(tipo) for nome, tipo in colunas.values()])
-        .sort("cod_municipio", "ano")
+    panel = (
+        long.with_columns(numeric.alias("value"))
+        .pivot(on="column", index=["municipality_code", "year"], values="value")
+        .select("municipality_code", "year", *[pl.col(name).cast(kind) for name, kind in columns.values()])
+        .sort("municipality_code", "year")
     )
-    return painel, marcadores
+    return panel, markers

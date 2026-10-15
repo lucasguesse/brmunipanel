@@ -9,97 +9,97 @@ import polars as pl
 import pytest
 
 from brmunipanel.ibge import sidra
-from brmunipanel.nucleo import RespostaInvalida
+from brmunipanel.core import InvalidResponse
 
-PASTA_DADOS = Path(__file__).resolve().parent / "dados"
-
-
-@pytest.fixture
-def amostra_5938_2022_bytes() -> bytes:
-    caminho = PASTA_DADOS / "sidra_t5938_2022_amostra.json"
-    return caminho.read_bytes()
+FOLDER_DATA = Path(__file__).resolve().parent / "data"
 
 
 @pytest.fixture
-def amostra_1685_2012_bytes() -> bytes:
-    caminho = PASTA_DADOS / "sidra_t1685_2012_amostra.json"
-    return caminho.read_bytes()
+def sample_5938_2022_bytes() -> bytes:
+    path = FOLDER_DATA / "sidra_t5938_2022_sample.json"
+    return path.read_bytes()
 
 
-def test_validar_valores(amostra_5938_2022_bytes: bytes) -> None:
-    # 1. Accepts valid real response (with minimo_municipios matching the sample)
-    sidra.validar_valores(amostra_5938_2022_bytes, minimo_municipios=4)
+@pytest.fixture
+def sample_1685_2012_bytes() -> bytes:
+    path = FOLDER_DATA / "sidra_t1685_2012_sample.json"
+    return path.read_bytes()
+
+
+def test_validate_values(sample_5938_2022_bytes: bytes) -> None:
+    # 1. Accepts valid real response (with min_municipalities matching the sample)
+    sidra.validate_values(sample_5938_2022_bytes, min_municipalities=4)
 
     # 2. Rejects invalid JSON
-    with pytest.raises(RespostaInvalida, match="resposta não é JSON"):
-        sidra.validar_valores(b"<html>Erro no servidor</html>")
+    with pytest.raises(InvalidResponse, match="response is not JSON"):
+        sidra.validate_values(b"<html>Erro no servidor</html>")
 
     # 3. Rejects empty list
-    with pytest.raises(RespostaInvalida, match="resposta sem variáveis"):
-        sidra.validar_valores(b"[]")
+    with pytest.raises(InvalidResponse, match="response without variables"):
+        sidra.validate_values(b"[]")
 
     # 4. Rejects response with fewer municipalities than the configured minimum
-    with pytest.raises(RespostaInvalida, match="com 4 municípios"):
-        sidra.validar_valores(amostra_5938_2022_bytes, minimo_municipios=100)
+    with pytest.raises(InvalidResponse, match="with 4 municipalities"):
+        sidra.validate_values(sample_5938_2022_bytes, min_municipalities=100)
 
 
-def test_ler_tabela(tmp_path: Path, amostra_5938_2022_bytes: bytes) -> None:
-    pasta_tabela = tmp_path / "t5938"
-    pasta_tabela.mkdir(parents=True, exist_ok=True)
-    (pasta_tabela / "t5938_2022.json.gz").write_bytes(gzip.compress(amostra_5938_2022_bytes, mtime=0))
+def test_read_table(tmp_path: Path, sample_5938_2022_bytes: bytes) -> None:
+    folder_table = tmp_path / "t5938"
+    folder_table.mkdir(parents=True, exist_ok=True)
+    (folder_table / "t5938_2022.json.gz").write_bytes(gzip.compress(sample_5938_2022_bytes, mtime=0))
 
-    df_longo = sidra.ler_tabela(tmp_path, 5938, [2022])
+    df_long = sidra.read_table(tmp_path, 5938, [2022])
 
-    assert df_longo.schema == {
-        "cod_municipio": pl.String,
-        "ano": pl.Int16,
-        "variavel": pl.Int32,
-        "valor_bruto": pl.String,
+    assert df_long.schema == {
+        "municipality_code": pl.String,
+        "year": pl.Int16,
+        "variable": pl.Int32,
+        "raw_value": pl.String,
     }
-    assert df_longo.height == 7 * 4  # 7 variables x 4 municipalities
-    assert df_longo["ano"].unique().to_list() == [2022]
-    assert df_longo["valor_bruto"].dtype == pl.String
+    assert df_long.height == 7 * 4  # 7 variables x 4 municipalities
+    assert df_long["year"].unique().to_list() == [2022]
+    assert df_long["raw_value"].dtype == pl.String
 
 
-def test_para_painel_converte_marcadores_e_traco(
-    tmp_path: Path, amostra_1685_2012_bytes: bytes, amostra_5938_2022_bytes: bytes
+def test_to_panel_converts_markers_and_dash(
+    tmp_path: Path, sample_1685_2012_bytes: bytes, sample_5938_2022_bytes: bytes
 ) -> None:
     # Sets up tables in tmp_path
     (tmp_path / "t1685").mkdir(parents=True, exist_ok=True)
-    (tmp_path / "t1685" / "t1685_2012.json.gz").write_bytes(gzip.compress(amostra_1685_2012_bytes, mtime=0))
+    (tmp_path / "t1685" / "t1685_2012.json.gz").write_bytes(gzip.compress(sample_1685_2012_bytes, mtime=0))
 
-    df_longo_cempre = sidra.ler_tabela(tmp_path, 1685, [2012])
-    colunas_cempre_teste = {
-        706: ("unidades_locais", pl.Int64),
+    df_long_cempre = sidra.read_table(tmp_path, 1685, [2012])
+    columns_cempre_test = {
+        706: ("establishments_number", pl.Int64),
         367: ("empresas_atuantes", pl.Int64),
-        707: ("pessoal_ocupado_total", pl.Int64),
-        708: ("pessoal_ocupado_assalariado", pl.Int64),
-        5944: ("pessoal_assalariado_medio", pl.Float64),
-        662: ("salarios_mil_reais", pl.Float64),
-        1606: ("salario_medio_mensal_sm", pl.Float64),
-        10143: ("salario_medio_mensal_reais", pl.Float64),
+        707: ("employed_total", pl.Int64),
+        708: ("employed_salaried", pl.Int64),
+        5944: ("salaried_employees_avg", pl.Float64),
+        662: ("wages_thousand_brl", pl.Float64),
+        1606: ("avg_monthly_wage_mw", pl.Float64),
+        10143: ("avg_monthly_wage_brl", pl.Float64),
     }
-    painel_cempre, marcadores_cempre = sidra.para_painel(df_longo_cempre, colunas_cempre_teste)
+    panel_cempre, markers_cempre = sidra.to_panel(df_long_cempre, columns_cempre_test)
 
-    # 1. 4220000 has '-' in pessoal_ocupado_assalariado (var 708) -> must become 0
-    linha_4220000 = painel_cempre.filter(pl.col("cod_municipio") == "4220000")
-    assert linha_4220000["pessoal_ocupado_assalariado"].item() == 0
+    # 1. 4220000 has '-' in employed_salaried (var 708) -> must become 0
+    row_4220000 = panel_cempre.filter(pl.col("municipality_code") == "4220000")
+    assert row_4220000["employed_salaried"].item() == 0
 
-    # 2. 4220000 has 'X' in pessoal_assalariado_medio (var 5944) -> must be null in panel
-    assert linha_4220000["pessoal_assalariado_medio"].item() is None
+    # 2. 4220000 has 'X' in salaried_employees_avg (var 5944) -> must be null in panel
+    assert row_4220000["salaried_employees_avg"].item() is None
 
     # 3. Markers store 'X' in markers table
-    marcs_4220000 = marcadores_cempre.filter(pl.col("cod_municipio") == "4220000")
-    assert "X" in marcs_4220000["marcador"].to_list()
+    marks_4220000 = markers_cempre.filter(pl.col("municipality_code") == "4220000")
+    assert "X" in marks_4220000["marker"].to_list()
     # '-' must NOT be in markers (because it is numeric zero)
-    assert "-" not in marcadores_cempre["marcador"].to_list()
+    assert "-" not in markers_cempre["marker"].to_list()
 
     # 4. In table 5938 from 2022, impostos_liquidos and VAB are '...'
     (tmp_path / "t5938").mkdir(parents=True, exist_ok=True)
-    (tmp_path / "t5938" / "t5938_2022.json.gz").write_bytes(gzip.compress(amostra_5938_2022_bytes, mtime=0))
-    df_longo_pib = sidra.ler_tabela(tmp_path, 5938, [2022])
-    colunas_pib_teste = {
-        37: ("pib", pl.Float64),
+    (tmp_path / "t5938" / "t5938_2022.json.gz").write_bytes(gzip.compress(sample_5938_2022_bytes, mtime=0))
+    df_long_gdp = sidra.read_table(tmp_path, 5938, [2022])
+    columns_gdp_test = {
+        37: ("gdp", pl.Float64),
         543: ("impostos_liquidos", pl.Float64),
         498: ("vab_total", pl.Float64),
         513: ("vab_agropecuaria", pl.Float64),
@@ -107,27 +107,27 @@ def test_para_painel_converte_marcadores_e_traco(
         6575: ("vab_servicos", pl.Float64),
         525: ("vab_adm_publica", pl.Float64),
     }
-    painel_pib, marcadores_pib = sidra.para_painel(df_longo_pib, colunas_pib_teste)
+    panel_gdp, markers_gdp = sidra.to_panel(df_long_gdp, columns_gdp_test)
 
     # GDP has a numeric value
-    assert painel_pib["pib"].null_count() == 0
+    assert panel_gdp["gdp"].null_count() == 0
     # Impostos and VAB are null
-    assert painel_pib["impostos_liquidos"].null_count() == 4
-    assert painel_pib["vab_total"].null_count() == 4
+    assert panel_gdp["impostos_liquidos"].null_count() == 4
+    assert panel_gdp["vab_total"].null_count() == 4
     # Marker '...' present in the GDP markers
-    assert all(m == "..." for m in marcadores_pib["marcador"].to_list())
-    assert marcadores_pib.height == 6 * 4  # 6 columns without value x 4 municipalities
+    assert all(m == "..." for m in markers_gdp["marker"].to_list())
+    assert markers_gdp.height == 6 * 4  # 6 columns without value x 4 municipalities
 
     # 5. Explicit synthetic test for '..'
-    df_dois_pontos = pl.DataFrame(
+    df_colon = pl.DataFrame(
         {
-            "cod_municipio": ["1100015"],
-            "ano": [2020],
-            "variavel": [37],
-            "valor_bruto": [".."],
+            "municipality_code": ["1100015"],
+            "year": [2020],
+            "variable": [37],
+            "raw_value": [".."],
         },
-        schema={"cod_municipio": pl.String, "ano": pl.Int16, "variavel": pl.Int32, "valor_bruto": pl.String},
+        schema={"municipality_code": pl.String, "year": pl.Int16, "variable": pl.Int32, "raw_value": pl.String},
     )
-    p_dp, m_dp = sidra.para_painel(df_dois_pontos, {37: ("pib", pl.Float64)})
-    assert p_dp["pib"].item() is None
-    assert m_dp["marcador"].to_list() == [".."]
+    p_dp, m_dp = sidra.to_panel(df_colon, {37: ("gdp", pl.Float64)})
+    assert p_dp["gdp"].item() is None
+    assert m_dp["marker"].to_list() == [".."]

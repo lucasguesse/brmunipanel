@@ -1,9 +1,9 @@
-from brmunipanel.inep.censo_escolar import harmonizar as harmonizar_censo_escolar
-from brmunipanel.inep.censo_superior import harmonizar as harmonizar_censo_superior
-from brmunipanel.inep.ideb import harmonizar as harmonizar_ideb
+from brmunipanel.inep.school_census import harmonize as harmonize_school_census
+from brmunipanel.inep.higher_education_census import harmonize as harmonize_higher_education_census
+from brmunipanel.inep.ideb import harmonize as harmonize_ideb
 
 __all__ = [
-    "harmonizar_censo_escolar",
-    "harmonizar_censo_superior",
-    "harmonizar_ideb",
+    "harmonize_school_census",
+    "harmonize_higher_education_census",
+    "harmonize_ideb",
 ]
