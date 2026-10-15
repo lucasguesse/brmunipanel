@@ -3,6 +3,8 @@
 Each source has its own folder inside the raw data folder, with a `manifest.json` that records,
 for each file, the request that generated it (URL, method, body), the date, size, and response hash.
 A file already recorded in the manifest is never downloaded again or overwritten, making collection resumable.
+Before a recorded file is reused, the request is compared with the record and the file with the recorded size and
+hash, and any difference raises an error.
 """
 
 from __future__ import annotations
@@ -77,6 +79,21 @@ def _requisitar(req: Requisicao, sessao: requests.Session, timeout: float) -> re
     return sessao.get(req.url, headers=cabecalhos, timeout=timeout)
 
 
+def _conferir_registro(pasta: Path, req: Requisicao, registro: dict) -> None:
+    """Raises when the manifest record no longer describes `req` or the file on disk no longer matches it."""
+    esperado = {"url": req.url, "metodo": req.metodo, "arquivo": req.arquivo, "corpo": req.corpo}
+    diferentes = [campo for campo, valor in esperado.items() if registro.get(campo) != valor]
+    if diferentes:
+        raise RuntimeError(f"{req.chave}: a requisição difere do registro no manifesto ({', '.join(diferentes)})")
+    gravado = (pasta / req.arquivo).read_bytes()
+    try:
+        conteudo = gzip.decompress(gravado) if req.compactar else gravado
+    except (OSError, EOFError) as erro:
+        raise RuntimeError(f"{req.chave}: o arquivo {req.arquivo} não pôde ser descompactado ({erro})") from erro
+    if len(conteudo) != registro.get("bytes") or hashlib.sha256(conteudo).hexdigest() != registro.get("sha256"):
+        raise RuntimeError(f"{req.chave}: o arquivo {req.arquivo} mudou depois de registrado no manifesto")
+
+
 def baixar(
     req: Requisicao,
     pasta: Path,
@@ -92,11 +109,15 @@ def baixar(
     Network errors, HTTP 429 and 5xx, and responses rejected by `validar` are retried, with waiting time
     doubled on each attempt. Other HTTP errors and a failed certificate verification are raised immediately,
     because retrying does not resolve them.
+
+    A key already in the manifest whose file exists is reused only when the record matches the request and the file
+    still has the recorded size and hash; otherwise an error is raised and nothing is downloaded or overwritten.
     """
     pasta = Path(pasta)
     manifesto = ler_manifesto(pasta)
     destino = pasta / req.arquivo
     if req.chave in manifesto and destino.exists():
+        _conferir_registro(pasta, req, manifesto[req.chave])
         return manifesto[req.chave], False
 
     sessao = sessao or requests.Session()

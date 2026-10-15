@@ -491,4 +491,91 @@ def test_somente_ipv4_restaura() -> None:
     assert urllib3.util.connection.allowed_gai_family is original
 
 
+def test_reutilizacao_com_url_diferente_sobe_erro(tmp_path: Path) -> None:
+    """A recorded key requested again with another URL raises, without a request and without touching the file."""
+    sessao = SessaoFalsa([RespostaFalsa(b"versao 1", 200)])
+    req = Requisicao(chave="fonte/1", url="http://exemplo.org/v1", arquivo="fonte/1.json.gz")
+    baixar(req, tmp_path, sessao=sessao, espera=0)
+    gravado = (tmp_path / req.arquivo).read_bytes()
+
+    outra = Requisicao(chave="fonte/1", url="http://exemplo.org/v2", arquivo="fonte/1.json.gz")
+    with pytest.raises(RuntimeError, match=r"fonte/1: a requisição difere do registro no manifesto \(url\)"):
+        baixar(outra, tmp_path, sessao=sessao, espera=0)
+
+    assert len(sessao.chamadas) == 1
+    assert (tmp_path / req.arquivo).read_bytes() == gravado
+    assert ler_manifesto(tmp_path)["fonte/1"]["url"] == "http://exemplo.org/v1"
+
+
+def test_reutilizacao_com_corpo_diferente_sobe_erro(tmp_path: Path) -> None:
+    """A recorded POST requested again with another body raises."""
+    sessao = SessaoFalsa([RespostaFalsa(b"resposta", 200)])
+    req = Requisicao(chave="fonte/post", url="http://exemplo.org/post", arquivo="post.json.gz", metodo="POST", corpo="a=1")
+    baixar(req, tmp_path, sessao=sessao, espera=0)
+
+    outra = Requisicao(chave="fonte/post", url="http://exemplo.org/post", arquivo="post.json.gz", metodo="POST", corpo="a=2")
+    with pytest.raises(RuntimeError, match=r"\(corpo\)"):
+        baixar(outra, tmp_path, sessao=sessao, espera=0)
+    assert len(sessao.chamadas) == 1
+
+
+def test_reutilizacao_de_registro_sem_metodo_sobe_erro(tmp_path: Path) -> None:
+    """A record written without the `metodo` field does not describe the request and raises."""
+    dados = b"PK\x03\x04conteudo"
+    (tmp_path / "pacotes").mkdir()
+    (tmp_path / "pacotes" / "a.zip").write_bytes(dados)
+    registro = {
+        "url": "http://exemplo.org/a.zip",
+        "arquivo": "pacotes/a.zip",
+        "bytes": len(dados),
+        "sha256": hashlib.sha256(dados).hexdigest(),
+    }
+    (tmp_path / "manifest.json").write_text(json.dumps({"pacotes/a": registro}), encoding="utf-8")
+
+    req = Requisicao(chave="pacotes/a", url="http://exemplo.org/a.zip", arquivo="pacotes/a.zip", compactar=False)
+    sessao = SessaoFalsa([])
+    with pytest.raises(RuntimeError, match=r"\(metodo\)"):
+        baixar(req, tmp_path, sessao=sessao, espera=0)
+    assert sessao.chamadas == []
+
+
+def test_reutilizacao_com_arquivo_alterado_sobe_erro(tmp_path: Path) -> None:
+    """A gzip file replaced by another valid gzip after the download raises, and is not downloaded again."""
+    sessao = SessaoFalsa([RespostaFalsa(b"original", 200)])
+    req = Requisicao(chave="fonte/2", url="http://exemplo.org/2", arquivo="2.json.gz")
+    baixar(req, tmp_path, sessao=sessao, espera=0)
+    alterado = gzip.compress(b"outro conteudo", mtime=0)
+    (tmp_path / req.arquivo).write_bytes(alterado)
+
+    with pytest.raises(RuntimeError, match=r"fonte/2: o arquivo 2\.json\.gz mudou depois de registrado no manifesto"):
+        baixar(req, tmp_path, sessao=sessao, espera=0)
+    assert len(sessao.chamadas) == 1
+    assert (tmp_path / req.arquivo).read_bytes() == alterado
+
+
+def test_reutilizacao_com_gzip_truncado_sobe_erro(tmp_path: Path) -> None:
+    """A truncated gzip file raises an error that names the file."""
+    sessao = SessaoFalsa([RespostaFalsa(b"conteudo longo " * 100, 200)])
+    req = Requisicao(chave="fonte/3", url="http://exemplo.org/3", arquivo="3.json.gz")
+    baixar(req, tmp_path, sessao=sessao, espera=0)
+    destino = tmp_path / req.arquivo
+    destino.write_bytes(destino.read_bytes()[:20])
+
+    with pytest.raises(RuntimeError, match=r"fonte/3: o arquivo 3\.json\.gz não pôde ser descompactado"):
+        baixar(req, tmp_path, sessao=sessao, espera=0)
+    assert len(sessao.chamadas) == 1
+
+
+def test_reutilizacao_sem_compactar_confere_o_hash(tmp_path: Path) -> None:
+    """An uncompressed file with one byte changed raises; the unchanged file is reused without a request."""
+    sessao = SessaoFalsa([RespostaFalsa(b"\x00\x01\x02\x03", 200)])
+    req = Requisicao(chave="bin/1", url="http://exemplo.org/bin", arquivo="1.bin", compactar=False)
+    registro, _ = baixar(req, tmp_path, sessao=sessao, espera=0)
+
+    assert baixar(req, tmp_path, sessao=sessao, espera=0) == (registro, False)
+    (tmp_path / req.arquivo).write_bytes(b"\x00\x01\x02\x04")
+    with pytest.raises(RuntimeError, match=r"mudou depois de registrado"):
+        baixar(req, tmp_path, sessao=sessao, espera=0)
+    assert len(sessao.chamadas) == 1
+
 

@@ -201,7 +201,8 @@ def test_censo_escolar_baixar_mock(monkeypatch):
             arquivo = pasta_inep / f"censo-escolar_{ano}.zip"
             arquivo.write_bytes(b"PK\x03\x04" + b"X" * 10)
             manifesto[f"censo-escolar/{ano}"] = {
-                "arquivo": f"censo-escolar_{ano}.zip",
+                "arquivo": f"censo-escolar/censo-escolar_{ano}.zip",
+                "metodo": "GET",
                 "url": f"https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_{ano}.zip",
                 "bytes": arquivo.stat().st_size,
                 "sha256": hashlib.sha256(arquivo.read_bytes()).hexdigest()

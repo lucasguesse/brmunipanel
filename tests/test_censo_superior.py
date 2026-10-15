@@ -331,7 +331,8 @@ def test_baixar(base_dir, monkeypatch):
     
     manifesto = {
         "censo-superior/2023": {
-            "arquivo": "censo-superior_2023.zip",
+            "arquivo": "censo-superior/censo-superior_2023.zip",
+            "metodo": "GET",
             "url": "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2023.zip",
             "bytes": arquivo.stat().st_size,
             "sha256": sha256
