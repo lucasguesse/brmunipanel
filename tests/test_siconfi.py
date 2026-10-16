@@ -340,6 +340,56 @@ def test_api_requests():
     assert [r.key for r in reqs_order] == ["2015/1100015", "2015/1200013", "2015/3550308"]
 
 
+def test_api_names_by_annex():
+    assert siconfi.api_annex(2013) == "Anexo I-E"
+    assert siconfi.api_annex(2014) == "DCA-Anexo I-E"
+    assert siconfi.api_annex(2013, "I-C") == "Anexo I-C"
+    assert siconfi.api_annex(2023, "I-C") == "DCA-Anexo I-C"
+    assert siconfi.api_file(2013) == "dca_annex_i_e_2013.jsonl.gz"
+    assert siconfi.api_file(2013, "I-C") == "dca_annex_i_c_2013.jsonl.gz"
+    assert siconfi.api_manifest_key(2013) == "dca_2013"
+    assert siconfi.api_manifest_key(2013, "I-C") == "dca_i_c_2013"
+
+    reqs_2013 = siconfi.api_requests(2013, ["1200013"], annex="I-C")
+    assert reqs_2013[0].key == "2013/1200013"
+    assert reqs_2013[0].url.endswith("no_anexo=Anexo+I-C")
+    assert reqs_2013[0].file == "dca_annex_i_c_2013.jsonl.gz"
+    reqs_2014 = siconfi.api_requests(2014, ["1200013"], annex="I-C")
+    assert reqs_2014[0].url.endswith("no_anexo=DCA-Anexo+I-C")
+    assert reqs_2014[0].file == "dca_annex_i_c_2014.jsonl.gz"
+
+
+def test_download_api_keeps_annexes_apart(tmp_path, monkeypatch):
+    targets = []
+
+    def fake_download_at_rate(reqs, target, **kwargs):
+        targets.append(target.name)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(gzip.compress(b'{"chave": "x"}\n', mtime=0))
+        return {"rows": len(reqs), "pauses_429": 0}
+
+    monkeypatch.setattr(core, "download_at_rate", fake_download_at_rate)
+
+    siconfi.download_api(tmp_path, ["1200013"], years=[2013, 2014])
+    siconfi.download_api(tmp_path, ["1200013"], years=[2013, 2014], annex="I-C")
+    assert targets == [
+        "dca_annex_i_e_2013.jsonl.gz",
+        "dca_annex_i_e_2014.jsonl.gz",
+        "dca_annex_i_c_2013.jsonl.gz",
+        "dca_annex_i_c_2014.jsonl.gz",
+    ]
+
+    manifest = core.read_manifest(tmp_path)
+    assert sorted(manifest) == ["dca_2013", "dca_2014", "dca_i_c_2013", "dca_i_c_2014"]
+    assert manifest["dca_2013"]["parameters"]["no_anexo"] == "Anexo I-E"
+    assert manifest["dca_i_c_2013"]["parameters"]["no_anexo"] == "Anexo I-C"
+    assert manifest["dca_i_c_2014"]["parameters"]["no_anexo"] == "DCA-Anexo I-C"
+    assert manifest["dca_i_c_2014"]["file"] == "dca_annex_i_c_2014.jsonl.gz"
+
+    siconfi.download_api(tmp_path, ["1200013"], years=[2013, 2014], annex="I-C")
+    assert len(targets) == 4
+
+
 def test_validate_api_response():
     siconfi.validate_api_response(b'{"items": [], "hasMore": false}')
 

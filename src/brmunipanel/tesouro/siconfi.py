@@ -21,6 +21,9 @@ The same declarations can be collected from the Tesouro API with `download_api`,
 one year per request. The requests run at a fixed rate with overlapping calls, through `core.download_at_rate`, and
 each year is stored as one gzip JSON Lines file with one line per municipality. `harmonize(..., source="api")`
 reads those files with `read_api_year` and applies the same rules.
+
+`download_api` also collects other annexes of the same declaration through `annex`, such as "I-C", the budget
+revenue. Each annex has its own files and manifest keys, and only annex "I-E" is harmonized in this module.
 """
 import csv
 import gzip
@@ -46,23 +49,28 @@ HEADER = "Instituição;Cod.IBGE;UF;População;Coluna;Conta;Identificador da Co
 API_URL = "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/dca"
 
 
-def api_annex(year: int) -> str:
+def api_annex(year: int, annex: str = "I-E") -> str:
     """Returns the annex name the API expects: without the "DCA-" prefix in 2013, with it from 2014 on."""
-    return "Anexo I-E" if year == 2013 else "DCA-Anexo I-E"
+    return f"Anexo {annex}" if year == 2013 else f"DCA-Anexo {annex}"
 
 
-def api_file(year: int) -> str:
-    """Returns the gzip JSON Lines filename used to store API responses for `year`."""
-    return f"dca_annex_i_e_{year}.jsonl.gz"
+def api_file(year: int, annex: str = "I-E") -> str:
+    """Returns the gzip JSON Lines filename used to store API responses for `annex` in `year`."""
+    return f"dca_annex_{annex.lower().replace('-', '_')}_{year}.jsonl.gz"
 
 
-def api_requests(year: int, municipalities: Sequence[str]) -> list[core.Request]:
-    """Builds a list of `Request` objects for all municipalities in `year` from the SICONFI API."""
+def api_manifest_key(year: int, annex: str = "I-E") -> str:
+    """Returns the manifest key of `annex` in `year`: `dca_<year>` for annex I-E, `dca_<annex>_<year>` for the others."""
+    return f"dca_{year}" if annex == "I-E" else f"dca_{annex.lower().replace('-', '_')}_{year}"
+
+
+def api_requests(year: int, municipalities: Sequence[str], annex: str = "I-E") -> list[core.Request]:
+    """Builds a list of `Request` objects for all municipalities in `year` and `annex` from the SICONFI API."""
     return [
         core.Request(
             key=f"{year}/{code}",
-            url=f"{API_URL}?{urlencode({'an_exercicio': year, 'id_ente': code, 'no_anexo': api_annex(year)})}",
-            file=api_file(year),
+            url=f"{API_URL}?{urlencode({'an_exercicio': year, 'id_ente': code, 'no_anexo': api_annex(year, annex)})}",
+            file=api_file(year, annex),
         )
         for code in sorted(municipalities)
     ]
@@ -80,22 +88,25 @@ def validate_api_response(content: bytes) -> None:
         raise core.InvalidResponse("The response has more than one page")
 
 
-def download_api(folder: Path, municipalities: Sequence[str], years: Sequence[int] = YEARS, *, rate: float = 4.0, **options) -> list[dict]:
+def download_api(
+    folder: Path, municipalities: Sequence[str], years: Sequence[int] = YEARS, *, annex: str = "I-E", rate: float = 4.0, **options
+) -> list[dict]:
     """Downloads the declarations from the Tesouro API, one request per municipality and year, into one file per year.
 
-    Distrito Federal is not requested, because it reports as a state. A year already in the manifest is skipped.
+    `annex` chooses the DCA annex; the default, "I-E", is the expenditure by function. Distrito Federal is not
+    requested, because it reports as a state. A year already in the manifest is skipped.
     """
     folder = Path(folder)
     codes = sorted({str(c) for c in municipalities if not str(c).startswith("53")})
     manifest = core.read_manifest(folder)
     records = []
     for year in years:
-        key, file = f"dca_{year}", api_file(year)
+        key, file = api_manifest_key(year, annex), api_file(year, annex)
         if key in manifest and (folder / file).exists():
             records.append(manifest[key])
             continue
         with core.ipv4_only():
-            core.download_at_rate(api_requests(year, codes), folder / file, rate=rate, validate=validate_api_response, **options)
+            core.download_at_rate(api_requests(year, codes, annex), folder / file, rate=rate, validate=validate_api_response, **options)
         records.append(
             core.record_file(
                 folder,
@@ -103,7 +114,7 @@ def download_api(folder: Path, municipalities: Sequence[str], years: Sequence[in
                 file,
                 url=API_URL,
                 method="GET",
-                parameters={"an_exercicio": str(year), "no_anexo": api_annex(year), "municipalities": str(len(codes)), "rate": str(rate)},
+                parameters={"an_exercicio": str(year), "no_anexo": api_annex(year, annex), "municipalities": str(len(codes)), "rate": str(rate)},
             )
         )
     return records
