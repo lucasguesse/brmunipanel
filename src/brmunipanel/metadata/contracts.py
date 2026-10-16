@@ -244,6 +244,24 @@ CONTRACTS = {
             "rows": 38114,
             "municipalities": 5558
         },
+        "tesouro_revenue_finbra": {
+            "cols": {
+                "municipality_code": pl.String,
+                "year": pl.Int16,
+                "rev_current_gross": pl.Float64,
+                "rev_current_deductions": pl.Float64,
+                "rev_iptu": pl.Float64,
+                "rev_iss": pl.Float64,
+                "rev_itbi": pl.Float64,
+                "rev_fees": pl.Float64,
+                "rev_fpm": pl.Float64,
+                "rev_icms_share": pl.Float64
+            },
+            "keys": ['municipality_code', 'year'],
+            "period": (2006, 2012),
+            "rows": 38114,
+            "municipalities": 5558
+        },
         "tesouro_expenditure_by_function_siconfi": {
             "cols": {
                 "municipality_code": pl.String,

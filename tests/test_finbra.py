@@ -7,7 +7,7 @@ import polars as pl
 import pytest
 
 from brmunipanel.core import InvalidResponse
-from brmunipanel.tesouro import finbra
+from brmunipanel.tesouro import finbra, revenue
 from brmunipanel.tesouro.expenditure_by_function import PUBLISHED_COLUMNS, FUNCTIONS
 from brmunipanel.tesouro.finbra import (
     code_6,
@@ -357,6 +357,115 @@ def test_published_columns():
     assert PUBLISHED_COLUMNS[1] == "year"
     for i, (_, _, c_out) in enumerate(FUNCTIONS):
         assert PUBLISHED_COLUMNS[i + 2] == c_out
+
+
+def test_revenue_schema():
+    assert revenue.REVENUE_COLUMNS == [
+        "rev_current_gross",
+        "rev_current_deductions",
+        "rev_iptu",
+        "rev_iss",
+        "rev_itbi",
+        "rev_fees",
+        "rev_fpm",
+        "rev_icms_share",
+    ]
+    assert list(revenue.SCHEMA) == ["municipality_code", "year"] + revenue.REVENUE_COLUMNS
+    assert list(finbra.REVENUE_SOURCE_COLUMNS) == revenue.REVENUE_COLUMNS
+
+
+def test_process_revenue_table_real_sample():
+    with open(DATA / "finbra_receita_2006_sample.json", encoding="utf-8") as f:
+        table_2006 = json.load(f)
+    real_munis = pl.DataFrame({
+        "municipality_code_6": ["355030", "110009", "110013"],
+        "municipality_code": ["3550308", "1100098", "1100130"],
+    })
+
+    df, discarded = finbra.process_revenue_table(table_2006, 2006, real_munis)
+
+    assert discarded == []
+    assert df.schema == revenue.SCHEMA
+    assert df["municipality_code"].to_list() == ["1100098", "1100130", "3550308"]
+    sp = df.filter(pl.col("municipality_code") == "3550308").row(0, named=True)
+    assert sp["year"] == 2006
+    assert sp["rev_current_gross"] == 17327911947.0
+    assert sp["rev_current_deductions"] == 534845705.3
+    assert sp["rev_iptu"] == 2645953739.0
+    assert sp["rev_iss"] == 4082513660.0
+    assert sp["rev_itbi"] == 425655522.6
+    assert sp["rev_fees"] == 199157726.3
+    assert sp["rev_fpm"] == 99960964.39
+    assert sp["rev_icms_share"] == 3398327745.0
+    # the deduction keeps the negative sign declared by the municipality
+    assert df.filter(pl.col("municipality_code") == "1100130")["rev_current_deductions"][0] == -1504980.77
+
+
+def _revenue_table(states, codes, value):
+    table = {"CD_UF": states, "CD_MUN": codes, "Rec Tributária": [1] * len(states)}
+    for source_column in finbra.REVENUE_SOURCE_COLUMNS.values():
+        table[source_column] = [value] * len(states)
+    return table
+
+
+def test_process_revenue_table_discards_and_nulls(municipalities):
+    table = _revenue_table([35, None, 12], [5030, 1, 1], 20000)
+    table["IPTU"][0] = None
+
+    df, discarded = finbra.process_revenue_table(table, 2010, municipalities)
+
+    assert df.height == 1
+    assert df["municipality_code"][0] == "3550308"
+    assert df["rev_iptu"][0] is None
+    assert df["rev_current_gross"][0] == 2.0
+    assert df["rev_icms_share"][0] == 2.0
+    assert "Rec Tributária" not in df.columns
+    assert [d["reason"] for d in discarded] == ["null key", "outside DTB"]
+
+
+def test_process_revenue_table_errors(municipalities):
+    table = _revenue_table([35], [5030], 10000)
+    del table["Cota ICMS"]
+    with pytest.raises(ValueError, match="Missing columns"):
+        finbra.process_revenue_table(table, 2006, municipalities)
+
+    table = _revenue_table([35, 35], [5030, 5030], 10000)
+    with pytest.raises(ValueError, match="Repeated keys"):
+        finbra.process_revenue_table(table, 2006, municipalities)
+
+    table = _revenue_table([35, 11], [5030, 15], 10000)
+    table["ITBI"] = [10000]
+    with pytest.raises(ValueError, match="Inconsistent column sizes"):
+        finbra.process_revenue_table(table, 2006, municipalities)
+
+
+def test_harmonize_revenue(tmp_path, monkeypatch):
+    with open(DATA / "finbra_receita_2006_sample.json", encoding="utf-8") as f:
+        table_2006 = json.load(f)
+    with open(DATA / "finbra_receita_2012_sample.json", encoding="utf-8") as f:
+        table_2012 = json.load(f)
+    calls = []
+
+    def mock_read_access_table(folder, year, name):
+        calls.append((year, name))
+        return table_2006 if year <= 2009 else table_2012
+
+    monkeypatch.setattr(finbra, "read_access_table", mock_read_access_table)
+    municipalities = pl.DataFrame({
+        "municipality_code_6": ["355030", "110009", "110013"],
+        "municipality_code": ["3550308", "1100098", "1100130"],
+    })
+
+    df = finbra.harmonize_revenue(tmp_path, municipalities)
+
+    assert calls == [(year, "Receita") for year in range(2006, 2013)]
+    assert df.columns == ["municipality_code", "year"] + revenue.REVENUE_COLUMNS
+    assert df.schema == revenue.SCHEMA
+    assert df.height == 3 * 7
+    assert df.is_sorted(["municipality_code", "year"])
+    sp_2012 = df.filter((pl.col("municipality_code") == "3550308") & (pl.col("year") == 2012)).row(0, named=True)
+    assert sp_2012["rev_fpm"] == 170708313.74
+    assert sp_2012["rev_current_deductions"] == 1719136556.76
 
 
 def test_harmonize(tmp_path, monkeypatch):

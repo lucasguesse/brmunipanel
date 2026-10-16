@@ -228,7 +228,7 @@ class QualityAuditor:
         numeric_cols = [c for c, dtype in zip(df.columns, df.dtypes) if dtype.is_numeric()]
         failures = []
         for c in numeric_cols:
-            if c in ["latitude", "longitude", "gdp", "gdp_per_capita"] or c.startswith("exp_"):
+            if c in ["latitude", "longitude", "gdp", "gdp_per_capita"] or c.startswith(("exp_", "rev_")):
                 continue
             neg_count = df.filter(pl.col(c) < 0).height
             if neg_count > 0:

@@ -90,6 +90,18 @@ def test_audit_length_limit():
     checks = auditor.get_checks_df()
     assert checks.filter(pl.col("rule") == "comprimentos positivos")["status"][0] == "FAIL"
 
+def test_audit_negative_values_skips_money_columns():
+    auditor = QualityAuditor(None)
+    df = pl.DataFrame({"exp_10_health": [-1.0], "rev_current_deductions": [-2.0], "rev_itbi": [-3.0]})
+    auditor.audit_negative_values(df, "test")
+    checks = auditor.get_checks_df()
+    assert checks.filter(pl.col("rule") == "non-negative values")["status"][0] == "OK"
+
+    auditor = QualityAuditor(None)
+    auditor.audit_negative_values(pl.DataFrame({"enroll_elementary": [-1]}), "test")
+    checks = auditor.get_checks_df()
+    assert checks.filter(pl.col("rule") == "non-negative values")["status"][0] == "FAIL"
+
 def test_missing_file():
     auditor = QualityAuditor(None)
     contract = {"test": {}}

@@ -1,4 +1,4 @@
-"""Municipal committed expenditure by budget function in 2006–2012 (FINBRA, Tesouro Nacional).
+"""Municipal committed expenditure by budget function and budget revenue in 2006–2012 (FINBRA, Tesouro Nacional).
 
 The output contains only the 28 functions of the functional classification.
 Declared total and intra-budgetary expenditure are used only in internal checks.
@@ -20,6 +20,11 @@ total, and `declares_intra_budgetary` is true when it is greater than zero.
 Nothing is imputed or corrected. `exp_total_functions` is the total declared in the source (`Despesas por Função`), without
 recalculation: in 8 municipalities of 2010 it differs from the sum of the 28 functions. In 4 rows of 2011 and 2012, the total and
 all functions are zero, and the entire expenditure is in the intra-budgetary column.
+
+The same databases bring budget revenue in table `Receita`, one column per revenue nature and one row per
+municipality, keyed by `CD_UF` and `CD_MUN`. `harmonize_revenue` reads from it the eight columns of
+`revenue.SCHEMA`, named in `REVENUE_SOURCE_COLUMNS`: realized revenue in current reais, gross for the revenue items,
+and the current revenue deductions with the sign declared in the source. A null cell stays null.
 """
 
 import io
@@ -32,6 +37,7 @@ import polars as pl
 from access_parser import AccessParser
 
 from brmunipanel.core import Request, InvalidResponse, download_batch, read_raw
+from brmunipanel.tesouro import revenue
 from brmunipanel.tesouro.expenditure_by_function import PUBLISHED_COLUMNS, SCHEMA, FUNCTIONS
 
 
@@ -88,20 +94,25 @@ def download(folder: Path, **options) -> list[dict]:
     return download_batch(reqs, folder, validate=validate_zip, interval=2.0, **options)
 
 
-def read_dsubfuncao(folder: Path, year: int) -> dict[str, list]:
-    """Reads table `DSubFuncao` from the annual Access database, returning column lists."""
+def read_access_table(folder: Path, year: int, name: str) -> dict[str, list]:
+    """Reads table `name` from the annual Access database, returning column lists."""
     content = read_raw(folder, f"finbra_{year}.zip")
     with zipfile.ZipFile(io.BytesIO(content)) as zf, tempfile.TemporaryDirectory() as tmp:
         (member,) = [n for n in zf.namelist() if n.lower().endswith(".mdb")]
         path = Path(zf.extract(member, tmp))
         database = AccessParser(str(path))
         database.extra_props = {}  # without the Format property, the currency field arrives as an integer (value × 10,000)
-        table = database.parse_table("DSubFuncao")
+        table = database.parse_table(name)
         
     if not table:
-        raise ValueError(f"DSubFuncao table empty or not found in year {year}")
+        raise ValueError(f"{name} table empty or not found in year {year}")
         
     return {str(name).strip(): list(values) for name, values in table.items()}
+
+
+def read_dsubfuncao(folder: Path, year: int) -> dict[str, list]:
+    """Reads table `DSubFuncao` from the annual Access database, returning column lists."""
+    return read_access_table(folder, year, "DSubFuncao")
 
 
 def process_table(table: dict[str, list], year: int, municipalities: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
@@ -213,3 +224,66 @@ def harmonize(folder: Path, municipalities: pl.DataFrame) -> pl.DataFrame:
             
     df_final = pl.concat(dfs).select(PUBLISHED_COLUMNS).sort(["municipality_code", "year"])
     return df_final
+
+
+REVENUE_SOURCE_COLUMNS = {
+    "rev_current_gross": "Rec Correntes",
+    "rev_current_deductions": "Deduções Rec Corrente",
+    "rev_iptu": "IPTU",
+    "rev_iss": "ISSQN",
+    "rev_itbi": "ITBI",
+    "rev_fees": "Taxas",
+    "rev_fpm": "Cota FPM",
+    "rev_icms_share": "Cota ICMS",
+}
+
+
+def process_revenue_table(table: dict[str, list], year: int, municipalities: pl.DataFrame) -> tuple[pl.DataFrame, list[dict]]:
+    """Processes raw `Receita` columns into the revenue schema, mapping 6-digit to 7-digit codes."""
+    used_columns = ["CD_UF", "CD_MUN"] + list(REVENUE_SOURCE_COLUMNS.values())
+    missing = [c for c in used_columns if c not in table]
+    if missing:
+        raise ValueError(f"Missing columns in the table: {missing}")
+
+    sizes = {c: len(table[c]) for c in used_columns}
+    if len(set(sizes.values())) > 1:
+        raise ValueError(f"Inconsistent column sizes: {sizes}")
+
+    municipalities_dict = dict(zip(municipalities["municipality_code_6"].to_list(), municipalities["municipality_code"].to_list()))
+    discarded = []
+    valid_rows = []
+    seen_keys = []
+    for i in range(next(iter(sizes.values()))):
+        state = table["CD_UF"][i]
+        code = table["CD_MUN"][i]
+        key = code_6(state, code)
+        if key is None:
+            discarded.append({"year": year, "state": state, "muni_code": code, "reason": "null key"})
+            continue
+        seen_keys.append(key)
+        if key not in municipalities_dict:
+            discarded.append({"year": year, "state": state, "muni_code": code, "reason": "outside DTB"})
+            continue
+        row = {"municipality_code": municipalities_dict[key], "year": year}
+        for column, source_column in REVENUE_SOURCE_COLUMNS.items():
+            row[column] = convert_currency(table[source_column][i])
+        valid_rows.append(row)
+
+    repeated = [k for k, v in Counter(seen_keys).items() if v > 1]
+    if repeated:
+        raise ValueError(f"Repeated keys: {repeated}")
+    if not valid_rows:
+        return pl.DataFrame(schema=revenue.SCHEMA), discarded
+    return pl.DataFrame(valid_rows, schema=revenue.SCHEMA).sort("municipality_code"), discarded
+
+
+def harmonize_revenue(folder: Path, municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes FINBRA municipal budget revenue for 2006–2012, sorted by municipality and year."""
+    dfs = []
+    for year in range(2006, 2013):
+        df_year, discarded = process_revenue_table(read_access_table(folder, year, "Receita"), year, municipalities)
+        dfs.append(df_year)
+        if discarded:
+            reasons = Counter(d["reason"] for d in discarded)
+            print(f"{year}: {sum(reasons.values())} discarded ({', '.join(f'{k}: {v}' for k, v in reasons.items())})")
+    return pl.concat(dfs).sort(["municipality_code", "year"])

@@ -1200,6 +1200,88 @@
         "methodological_note": "Despesas orçamentárias empenhadas."
       }
     },
+    "tesouro_revenue_finbra": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "rev_current_gross": {
+        "description_pt": "Receita: receita corrente bruta",
+        "description_en": "Revenue: Gross Current Revenue",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Receita orçamentária realizada, coluna Rec Correntes da tabela Receita."
+      },
+      "rev_current_deductions": {
+        "description_pt": "Receita: deduções da receita corrente",
+        "description_en": "Revenue: Current Revenue Deductions",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna Deduções Rec Corrente, com o sinal declarado pelo município; deduções para o FUNDEF em 2006 e para o FUNDEB a partir de 2007."
+      },
+      "rev_iptu": {
+        "description_pt": "Receita: IPTU",
+        "description_en": "Revenue: Urban Property Tax (IPTU)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna IPTU, receita bruta; multas e dívida ativa ficam fora."
+      },
+      "rev_iss": {
+        "description_pt": "Receita: ISS",
+        "description_en": "Revenue: Services Tax (ISS)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna ISSQN, receita bruta; multas e dívida ativa ficam fora."
+      },
+      "rev_itbi": {
+        "description_pt": "Receita: ITBI",
+        "description_en": "Revenue: Real Estate Transfer Tax (ITBI)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna ITBI, receita bruta; multas e dívida ativa ficam fora."
+      },
+      "rev_fees": {
+        "description_pt": "Receita: taxas",
+        "description_en": "Revenue: Fees",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna Taxas, receita bruta (poder de polícia e prestação de serviços)."
+      },
+      "rev_fpm": {
+        "description_pt": "Receita: cota-parte do FPM",
+        "description_en": "Revenue: FPM Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna Cota FPM, receita bruta, antes da dedução para o FUNDEB."
+      },
+      "rev_icms_share": {
+        "description_pt": "Receita: cota-parte do ICMS",
+        "description_en": "Revenue: ICMS Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA)",
+        "period": "2006-2012",
+        "methodological_note": "Coluna Cota ICMS, receita bruta, antes da dedução para o FUNDEB."
+      }
+    },
     "tesouro_expenditure_by_function_siconfi": {
       "municipality_code": {
         "description_pt": "Código do Município (7 dígitos)",
