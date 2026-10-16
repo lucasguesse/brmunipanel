@@ -279,7 +279,7 @@ CONTRACTS = {
             },
             "keys": ['municipality_code', 'year'],
             "period": (2013, 2023),
-            "rows": 60402,
+            "rows": 60403,
             "municipalities": 5568
         },
     },
