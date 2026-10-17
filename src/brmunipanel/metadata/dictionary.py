@@ -72,8 +72,10 @@ def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Di
             "type": str(df[col_name].dtype),
             "description_en": meta.get("description_en", ""),
             "description_pt": meta.get("description_pt", ""),
-            "unit": meta.get("unit", ""),
-            "source": meta.get("source", ""),
+            "unit_en": meta.get("unit_en", ""),
+            "unit_pt": meta.get("unit_pt", ""),
+            "source_en": meta.get("source_en", ""),
+            "source_pt": meta.get("source_pt", ""),
             "period": meta.get("period", ""),
             "key": is_key,
             "nulls": stats["nulls"],
@@ -81,7 +83,8 @@ def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Di
             "min": stats["min"],
             "max": stats["max"],
             "domain": stats["domain"],
-            "methodological_note": meta.get("methodological_note", "")
+            "methodological_note_en": meta.get("methodological_note_en", ""),
+            "methodological_note_pt": meta.get("methodological_note_pt", ""),
         }
         rows.append(row)
         
@@ -91,8 +94,10 @@ def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Di
         "type": pl.String,
         "description_en": pl.String,
         "description_pt": pl.String,
-        "unit": pl.String,
-        "source": pl.String,
+        "unit_en": pl.String,
+        "unit_pt": pl.String,
+        "source_en": pl.String,
+        "source_pt": pl.String,
         "period": pl.String,
         "key": pl.String,
         "nulls": pl.Int64,
@@ -100,7 +105,8 @@ def build_table_dictionary(df: pl.DataFrame, table_name: str, table_metadata: Di
         "min": pl.String,
         "max": pl.String,
         "domain": pl.String,
-        "methodological_note": pl.String
+        "methodological_note_en": pl.String,
+        "methodological_note_pt": pl.String,
     }
     
     return pl.DataFrame(rows, schema=schema)

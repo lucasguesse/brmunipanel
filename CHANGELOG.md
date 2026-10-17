@@ -54,6 +54,12 @@ Version 0.3.0 does not read manifests written by 0.2.0. A record whose key did n
 
 Budget revenue. `tesouro.revenue` defines eight revenue columns: `rev_current_gross` (gross current revenue), `rev_current_deductions` (current revenue deductions, with the sign declared by the municipality), `rev_iptu`, `rev_iss`, `rev_itbi`, `rev_fees`, `rev_fpm` and `rev_icms_share`. `tesouro.finbra.harmonize_revenue` reads them from table `Receita` of the FINBRA databases (2006–2012), through the new `tesouro.finbra.read_access_table`. The new module `tesouro.siconfi_revenue` reads them from Annex I-C of the annual accounts (2013–2023), which `tesouro.siconfi.download_api` now collects with `annex="I-C"`; the files are `dca_annex_i_c_<year>.jsonl.gz`, with manifest keys `dca_i_c_<year>` (`tesouro.siconfi.api_manifest_key`), and annex I-E keeps its names. `panel.build_revenue` combines the two sources, and `public_finance` carries the eight columns after the 28 expenditure columns. The audit accepts negative values in `rev_` columns, as it already did in `exp_` columns.
 
+Data dictionary in English and Portuguese. `metadata.dictionary.build_table_dictionary` writes the unit, the source and the methodological note in both languages, in the columns `unit_en`, `unit_pt`, `source_en`, `source_pt`, `methodological_note_en` and `methodological_note_pt`, which replace `unit`, `source` and `methodological_note`. `metadata/variables.json` uses the same keys. The period of the three IDEB variables is now the years with values: 2007–2023, and 2017–2023 for upper secondary education.
+
+Deposit metadata in the data package. `packaging.build_final_package` takes `dataset_license`, `doi` and `url`, writes them to the manifest and to the citation lines of the package README, and leaves out of the manifest the raw sources marked with `"in_package": false`.
+
+The quality check on the length of shared boundaries is named `non-negative lengths`.
+
 ## 0.2.0 and earlier
 
 See the [GitHub releases](https://github.com/lucasguesse/brmunipanel/releases).

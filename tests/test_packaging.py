@@ -169,3 +169,54 @@ def test_manifest_validation_rejects_changes(fake_environment):
     with mock.patch("json.load", side_effect=json_load_mock):
         with pytest.raises(RuntimeError, match="Manifest sha256 mismatch"):
             packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
+
+
+def test_packaging_license_doi_url(fake_environment):
+    data_dir, results_dir, dj = fake_environment
+    packaging.build_final_package(
+        "1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj,
+        dataset_license="CC-BY-4.0", doi="10.17632/abc.1", url="https://data.mendeley.com/datasets/abc/1",
+    )
+    final_dir = data_dir / "final"
+    manifest = json.loads((final_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["license"] == "CC-BY-4.0"
+    assert manifest["doi"] == "10.17632/abc.1"
+    assert manifest["url"] == "https://data.mendeley.com/datasets/abc/1"
+    readme = (final_dir / "README.md").read_text(encoding="utf-8")
+    assert readme.endswith(
+        "## Citation\nDOI: https://doi.org/10.17632/abc.1\nURL: https://data.mendeley.com/datasets/abc/1\nLicense: CC-BY-4.0\n"
+    )
+    assert "Pending" not in readme
+
+
+def test_packaging_without_license_doi_url(fake_environment):
+    data_dir, results_dir, dj = fake_environment
+    packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
+    final_dir = data_dir / "final"
+    manifest = json.loads((final_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["license"] is None
+    assert manifest["doi"] is None
+    assert manifest["url"] is None
+    readme = (final_dir / "README.md").read_text(encoding="utf-8")
+    assert readme.endswith("## Citation\nDOI: not assigned\nURL: not assigned\nLicense: not assigned\n")
+
+
+def test_packaging_raw_sources_in_package(fake_environment):
+    data_dir, results_dir, dj = fake_environment
+    dj.write_text(
+        '[{"id": "t1", "name": "T1", "period": "2020"},'
+        ' {"id": "t2", "name": "T2", "period": "2021", "in_package": false},'
+        ' {"id": "t3", "name": "T3", "period": "2022", "in_package": true}]',
+        encoding="utf-8",
+    )
+    packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir, dj)
+    manifest = json.loads((data_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    assert [s["id"] for s in manifest["raw_sources"]] == ["t1", "t3"]
+    assert manifest["raw_sources"][1] == {"id": "t3", "name": "T3", "period": "2022"}
+
+
+def test_citation_lines():
+    assert packaging.citation_lines("CC-BY-4.0", "10.1/x", "https://u") == (
+        "DOI: https://doi.org/10.1/x\nURL: https://u\nLicense: CC-BY-4.0\n"
+    )
+    assert packaging.citation_lines(None, None, None) == "DOI: not assigned\nURL: not assigned\nLicense: not assigned\n"

@@ -262,9 +262,9 @@ class QualityAuditor:
                     self.add_check(table, "neighboring codes", "FAIL", f"{inv_code_lim} invalid", "0", "Must belong to the registry")
             comp_inv = df.filter(pl.col("border_length_km") < 0).height # 0 is accepted
             if comp_inv == 0:
-                self.add_check(table, "comprimentos positivos", "OK", "Correct", "Correct")
+                self.add_check(table, "non-negative lengths", "OK", "Correct", "Correct")
             else:
-                self.add_check(table, "comprimentos positivos", "FAIL", f"{comp_inv} < 0", "0", "Length must be >= 0")
+                self.add_check(table, "non-negative lengths", "FAIL", f"{comp_inv} < 0", "0", "Length must be >= 0")
 
     def get_checks_df(self) -> pl.DataFrame:
         """Returns recorded check results as a Polars DataFrame with the audit schema."""

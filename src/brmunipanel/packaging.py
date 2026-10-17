@@ -43,6 +43,11 @@ def validate_critical_audit(quality_checks_path: Path) -> bool:
                 return False
     return True
 
+def citation_lines(dataset_license: str | None, doi: str | None, url: str | None) -> str:
+    """Builds the DOI, URL and licence lines of the README, with "not assigned" for a missing value."""
+    doi_text = f"https://doi.org/{doi}" if doi else "not assigned"
+    return f"DOI: {doi_text}\nURL: {url or 'not assigned'}\nLicense: {dataset_license or 'not assigned'}\n"
+
 def build_final_package(
     dataset_version: str,
     generation_date: str,
@@ -51,9 +56,17 @@ def build_final_package(
     project_commit: str,
     data_dir: Path,
     results_dir: Path,
-    datasets_json_path: Path
+    datasets_json_path: Path,
+    dataset_license: str | None = None,
+    doi: str | None = None,
+    url: str | None = None,
 ) -> None:
-    """Builds the final public data package in `data/final` with Parquet, CSV, checksums, and metadata."""
+    """Builds the final public data package in `data/final` with Parquet, CSV, checksums, and metadata.
+
+    `dataset_license`, `doi` and `url` describe the deposit of the dataset and are written to the manifest and to the
+    citation lines of the README. Raw sources marked with `"in_package": false` in `datasets_json_path` are left out
+    of the manifest.
+    """
     processed_dir = data_dir / "processed"
     final_dir = data_dir / "final"
     temp_dir = data_dir / "final_temp"
@@ -151,7 +164,7 @@ def build_final_package(
             "sha256": compute_sha256(qchk_target)
         })
 
-        readme_content = """# Brazilian Municipal Data Panel (2006-2023)
+        readme_content = """# BRMuniPanel: Brazilian Municipalities Panel, 2006-2023
 
 ## Overview
 This dataset provides a harmonized panel of Brazilian municipalities, covering the period from 2006 to 2023. It integrates data from various official sources to provide demographic, economic, social, public finance, health, and education indicators at the municipal level.
@@ -177,7 +190,7 @@ Files are encoded in UTF-8. CSV files use `,` as delimiter and empty strings for
 Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the documentation for specific indicators).
 
 ## Documentation and Quality
-- `dictionary.csv`: Variable dictionary with data types, descriptions, and source information.
+- `dictionary.csv`: Variable dictionary with the data type, period and summary statistics of each variable, and its description, unit, source and methodological note in English and in Portuguese.
 - `quality_summary.csv` and `quality_checks.csv`: Results of automated quality and consistency checks.
 - `manifest.json` and `checksums.sha256`: Metadata artifacts and SHA-256 integrity checksums. Note: `manifest.json` and `checksums.sha256` are meta-artifacts.
 
@@ -204,10 +217,7 @@ Source code repository: https://github.com/lucasguesse/brmunipanel
 See the paper for a full discussion of limitations.
 
 ## Citation
-*(Provisional citation - pending DOI)*
-URL: [Pending DOI/URL]
-License: [Pending License]
-"""
+""" + citation_lines(dataset_license, doi, url)
         readme_target = temp_dir / "README.md"
         with open(readme_target, "w", encoding="utf-8", newline="\n") as f:
             f.write(readme_content)
@@ -220,7 +230,11 @@ License: [Pending License]
 
         with open(datasets_json_path, "r", encoding="utf-8") as f:
             datasets = json.load(f)
-        sources = [{"id": ds["id"], "name": ds["name"], "period": ds["period"]} for ds in datasets]
+        sources = [
+            {"id": ds["id"], "name": ds["name"], "period": ds["period"]}
+            for ds in datasets
+            if ds.get("in_package", True)
+        ]
 
         manifest = {
             "dataset_version": dataset_version,
@@ -228,9 +242,9 @@ License: [Pending License]
             "package_version": package_version,
             "git_package_commit": package_commit,
             "git_project_commit": project_commit,
-            "license": None,
-            "doi": None,
-            "url": None,
+            "license": dataset_license,
+            "doi": doi,
+            "url": url,
             "files": files_manifest,
             "raw_sources": sources
         }
@@ -262,7 +276,7 @@ License: [Pending License]
             if "time_window" in am:
                 table = am["name"].split(".")[0]
                 if am["time_window"] != METADATA_TABLES[table]["time_window"]:
-                    raise RuntimeError(f"Manifest janela_temporal mismatch for {am['name']}.")
+                    raise RuntimeError(f"Manifest time_window mismatch for {am['name']}.")
                 if set(am["keys"]) != set(METADATA_TABLES[table]["keys"]):
                     raise RuntimeError(f"Manifest keys mismatch for {am['name']}")
 

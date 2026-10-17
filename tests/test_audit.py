@@ -81,14 +81,14 @@ def test_audit_length_limit():
     df_ok = pl.DataFrame({"municipality_code": ["1"], "neighbor_municipality_code": ["2"], "border_length_km": [0.0]})
     auditor.audit_geographic_domains(df_ok, "neighboring_municipalities")
     checks = auditor.get_checks_df()
-    assert checks.filter(pl.col("rule") == "comprimentos positivos")["status"][0] == "OK"
+    assert checks.filter(pl.col("rule") == "non-negative lengths")["status"][0] == "OK"
 
     df_fail = pl.DataFrame({"municipality_code": ["1"], "neighbor_municipality_code": ["2"], "border_length_km": [-1.0]})
     auditor = QualityAuditor(pl.DataFrame({"municipality_code": ["1", "2"]}))
     auditor.valid_codes = {"1", "2"}
     auditor.audit_geographic_domains(df_fail, "neighboring_municipalities")
     checks = auditor.get_checks_df()
-    assert checks.filter(pl.col("rule") == "comprimentos positivos")["status"][0] == "FAIL"
+    assert checks.filter(pl.col("rule") == "non-negative lengths")["status"][0] == "FAIL"
 
 def test_audit_negative_values_skips_money_columns():
     auditor = QualityAuditor(None)
