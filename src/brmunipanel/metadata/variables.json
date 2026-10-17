@@ -1282,6 +1282,88 @@
         "methodological_note": "Coluna Cota ICMS, receita bruta, antes da dedução para o FUNDEB."
       }
     },
+    "tesouro_revenue_siconfi": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality Code (7 digits)",
+        "unit": "Código",
+        "source": "IBGE",
+        "period": "2006-2023",
+        "methodological_note": "Código padrão IBGE de 7 dígitos."
+      },
+      "year": {
+        "description_pt": "Ano de referência",
+        "description_en": "Reference Year",
+        "unit": "Ano",
+        "source": "Múltiplas",
+        "period": "2006-2023",
+        "methodological_note": ""
+      },
+      "rev_current_gross": {
+        "description_pt": "Receita: receita corrente bruta",
+        "description_en": "Revenue: Gross Current Revenue",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Linha da receita corrente do Anexo I-C da DCA, na coluna de receita bruta realizada, sem a receita intraorçamentária; nula quando a declaração não traz essa linha."
+      },
+      "rev_current_deductions": {
+        "description_pt": "Receita: deduções da receita corrente",
+        "description_en": "Revenue: Current Revenue Deductions",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Deduções da linha da receita corrente: a coluna Deduções da Receita em 2013 e a soma das colunas de dedução do FUNDEB, das transferências constitucionais e outras a partir de 2014, com o sinal declarado pelo município."
+      },
+      "rev_iptu": {
+        "description_pt": "Receita: IPTU",
+        "description_en": "Revenue: Urban Property Tax (IPTU)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Conta do IPTU no Anexo I-C, receita bruta; a partir de 2018 inclui multas, juros e dívida ativa do tributo, que de 2013 a 2017 ficam em contas próprias, fora desta coluna."
+      },
+      "rev_iss": {
+        "description_pt": "Receita: ISS",
+        "description_en": "Revenue: Services Tax (ISS)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Conta do ISS no Anexo I-C, receita bruta; a partir de 2018 inclui multas, juros e dívida ativa do tributo, que de 2013 a 2017 ficam em contas próprias, fora desta coluna."
+      },
+      "rev_itbi": {
+        "description_pt": "Receita: ITBI",
+        "description_en": "Revenue: Real Estate Transfer Tax (ITBI)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Conta do ITBI no Anexo I-C, receita bruta; a partir de 2018 inclui multas, juros e dívida ativa do tributo, que de 2013 a 2017 ficam em contas próprias, fora desta coluna."
+      },
+      "rev_fees": {
+        "description_pt": "Receita: taxas",
+        "description_en": "Revenue: Fees",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Conta de taxas no Anexo I-C, receita bruta; a partir de 2018 inclui multas, juros e dívida ativa do tributo, que de 2013 a 2017 ficam em contas próprias, fora desta coluna."
+      },
+      "rev_fpm": {
+        "description_pt": "Receita: cota-parte do FPM",
+        "description_en": "Revenue: FPM Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Cota-parte do FPM no Anexo I-C, receita bruta, antes da dedução para o FUNDEB: cota mensal e adicionais de 1% somados de 2015 a 2021, e a conta do FPM a partir de 2022."
+      },
+      "rev_icms_share": {
+        "description_pt": "Receita: cota-parte do ICMS",
+        "description_en": "Revenue: ICMS Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (SICONFI)",
+        "period": "2013-2023",
+        "methodological_note": "Cota-parte do ICMS no Anexo I-C, receita bruta, antes da dedução para o FUNDEB."
+      }
+    },
     "tesouro_expenditure_by_function_siconfi": {
       "municipality_code": {
         "description_pt": "Código do Município (7 dígitos)",
