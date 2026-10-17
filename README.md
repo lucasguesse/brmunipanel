@@ -17,7 +17,7 @@ This library provides the reproducible scientific protocol and supporting codeba
 - **Thematic Modularity:** Provides six standardized tables:
   - `municipalities`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators).
   - `socioeconomic`: Longitudinal panel covering population estimates, municipal GDP, formal employment from CEMPRE, and Bolsa Família beneficiaries and transfers.
-  - `public_finance`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) combining FINBRA (2006–2012) and SICONFI (2013–2023).
+  - `public_finance`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) and budget revenue (gross current revenue and its deductions, IPTU, ISS, ITBI, fees, and the FPM and ICMS shares), combining FINBRA (2006–2012) and SICONFI (2013–2023).
   - `health`: Longitudinal panel covering health infrastructure, human resources, mortality, and live births from DATASUS (CNES, SIM, Sinasc).
   - `neighboring_municipalities`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
   - `education`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.

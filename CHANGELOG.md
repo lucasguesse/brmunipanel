@@ -38,7 +38,7 @@ The verbs follow one pattern: `baixar` became `download`, `harmonizar` became `h
 | `saude` | `health` |
 | `educacao` | `education` |
 
-The keys are `municipality_code` and `year`. Expenditure columns use the prefix `exp_` (for example, `exp_health`). Every column, with its description, is listed in `metadata/variables.json`. In the School Census, special education columns are named `inclusive_ed`, `inclusive_ed_common_classes` and `inclusive_ed_exclusive_classes` (with the prefixes `enroll_`, `teachers_` and `classes_`).
+The keys are `municipality_code` and `year`. Expenditure columns use the prefix `exp_` (for example, `exp_health`), and revenue columns the prefix `rev_` (for example, `rev_fpm`). Every column, with its description, is listed in `metadata/variables.json`. In the School Census, special education columns are named `inclusive_ed`, `inclusive_ed_common_classes` and `inclusive_ed_exclusive_classes` (with the prefixes `enroll_`, `teachers_` and `classes_`).
 
 Category values in the intermediate tables are in English: administrative dependency `federal`, `state`, `municipal` and `private`; location `urban` and `rural`; Higher Education Census category `federal`, `state`, `municipal`, `private` and `special`; population source `estimate` and `interpolated`. The FINBRA and SICONFI readers return `declares_intra_budgetary`.
 
@@ -49,6 +49,10 @@ The manifest fields are `url`, `method`, `file`, `bytes`, `sha256`, `downloaded_
 ### Migrating a raw data folder
 
 Version 0.3.0 does not read manifests written by 0.2.0. A record whose key did not change stops the download with an error, because its fields no longer match the request; a record whose key changed is downloaded again. Start a new raw data folder, or rename the manifest fields, record keys and files of the old folder as listed above, keeping the file contents unchanged.
+
+### Added
+
+Budget revenue. `tesouro.revenue` defines eight revenue columns: `rev_current_gross` (gross current revenue), `rev_current_deductions` (current revenue deductions, with the sign declared by the municipality), `rev_iptu`, `rev_iss`, `rev_itbi`, `rev_fees`, `rev_fpm` and `rev_icms_share`. `tesouro.finbra.harmonize_revenue` reads them from table `Receita` of the FINBRA databases (2006–2012), through the new `tesouro.finbra.read_access_table`. The new module `tesouro.siconfi_revenue` reads them from Annex I-C of the annual accounts (2013–2023), which `tesouro.siconfi.download_api` now collects with `annex="I-C"`; the files are `dca_annex_i_c_<year>.jsonl.gz`, with manifest keys `dca_i_c_<year>` (`tesouro.siconfi.api_manifest_key`), and annex I-E keeps its names. `panel.build_revenue` combines the two sources, and `public_finance` carries the eight columns after the 28 expenditure columns. The audit accepts negative values in `rev_` columns, as it already did in `exp_` columns.
 
 ## 0.2.0 and earlier
 

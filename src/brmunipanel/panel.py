@@ -10,6 +10,8 @@ import re
 from typing import Sequence
 import polars as pl
 
+from brmunipanel.tesouro import revenue
+
 PANEL_YEARS = tuple(range(2006, 2024))
 
 def build_municipalities(municipalities: pl.DataFrame) -> pl.DataFrame:
@@ -58,6 +60,20 @@ def build_expenditure(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFra
             rename_map[c] = f"exp_{m.group(1)}"
             
     return output.rename(rename_map).sort(["municipality_code", "year"])
+
+def build_revenue(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
+    """Combines FINBRA and SICONFI budget revenue, checks the revenue schema, and sorts by municipality and year."""
+    for name, table in (("finbra", finbra), ("siconfi", siconfi)):
+        if dict(table.schema) != revenue.SCHEMA:
+            raise ValueError(f"{name} does not follow the revenue schema: {dict(table.schema)}")
+
+    finbra_keys = set(finbra.select(["municipality_code", "year"]).iter_rows())
+    siconfi_keys = set(siconfi.select(["municipality_code", "year"]).iter_rows())
+    inter = finbra_keys & siconfi_keys
+    if inter:
+        raise ValueError(f"{len(inter)} cases of the same municipality and year in both tables. Examples: {list(inter)[:3]}")
+
+    return pl.concat([finbra, siconfi]).sort(["municipality_code", "year"])
 
 def build_longitudinal_table(municipalities: pl.DataFrame, sources: list[pl.DataFrame], years: Sequence[int] = PANEL_YEARS, table_name: str = "longitudinal_table") -> pl.DataFrame:
     """Builds a longitudinal panel on a municipality-year grid by sequentially left-joining source tables."""

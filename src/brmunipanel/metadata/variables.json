@@ -2036,6 +2036,70 @@
         "source": "Tesouro Nacional (FINBRA/SICONFI)",
         "period": "2006-2023",
         "methodological_note": "Despesas orçamentárias empenhadas."
+      },
+      "rev_current_gross": {
+        "description_pt": "Receita: receita corrente bruta",
+        "description_en": "Revenue: Gross Current Revenue",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita orçamentária realizada, sem a receita intraorçamentária: coluna Rec Correntes do FINBRA (2006-2012) e linha da receita corrente do Anexo I-C da DCA (2013-2023), nula quando a declaração não traz essa linha."
+      },
+      "rev_current_deductions": {
+        "description_pt": "Receita: deduções da receita corrente",
+        "description_en": "Revenue: Current Revenue Deductions",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Deduções da receita corrente (FUNDEF em 2006, FUNDEB a partir de 2007, transferências constitucionais e outras), com o sinal declarado pelo município; a receita corrente líquida é rev_current_gross menos o valor absoluto desta coluna."
+      },
+      "rev_iptu": {
+        "description_pt": "Receita: IPTU",
+        "description_en": "Revenue: Urban Property Tax (IPTU)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta. De 2006 a 2017 só o principal; a partir de 2018, com multas, juros e dívida ativa do tributo, que antes ficavam em contas próprias."
+      },
+      "rev_iss": {
+        "description_pt": "Receita: ISS",
+        "description_en": "Revenue: Services Tax (ISS)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta. De 2006 a 2017 só o principal; a partir de 2018, com multas, juros e dívida ativa do tributo, que antes ficavam em contas próprias."
+      },
+      "rev_itbi": {
+        "description_pt": "Receita: ITBI",
+        "description_en": "Revenue: Real Estate Transfer Tax (ITBI)",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta. De 2006 a 2017 só o principal; a partir de 2018, com multas, juros e dívida ativa do tributo, que antes ficavam em contas próprias."
+      },
+      "rev_fees": {
+        "description_pt": "Receita: taxas",
+        "description_en": "Revenue: Fees",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta, poder de polícia e prestação de serviços. De 2006 a 2017 só o principal; a partir de 2018, com multas, juros e dívida ativa do tributo, que antes ficavam em contas próprias."
+      },
+      "rev_fpm": {
+        "description_pt": "Receita: cota-parte do FPM",
+        "description_en": "Revenue: FPM Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta, antes da dedução para o FUNDEB; no SICONFI, cota mensal e adicionais de 1% somados de 2015 a 2021 e conta do FPM a partir de 2022."
+      },
+      "rev_icms_share": {
+        "description_pt": "Receita: cota-parte do ICMS",
+        "description_en": "Revenue: ICMS Share",
+        "unit": "Reais",
+        "source": "Tesouro Nacional (FINBRA/SICONFI)",
+        "period": "2006-2023",
+        "methodological_note": "Receita bruta, antes da dedução para o FUNDEB."
       }
     },
     "municipalities": {

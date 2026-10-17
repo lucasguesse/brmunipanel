@@ -390,7 +390,15 @@ CONTRACTS = {
                 "exp_energy": pl.Float64,
                 "exp_transport": pl.Float64,
                 "exp_sports_leisure": pl.Float64,
-                "exp_special_charges": pl.Float64
+                "exp_special_charges": pl.Float64,
+                "rev_current_gross": pl.Float64,
+                "rev_current_deductions": pl.Float64,
+                "rev_iptu": pl.Float64,
+                "rev_iss": pl.Float64,
+                "rev_itbi": pl.Float64,
+                "rev_fees": pl.Float64,
+                "rev_fpm": pl.Float64,
+                "rev_icms_share": pl.Float64
             },
             "keys": ['municipality_code', 'year'],
             "period": (2006, 2023),

@@ -3,9 +3,12 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
+from brmunipanel.tesouro import revenue
+
 from brmunipanel.panel import (
     build_municipalities,
     build_expenditure,
+    build_revenue,
     build_longitudinal_table,
     build_neighboring,
     consolidate_education,
@@ -80,6 +83,32 @@ def test_build_expenditure_errors():
     })
     with pytest.raises(ValueError, match="cases of the same municipality and year"):
         build_expenditure(finbra, siconfi)
+
+def _revenue_rows(code, year, start):
+    return pl.DataFrame(
+        {"municipality_code": [code], "year": [year], **{c: [float(start + i)] for i, c in enumerate(revenue.REVENUE_COLUMNS)}},
+        schema=revenue.SCHEMA,
+    )
+
+def test_build_revenue():
+    finbra = pl.concat([_revenue_rows("2", 2010, 1), _revenue_rows("1", 2006, 10)])
+    siconfi = _revenue_rows("1", 2013, 100)
+
+    output = build_revenue(finbra, siconfi)
+
+    assert output.schema == revenue.SCHEMA
+    assert output.select(["municipality_code", "year"]).rows() == [("1", 2006), ("1", 2013), ("2", 2010)]
+    assert output["rev_current_gross"].to_list() == [10.0, 100.0, 1.0]
+    assert output["rev_icms_share"].to_list() == [17.0, 107.0, 8.0]
+
+def test_build_revenue_errors():
+    finbra = _revenue_rows("1", 2010, 1)
+    with pytest.raises(ValueError, match="cases of the same municipality and year"):
+        build_revenue(finbra, _revenue_rows("1", 2010, 5))
+    with pytest.raises(ValueError, match="siconfi does not follow the revenue schema"):
+        build_revenue(finbra, _revenue_rows("1", 2013, 5).drop("rev_fees"))
+    with pytest.raises(ValueError, match="finbra does not follow the revenue schema"):
+        build_revenue(finbra.with_columns(pl.col("year").cast(pl.Int32)), _revenue_rows("1", 2013, 5))
 
 def test_build_longitudinal_table():
     municipalities = pl.DataFrame({"municipality_code": ["1", "2"]})
