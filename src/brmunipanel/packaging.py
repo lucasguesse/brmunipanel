@@ -160,7 +160,7 @@ This dataset provides a harmonized panel of Brazilian municipalities, covering t
 The dataset includes 6 canonical tables, provided in both Parquet (canonical) and compressed CSV (gzip) formats:
 - `municipalities`: Territorial base and coordinates (Keys: municipality_code; Period: DTB 2025, Area 2025, Coordinates 2022).
 - `socioeconomic`: Population, GDP, formal employment, and Bolsa Família beneficiaries (Keys: municipality_code, year; Period: 2006-2023).
-- `public_finance`: Municipal budgetary expenses by function (Keys: municipality_code, year; Period: 2006-2023).
+- `public_finance`: Municipal budgetary expenditure by function and budget revenue (Keys: municipality_code, year; Period: 2006-2023).
 - `health`: Installed health capacity and basic mortality indicators (Keys: municipality_code, year; Period: 2006-2023).
 - `education`: Basic and higher education aggregates, including IDEB (Keys: municipality_code, year; Period: 2006-2023).
 - `neighboring_municipalities`: Geographic adjacency matrix between municipalities (Keys: municipality_code, neighbor_municipality_code; Period: 2024 adjacency).
@@ -168,7 +168,7 @@ The dataset includes 6 canonical tables, provided in both Parquet (canonical) an
 Lines and Columns (Parquet/CSV):
 - `municipalities`: 5,571 lines, 12 columns
 - `socioeconomic`: 100,278 lines, 11 columns
-- `public_finance`: 100,278 lines, 30 columns
+- `public_finance`: 100,278 lines, 38 columns
 - `health`: 100,278 lines, 11 columns
 - `education`: 100,222 lines, 12 columns
 - `neighboring_municipalities`: 32,952 lines, 3 columns
@@ -185,18 +185,19 @@ Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the docum
 This dataset is deterministically generated via the `brmunipanel` Python package.
 To reproduce from processed data:
 ```bash
-python scripts/run_pipeline.py --step data --etapa finalizar --dataset_version <version> --date <YYYY-MM-DD>
+python scripts/run_pipeline.py --step data --stage finalize --dataset_version <version> --date <YYYY-MM-DD>
 ```
 To reproduce from raw data:
 ```bash
-python scripts/run_pipeline.py --step data --etapa tudo --dataset_version <version> --date <YYYY-MM-DD>
+python scripts/run_pipeline.py --step data --stage all --dataset_version <version> --date <YYYY-MM-DD>
 ```
-Source code repository: [Pending publication]
+Source code repository: https://github.com/lucasguesse/brmunipanel
 
 ## Limitations
 - IDEB data contains missing values due to years without assessment (even years) and suppressed results.
 - Missing values in health, finance, and employment tables do not necessarily imply the absence of activities; they may result from lack of declaration or coverage.
 - FINBRA/SICONFI have missing declarations and some inconsistencies between declared totals and sums.
+- From 2018 on, municipal taxes and fees include fines, interest and overdue tax collection, which earlier years record separately; revenue deductions keep the sign declared by the municipality.
 - CEMPRE structural breaks occurred in 2022.
 - Bolsa Familia values in 2013 and 2016 have municipal anomalies.
 - Geographic areas and borders are based on the IBGE 2025 territorial division.
