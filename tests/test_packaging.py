@@ -21,8 +21,13 @@ def fake_environment(tmp_path):
         "health", "neighboring_municipalities", "education"
     ]
 
-    # Mock data slightly realistic to test CSV typing
-    df = pl.DataFrame({"municipality_code": [1, 2], "year": [2020, 2021], "value": [10.5, 20.0], "text": ["x", "y"]})
+    # Mock data slightly realistic to test CSV typing and null handling
+    df = pl.DataFrame({
+        "municipality_code": [1, 2],
+        "year": [2020, 2021],
+        "value": [10.5, None],
+        "text": ["x", None],
+    })
     for t in tables:
         df.write_parquet(processed_dir / f"{t}.parquet")
 
@@ -61,18 +66,19 @@ def test_packaging_files_and_manifest(fake_environment):
     assert final_dir.exists()
 
     expected_files = set([
-        "municipalities.parquet", "municipalities.csv.gz",
-        "socioeconomic.parquet", "socioeconomic.csv.gz",
-        "public_finance.parquet", "public_finance.csv.gz",
-        "health.parquet", "health.csv.gz",
-        "neighboring_municipalities.parquet", "neighboring_municipalities.csv.gz",
-        "education.parquet", "education.csv.gz",
+        "municipalities.parquet", "municipalities.csv",
+        "socioeconomic.parquet", "socioeconomic.csv",
+        "public_finance.parquet", "public_finance.csv",
+        "health.parquet", "health.csv",
+        "neighboring_municipalities.parquet", "neighboring_municipalities.csv",
+        "education.parquet", "education.csv",
         "dictionary.csv", "quality_summary.csv", "quality_checks.csv",
         "manifest.json", "checksums.sha256", "README.md"
     ])
 
     generated_files = set([p.name for p in final_dir.iterdir() if p.is_file()])
     assert generated_files == expected_files
+    assert not any(f.endswith(".csv.gz") or f.endswith(".gz") or f.endswith(".zip") for f in generated_files)
 
     with open(final_dir / "manifest.json", "r", encoding="utf-8") as f:
         manifest = json.load(f)
@@ -83,11 +89,17 @@ def test_packaging_files_and_manifest(fake_environment):
     assert manifest["git_project_commit"] == "hash2"
     assert len(manifest["files"]) == 16 # 6 parquet + 6 csv + 3 docs + 1 readme
 
-    # Metadata per table in the manifest
+    # Metadata per data table in the manifest
+    data_table_names = {
+        f"{t}.{fmt}"
+        for t in ["municipalities", "socioeconomic", "public_finance", "health", "neighboring_municipalities", "education"]
+        for fmt in ("parquet", "csv")
+    }
     for item in manifest["files"]:
-        if item["format"] in ("parquet", "csv.gz"):
+        if item["name"] in data_table_names:
             assert "time_window" in item
             assert "keys" in item
+        assert item["format"] != "csv.gz"
 
     # Test real determinism
     final2 = final_dir.parent / "final2"
@@ -109,9 +121,15 @@ def test_packaging_files_and_manifest(fake_environment):
         pq_processed = data_dir / "processed" / f"{t}.parquet"
         assert pq_final.read_bytes() == pq_processed.read_bytes()
 
+        csv_final = final_dir / f"{t}.csv"
+        csv_bytes = csv_final.read_bytes()
+        assert not csv_bytes.startswith(b"\x1f\x8b"), f"{t}.csv contains gzip magic bytes"
+        assert not csv_bytes.startswith(b"\xef\xbb\xbf"), f"{t}.csv contains UTF-8 BOM"
+        assert b"\r\n" not in csv_bytes, f"{t}.csv contains CRLF line endings"
+
         df_pq = pl.read_parquet(pq_final)
-        df_csv = pl.read_csv(final_dir / f"{t}.csv.gz", schema_overrides=df_pq.schema)
-        assert df_pq.equals(df_csv)
+        df_csv = pl.read_csv(csv_final, null_values=[""], schema_overrides=df_pq.schema)
+        assert df_pq.equals(df_csv, null_equal=True)
 
     # Check checksums
     checksum_file = final_dir / "checksums.sha256"

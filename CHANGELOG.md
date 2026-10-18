@@ -58,6 +58,8 @@ Data dictionary in English and Portuguese. `metadata.dictionary.build_table_dict
 
 Deposit metadata in the data package. `packaging.build_final_package` takes `dataset_license`, `doi` and `url`, writes them to the manifest and to the citation lines of the package README, and leaves out of the manifest the raw sources marked with `"in_package": false`.
 
+Uncompressed CSV tables in the data package. `packaging.build_final_package` provides the six tables in Parquet and uncompressed UTF-8 CSV (replacing gzip-compressed CSV), using comma delimiters, empty strings for nulls and LF line endings. The package manifest records `format: "csv"` for these files.
+
 The quality check on the length of shared boundaries is named `non-negative lengths`.
 
 ## 0.2.0 and earlier

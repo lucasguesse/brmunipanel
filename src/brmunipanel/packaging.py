@@ -1,5 +1,4 @@
 import csv
-import gzip
 import hashlib
 import json
 import shutil
@@ -16,13 +15,12 @@ METADATA_TABLES = {
     "education": {"time_window": "2006-2023", "keys": ["municipality_code", "year"]},
 }
 
-def write_csv_gz(parquet_path: Path, csv_gz_path: Path) -> None:
-    """Converts a Parquet file to a gzip-compressed CSV with deterministic mtime and maximum compression."""
+def write_csv(parquet_path: Path, csv_path: Path) -> None:
+    """Converts a Parquet file to an uncompressed UTF-8 CSV with LF line endings and empty string for nulls."""
     df = pl.read_parquet(parquet_path)
-    csv_bytes = df.write_csv(null_value="").encode('utf-8')
-    with open(csv_gz_path, "wb") as f_out:
-        with gzip.GzipFile(fileobj=f_out, mode="wb", compresslevel=9, mtime=0, filename="") as gz_out:
-            gz_out.write(csv_bytes)
+    csv_bytes = df.write_csv(null_value="").encode("utf-8")
+    with open(csv_path, "wb") as f_out:
+        f_out.write(csv_bytes)
 
 def compute_sha256(path: Path) -> str:
     """Computes and returns the SHA-256 hexadecimal checksum of `path`."""
@@ -92,7 +90,7 @@ def build_final_package(
 
         for table in expected_tables:
             parquet_name = f"{table}.parquet"
-            csv_name = f"{table}.csv.gz"
+            csv_name = f"{table}.csv"
 
             source = processed_dir / parquet_name
             if not source.exists():
@@ -102,7 +100,7 @@ def build_final_package(
             shutil.copy2(source, target_parquet)
 
             target_csv = temp_dir / csv_name
-            write_csv_gz(source, target_csv)
+            write_csv(source, target_csv)
 
             df = pl.read_parquet(target_parquet)
 
@@ -127,7 +125,7 @@ def build_final_package(
 
             files_manifest.append({
                 "name": csv_name,
-                "format": "csv.gz",
+                "format": "csv",
                 "time_window": METADATA_TABLES[table]["time_window"],
                 "keys": METADATA_TABLES[table]["keys"],
                 "size_bytes": target_csv.stat().st_size,
@@ -170,7 +168,7 @@ def build_final_package(
 This dataset provides a harmonized panel of Brazilian municipalities, covering the period from 2006 to 2023. It integrates data from various official sources to provide demographic, economic, social, public finance, health, and education indicators at the municipal level.
 
 ## Files and Formats
-The dataset includes 6 canonical tables, provided in both Parquet (canonical) and compressed CSV (gzip) formats:
+The dataset includes 6 canonical tables, provided in both Parquet (canonical) and uncompressed CSV formats:
 - `municipalities`: Territorial base and coordinates (Keys: municipality_code; Period: DTB 2025, Area 2025, Coordinates 2022).
 - `socioeconomic`: Population, GDP, formal employment, and Bolsa Família beneficiaries (Keys: municipality_code, year; Period: 2006-2023).
 - `public_finance`: Municipal budgetary expenditure by function and budget revenue (Keys: municipality_code, year; Period: 2006-2023).
@@ -271,7 +269,7 @@ See the paper for a full discussion of limitations.
                 raise RuntimeError(f"Manifest size mismatch for {am['name']}.")
             if am["sha256"] != compute_sha256(file_path):
                 raise RuntimeError(f"Manifest sha256 mismatch for {am['name']}.")
-            if am["format"] not in ["parquet", "csv.gz", "csv", "md"]:
+            if am["format"] not in ["parquet", "csv", "md"]:
                 raise RuntimeError(f"Manifest unexpected format {am['format']} for {am['name']}.")
             if "time_window" in am:
                 table = am["name"].split(".")[0]
@@ -288,12 +286,12 @@ See the paper for a full discussion of limitations.
                     raise RuntimeError(f"Manifest columns mismatch for {am['name']}")
 
         expected_files = set([
-            "municipalities.parquet", "municipalities.csv.gz",
-            "socioeconomic.parquet", "socioeconomic.csv.gz",
-            "public_finance.parquet", "public_finance.csv.gz",
-            "health.parquet", "health.csv.gz",
-            "neighboring_municipalities.parquet", "neighboring_municipalities.csv.gz",
-            "education.parquet", "education.csv.gz",
+            "municipalities.parquet", "municipalities.csv",
+            "socioeconomic.parquet", "socioeconomic.csv",
+            "public_finance.parquet", "public_finance.csv",
+            "health.parquet", "health.csv",
+            "neighboring_municipalities.parquet", "neighboring_municipalities.csv",
+            "education.parquet", "education.csv",
             "dictionary.csv", "quality_summary.csv", "quality_checks.csv",
             "manifest.json", "checksums.sha256", "README.md"
         ])
