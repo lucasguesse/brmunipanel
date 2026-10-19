@@ -62,11 +62,14 @@ Issues = "https://github.com/lucasguesse/brmunipanel/issues"
 Documentation = "https://github.com/lucasguesse/brmunipanel#readme"
 Changelog = "https://github.com/lucasguesse/brmunipanel/blob/master/CHANGELOG.md"
 
+[project.scripts]
+brmunipanel = "brmunipanel.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-brmunipanel = ["metadata/variables.json"]
+brmunipanel = ["metadata/variables.json", "metadata/raw_sources.json"]
 "brmunipanel.inep" = ["certificates/*.pem"]
 
 [tool.ruff]

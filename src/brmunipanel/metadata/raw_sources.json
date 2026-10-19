@@ -1,0 +1,164 @@
+[
+  {
+    "id": "ibge_populacao_municipal",
+    "institution": "IBGE",
+    "product": "Resident population estimates, SIDRA Table 6579 (variable 9324)",
+    "access": "SIDRA aggregates API",
+    "period": "2006–2024, years with an estimate",
+    "raw_folder": "ibge/sidra",
+    "manifest_keys": "^t6579/"
+  },
+  {
+    "id": "ibge_pib_vab_municipal",
+    "institution": "IBGE",
+    "product": "Gross domestic product of municipalities, SIDRA Table 5938 (variable 37)",
+    "access": "SIDRA aggregates API",
+    "period": "2006–2023",
+    "raw_folder": "ibge/sidra",
+    "manifest_keys": "^t5938/"
+  },
+  {
+    "id": "ibge_cempre_unidades_locais",
+    "institution": "IBGE",
+    "product": "Central Register of Enterprises (CEMPRE), SIDRA Tables 1685 and 9509",
+    "access": "SIDRA aggregates API",
+    "period": "2006–2021 and 2022–2023",
+    "raw_folder": "ibge/sidra",
+    "manifest_keys": "^t(1685|9509)/"
+  },
+  {
+    "id": "siconfi_despesas_por_funcao",
+    "institution": "National Treasury",
+    "product": "SICONFI annual accounts, Annex I-E (expenditure by function)",
+    "access": "SICONFI open data API",
+    "period": "2013–2023",
+    "raw_folder": "tesouro/siconfi-api",
+    "manifest_keys": "^dca_\\d{4}$"
+  },
+  {
+    "id": "tesouro_finbra_despesas_por_funcao",
+    "institution": "National Treasury",
+    "product": "FINBRA, table DSubFuncao (expenditure by function)",
+    "access": "Access databases, Tesouro Transparente",
+    "period": "2006–2012",
+    "raw_folder": "tesouro/finbra",
+    "manifest_keys": "^finbra_\\d{4}$"
+  },
+  {
+    "id": "tesouro_finbra_receitas",
+    "institution": "National Treasury",
+    "product": "FINBRA, table Receita (budget revenue)",
+    "access": "Access databases, Tesouro Transparente",
+    "period": "2006–2012",
+    "raw_folder": "tesouro/finbra",
+    "manifest_keys": "^finbra_\\d{4}$"
+  },
+  {
+    "id": "siconfi_receitas_anexo_ic",
+    "institution": "National Treasury",
+    "product": "SICONFI annual accounts, Annex I-C (budget revenue)",
+    "access": "SICONFI open data API",
+    "period": "2013–2023",
+    "raw_folder": "tesouro/siconfi-api-revenue",
+    "manifest_keys": "^dca_i_c_\\d{4}$"
+  },
+  {
+    "id": "ipea_bolsa_familia",
+    "institution": "IPEA",
+    "product": "Ipeadata series FAM_PBF and VAL_PBF (Bolsa Família)",
+    "access": "Ipeadata OData4 API",
+    "period": "2004–2025, December",
+    "raw_folder": "ipea/cash-transf-program",
+    "manifest_keys": "^(FAM|VAL)_PBF"
+  },
+  {
+    "id": "datasus_cnes_tabnet",
+    "institution": "Ministry of Health",
+    "product": "National Register of Health Establishments (CNES)",
+    "access": "DATASUS TabNet",
+    "period": "2006–2023, July",
+    "raw_folder": "datasus/tabnet",
+    "manifest_keys": "^cnes_"
+  },
+  {
+    "id": "datasus_sim_tabnet",
+    "institution": "Ministry of Health",
+    "product": "Mortality Information System (SIM)",
+    "access": "DATASUS TabNet",
+    "period": "2006–2023",
+    "raw_folder": "datasus/tabnet",
+    "manifest_keys": "^sim_"
+  },
+  {
+    "id": "datasus_sinasc_tabnet",
+    "institution": "Ministry of Health",
+    "product": "Live Birth Information System (SINASC)",
+    "access": "DATASUS TabNet",
+    "period": "2006–2023",
+    "raw_folder": "datasus/tabnet",
+    "manifest_keys": "^sinasc_"
+  },
+  {
+    "id": "ibge_dtb_2025",
+    "institution": "IBGE",
+    "product": "Brazilian Territorial Division (DTB) 2025",
+    "access": "File, IBGE geosciences server",
+    "period": "2025",
+    "raw_folder": "ibge/territory",
+    "manifest_keys": "^dtb_2025$"
+  },
+  {
+    "id": "ibge_municipios_limitrofes_2024",
+    "institution": "IBGE",
+    "product": "Neighbouring municipalities 2024",
+    "access": "File, IBGE geosciences server",
+    "period": "2024",
+    "raw_folder": "ibge/territory",
+    "manifest_keys": "^neighboring_2024$"
+  },
+  {
+    "id": "ibge_areas_territoriais_2025",
+    "institution": "IBGE",
+    "product": "Territorial areas 2025",
+    "access": "File, IBGE geosciences server",
+    "period": "2025",
+    "raw_folder": "ibge/territory",
+    "manifest_keys": "^areas_2025$"
+  },
+  {
+    "id": "ibge_localidades_2022",
+    "institution": "IBGE",
+    "product": "Localities of Brazil 2022, municipal seats",
+    "access": "File, IBGE geosciences server",
+    "period": "2022",
+    "raw_folder": "ibge/territory",
+    "manifest_keys": "^localities_2022$"
+  },
+  {
+    "id": "inep_censo_escolar",
+    "institution": "INEP",
+    "product": "School Census microdata",
+    "access": "File, INEP download server",
+    "period": "2006–2023",
+    "raw_folder": "inep",
+    "manifest_keys": "^school-census/(200[6-9]|201\\d|202[0-3])$"
+  },
+  {
+    "id": "inep_censo_superior",
+    "institution": "INEP",
+    "product": "Higher Education Census microdata",
+    "access": "File, INEP download server",
+    "period": "2000–2024",
+    "raw_folder": "inep",
+    "manifest_keys": "^higher-education-census/"
+  },
+  {
+    "id": "inep_ideb_rede_publica",
+    "institution": "INEP",
+    "product": "Municipal IDEB results, 2025 release",
+    "access": "File, INEP download server",
+    "period": "2005–2025, odd years",
+    "raw_folder": "inep/ideb",
+    "manifest_keys": "^(early_years|final_years|secondary)/2025$"
+  }
+]

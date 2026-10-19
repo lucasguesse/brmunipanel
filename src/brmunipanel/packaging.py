@@ -54,7 +54,7 @@ def build_final_package(
     project_commit: str,
     data_dir: Path,
     results_dir: Path,
-    datasets_json_path: Path,
+    datasets_json_path: Path | None = None,
     dataset_license: str | None = None,
     doi: str | None = None,
     url: str | None = None,
@@ -194,14 +194,11 @@ Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the docum
 
 ## Reproducibility
 This dataset is deterministically generated via the `brmunipanel` Python package.
-To reproduce from processed data:
 ```bash
-python scripts/run_pipeline.py --step data --stage finalize --dataset_version <version> --date <YYYY-MM-DD>
+pip install brmunipanel
+brmunipanel build --raw-dir <raw folder> --output-dir <output folder> --dataset-version <version> --date <YYYY-MM-DD>
 ```
-To reproduce from raw data:
-```bash
-python scripts/run_pipeline.py --step data --stage all --dataset_version <version> --date <YYYY-MM-DD>
-```
+The `--stage finalize` option rebuilds only the package from processed data.
 Source code repository: https://github.com/lucasguesse/brmunipanel
 
 ## Limitations
@@ -226,13 +223,21 @@ See the paper for a full discussion of limitations.
             "sha256": compute_sha256(readme_target)
         })
 
-        with open(datasets_json_path, "r", encoding="utf-8") as f:
-            datasets = json.load(f)
-        sources = [
-            {"id": ds["id"], "name": ds["name"], "period": ds["period"]}
-            for ds in datasets
-            if ds.get("in_package", True)
-        ]
+        if datasets_json_path is not None and Path(datasets_json_path).exists():
+            with open(datasets_json_path, "r", encoding="utf-8") as f:
+                loaded_datasets = json.load(f)
+            if loaded_datasets and isinstance(loaded_datasets, list) and "name" in loaded_datasets[0]:
+                sources = [
+                    {"id": ds["id"], "name": ds["name"], "period": ds["period"]}
+                    for ds in loaded_datasets
+                    if ds.get("in_package", True)
+                ]
+            else:
+                sources = [ds for ds in loaded_datasets if ds.get("in_package", True)]
+        else:
+            raw_sources_path = Path(__file__).resolve().parent / "metadata" / "raw_sources.json"
+            with open(raw_sources_path, "r", encoding="utf-8") as f:
+                sources = json.load(f)
 
         manifest = {
             "dataset_version": dataset_version,

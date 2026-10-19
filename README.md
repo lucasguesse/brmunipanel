@@ -71,6 +71,33 @@ print(bmp.__version__)
 
 Version 0.3.0 names modules, functions, tables, columns, category values and manifest fields in English and is not compatible with 0.2.0. See [CHANGELOG.md](CHANGELOG.md) for the list of changes and for how to migrate a raw data folder downloaded with 0.2.0.
 
+## Rebuild the Dataset
+
+You can rebuild the complete dataset using the command-line interface:
+
+```bash
+pip install brmunipanel
+brmunipanel build --raw-dir <raw folder> --output-dir <output folder> --dataset-version <version> --date <YYYY-MM-DD>
+```
+
+The pipeline executes four sequential stages (which can also be executed individually via `--stage`):
+1. `download`: downloads raw data files directly from official sources into `--raw-dir`.
+2. `harmonize`: parses and harmonizes raw sources into standardized Parquet tables in `<output folder>/intermediate`.
+3. `consolidate`: compiles intermediate tables into the canonical panels in `<output folder>/processed`, generating dictionaries and automated quality audit reports.
+4. `finalize`: builds the public release package in `<output folder>/final` (Parquet, uncompressed CSV, dictionaries, quality summaries, checksums, and manifest).
+
+The `--raw-dir` directory is organized into the following subfolders:
+- `ibge/territory`: DTB 2025, neighboring municipalities, territorial areas, and municipal seat localities.
+- `ibge/sidra`: SIDRA tables for population estimates (6579), municipal GDP (5938), and CEMPRE (1685, 9509).
+- `datasus/health-regions`: health regions and macro-regions.
+- `datasus/tabnet`: CNES, SIM, and Sinasc tabulations.
+- `ipea/cash-transf-program`: Bolsa Família series (FAM_PBF and VAL_PBF).
+- `tesouro/finbra`: FINBRA Access databases (2006–2012).
+- `tesouro/siconfi-api`: SICONFI expenditure by function API files (2013–2023).
+- `tesouro/siconfi-api-revenue`: SICONFI budget revenue API files (2013–2023).
+- `inep`: School Census and Higher Education Census microdata.
+- `inep/ideb`: public school IDEB results.
+
 ## Data Sources Handled
 The library currently wraps and harmonizes the following official sources:
 * **IBGE (Instituto Brasileiro de Geografia e Estatística):**

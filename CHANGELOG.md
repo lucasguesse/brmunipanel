@@ -60,6 +60,12 @@ Deposit metadata in the data package. `packaging.build_final_package` takes `dat
 
 Uncompressed CSV tables in the data package. `packaging.build_final_package` provides the six tables in Parquet and uncompressed UTF-8 CSV (replacing gzip-compressed CSV), using comma delimiters, empty strings for nulls and LF line endings. The package manifest records `format: "csv"` for these files.
 
+Command-line interface `brmunipanel build` to execute the complete dataset pipeline (`download`, `harmonize`, `consolidate`, `finalize`) across raw and output directories.
+
+Package dataset `metadata/raw_sources.json` listing the 18 official raw data sources, their accession methods, time periods, and manifest regex patterns.
+
+Dictionary and quality audit module `metadata.document.generate_dictionaries` to generate data dictionaries and automated quality reports directly within the library.
+
 The quality check on the length of shared boundaries is named `non-negative lengths`.
 
 ## 0.2.0 and earlier
