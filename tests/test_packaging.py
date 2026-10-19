@@ -238,3 +238,21 @@ def test_citation_lines():
         "DOI: https://doi.org/10.1/x\nURL: https://u\nLicense: CC-BY-4.0\n"
     )
     assert packaging.citation_lines(None, None, None) == "DOI: not assigned\nURL: not assigned\nLicense: not assigned\n"
+
+
+def test_packaging_raw_sources_default_keys(fake_environment):
+    data_dir, results_dir, _ = fake_environment
+    packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir)
+    manifest = json.loads((data_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    assert len(manifest["raw_sources"]) == 18
+    expected_keys = {"id", "institution", "product", "access", "period"}
+    for source in manifest["raw_sources"]:
+        assert set(source.keys()) == expected_keys
+
+
+def test_packaging_null_commits(fake_environment):
+    data_dir, results_dir, _ = fake_environment
+    packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", None, None, data_dir, results_dir)
+    manifest = json.loads((data_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["git_package_commit"] is None
+    assert manifest["git_project_commit"] is None

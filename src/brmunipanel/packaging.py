@@ -50,8 +50,8 @@ def build_final_package(
     dataset_version: str,
     generation_date: str,
     package_version: str,
-    package_commit: str,
-    project_commit: str,
+    package_commit: str | None,
+    project_commit: str | None,
     data_dir: Path,
     results_dir: Path,
     datasets_json_path: Path | None = None,
@@ -237,7 +237,17 @@ See the paper for a full discussion of limitations.
         else:
             raw_sources_path = Path(__file__).resolve().parent / "metadata" / "raw_sources.json"
             with open(raw_sources_path, "r", encoding="utf-8") as f:
-                sources = json.load(f)
+                raw_sources_data = json.load(f)
+            sources = [
+                {
+                    "id": item["id"],
+                    "institution": item["institution"],
+                    "product": item["product"],
+                    "access": item["access"],
+                    "period": item["period"],
+                }
+                for item in raw_sources_data
+            ]
 
         manifest = {
             "dataset_version": dataset_version,
