@@ -1699,7 +1699,7 @@
       },
       "wages_thousand_brl": {
         "description_pt": "Salários e outras remunerações",
-        "description_en": "Salaries and other remunerations",
+        "description_en": "Salaries and other remuneration",
         "unit_pt": "Mil Reais",
         "unit_en": "Thousand reais (BRL)",
         "source_pt": "IBGE - CEMPRE",
@@ -1767,9 +1767,9 @@
       },
       "enroll_early_childhood": {
         "description_pt": "Matriculas - Infantil",
-        "description_en": "Enrollments in early childhood education",
+        "description_en": "Enrolments in early childhood education",
         "unit_pt": "Matrículas",
-        "unit_en": "Enrollments",
+        "unit_en": "Enrolments",
         "source_pt": "INEP - Censo Escolar",
         "source_en": "INEP - School Census",
         "period": "2006-2023",
@@ -1778,9 +1778,9 @@
       },
       "enroll_elementary": {
         "description_pt": "Matriculas - Fundamental",
-        "description_en": "Enrollments in elementary education",
+        "description_en": "Enrolments in elementary education",
         "unit_pt": "Matrículas",
-        "unit_en": "Enrollments",
+        "unit_en": "Enrolments",
         "source_pt": "INEP - Censo Escolar",
         "source_en": "INEP - School Census",
         "period": "2006-2023",
@@ -1789,9 +1789,9 @@
       },
       "enroll_secondary": {
         "description_pt": "Matriculas - Medio",
-        "description_en": "Enrollments in upper secondary education",
+        "description_en": "Enrolments in upper secondary education",
         "unit_pt": "Matrículas",
-        "unit_en": "Enrollments",
+        "unit_en": "Enrolments",
         "source_pt": "INEP - Censo Escolar",
         "source_en": "INEP - School Census",
         "period": "2006-2023",
@@ -1822,9 +1822,9 @@
       },
       "enroll_higher_edu": {
         "description_pt": "Matrículas no ensino superior",
-        "description_en": "Higher education enrollments",
+        "description_en": "Higher education enrolments",
         "unit_pt": "Matrículas",
-        "unit_en": "Enrollments",
+        "unit_en": "Enrolments",
         "source_pt": "INEP - Censo da Educação Superior",
         "source_en": "INEP - Higher Education Census",
         "period": "2006-2023",
@@ -1934,7 +1934,7 @@
       },
       "exp_national_defense": {
         "description_pt": "Despesa: Defesa nacional",
-        "description_en": "Expenditure: National Defense",
+        "description_en": "Expenditure: National Defence",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2000,7 +2000,7 @@
       },
       "exp_labor": {
         "description_pt": "Despesa: Trabalho",
-        "description_en": "Expenditure: Labor",
+        "description_en": "Expenditure: Labour",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2198,7 +2198,7 @@
       },
       "rev_current_gross": {
         "description_pt": "Receita: receita corrente bruta",
-        "description_en": "Revenue: Gross Current Revenue",
+        "description_en": "Gross current revenue",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2209,7 +2209,7 @@
       },
       "rev_current_deductions": {
         "description_pt": "Receita: deduções da receita corrente",
-        "description_en": "Revenue: Current Revenue Deductions",
+        "description_en": "Deductions from current revenue",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2220,7 +2220,7 @@
       },
       "rev_iptu": {
         "description_pt": "Receita: IPTU",
-        "description_en": "Revenue: Urban Property Tax (IPTU)",
+        "description_en": "Urban property tax (IPTU)",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2231,7 +2231,7 @@
       },
       "rev_iss": {
         "description_pt": "Receita: ISS",
-        "description_en": "Revenue: Services Tax (ISS)",
+        "description_en": "Tax on services (ISS)",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2242,7 +2242,7 @@
       },
       "rev_itbi": {
         "description_pt": "Receita: ITBI",
-        "description_en": "Revenue: Real Estate Transfer Tax (ITBI)",
+        "description_en": "Real estate transfer tax (ITBI)",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2253,7 +2253,7 @@
       },
       "rev_fees": {
         "description_pt": "Receita: taxas",
-        "description_en": "Revenue: Fees",
+        "description_en": "Fees",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2264,7 +2264,7 @@
       },
       "rev_fpm": {
         "description_pt": "Receita: cota-parte do FPM",
-        "description_en": "Revenue: Municipalities Participation Fund (FPM)",
+        "description_en": "Share of the Municipal Participation Fund (FPM)",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2275,7 +2275,7 @@
       },
       "rev_icms_share": {
         "description_pt": "Receita: cota-parte do ICMS",
-        "description_en": "Revenue: State Tax on Goods and Services Share (ICMS)",
+        "description_en": "Share of the state tax on goods and services (ICMS)",
         "unit_pt": "Reais",
         "unit_en": "Reais (BRL)",
         "source_pt": "Tesouro Nacional (FINBRA/SICONFI)",
@@ -2433,7 +2433,7 @@
       },
       "neighbor_municipality_code": {
         "description_pt": "Código do Município Limítrofe",
-        "description_en": "Neighboring municipality code",
+        "description_en": "Neighbouring municipality code",
         "unit_pt": "Código",
         "unit_en": "Code",
         "source_pt": "IBGE",
@@ -2523,7 +2523,7 @@
       },
       "primary_care_units": {
         "description_pt": "Unidades Básicas de Saúde",
-        "description_en": "Health centers and basic health units",
+        "description_en": "Health centres and basic health units",
         "unit_pt": "Unidades",
         "unit_en": "Units",
         "source_pt": "DATASUS - CNES",
