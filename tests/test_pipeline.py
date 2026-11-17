@@ -99,14 +99,14 @@ def test_pipeline_paths_and_subfolders(monkeypatch: pytest.MonkeyPatch, tmp_path
 
 
 def test_raw_sources_json_structure_and_ids() -> None:
-    """Tests that raw_sources.json contains 18 sources with expected keys and unique IDs in order."""
+    """Tests that raw_sources.json contains 19 sources with expected keys and unique IDs in order."""
     raw_sources_path = Path(__file__).resolve().parents[1] / "src" / "brmunipanel" / "metadata" / "raw_sources.json"
     assert raw_sources_path.exists()
 
     with open(raw_sources_path, "r", encoding="utf-8") as f:
         sources = json.load(f)
 
-    assert len(sources) == 18
+    assert len(sources) == 19
 
     expected_keys = {"id", "institution", "product", "access", "period", "raw_folder", "manifest_keys"}
     expected_ids = [
@@ -128,6 +128,7 @@ def test_raw_sources_json_structure_and_ids() -> None:
         "inep_censo_escolar",
         "inep_censo_superior",
         "inep_ideb_rede_publica",
+        "inep_taxas_rendimento",
     ]
 
     actual_ids = []
@@ -136,11 +137,11 @@ def test_raw_sources_json_structure_and_ids() -> None:
         actual_ids.append(item["id"])
 
     assert actual_ids == expected_ids
-    assert len(set(actual_ids)) == 18
+    assert len(set(actual_ids)) == 19
 
 
 def test_manifest_keys_regexes_compile() -> None:
-    """Tests that all 18 manifest_keys expressions compile with re.compile."""
+    """Tests that all 19 manifest_keys expressions compile with re.compile."""
     raw_sources_path = Path(__file__).resolve().parents[1] / "src" / "brmunipanel" / "metadata" / "raw_sources.json"
     with open(raw_sources_path, "r", encoding="utf-8") as f:
         sources = json.load(f)

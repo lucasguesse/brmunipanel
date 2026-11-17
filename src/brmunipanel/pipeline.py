@@ -13,7 +13,7 @@ import polars as pl
 import brmunipanel
 from brmunipanel.datasus import health, health_regions, tabnet
 from brmunipanel.ibge import cempre, gdp, population, territory
-from brmunipanel.inep import higher_education_census, ideb, school_census
+from brmunipanel.inep import higher_education_census, ideb, pass_rates, school_census
 from brmunipanel.ipea import cash_transf_program
 from brmunipanel.metadata import document
 from brmunipanel import packaging, panel
@@ -86,6 +86,10 @@ class Paths:
     @property
     def ideb(self) -> Path:
         return self.raw_dir / "inep" / "ideb"
+
+    @property
+    def pass_rates(self) -> Path:
+        return self.raw_dir / "inep" / "pass-rates"
 
 
 def _write(table: pl.DataFrame, name: str, folder: Path) -> None:
@@ -200,6 +204,14 @@ SOURCES: dict[str, tuple[Callable[..., Any], Callable[..., Any] | None]] = {
         lambda paths: _write(
             ideb.harmonize(paths.ideb, pl.read_parquet(paths.intermediate_dir / "ibge_municipalities.parquet")),
             "inep_ideb",
+            paths.intermediate_dir,
+        ),
+    ),
+    "pass_rates": (
+        lambda paths: pass_rates.download(paths.pass_rates),
+        lambda paths: _write(
+            pass_rates.harmonize(paths.pass_rates, pl.read_parquet(paths.intermediate_dir / "ibge_municipalities.parquet")),
+            "inep_pass_rates",
             paths.intermediate_dir,
         ),
     ),

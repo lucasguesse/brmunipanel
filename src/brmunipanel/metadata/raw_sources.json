@@ -160,5 +160,14 @@
     "period": "2005–2025, odd years",
     "raw_folder": "inep/ideb",
     "manifest_keys": "^(early_years|final_years|secondary)/2025$"
+  },
+  {
+    "id": "inep_taxas_rendimento",
+    "institution": "INEP",
+    "product": "School performance rates (pass, failure and dropout) by municipality",
+    "access": "File, INEP download server",
+    "period": "2007–2025",
+    "raw_folder": "inep/pass-rates",
+    "manifest_keys": "^pass-rates/\\d{4}$"
   }
 ]
