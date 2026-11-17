@@ -11,11 +11,18 @@ Caveats:
 - Null means that no school in the group has data.
 - In 2006, the layout is different: the reference date is March 29, 2006 (and from 2007 onwards it is the last Wednesday of May); blanks are zero; EJA includes blended courses in enrollments and not in classes; the normal track and integrated secondary education are within upper secondary education; fourteen columns are null; and the series changes method in 2007, when INEP began collecting the census per student.
 - Teachers in 2006: these are practicing teachers at the school, and those at each level count the same teacher in more than one.
+- School names are decoded using Latin-1 to preserve accented characters.
+- Federal school classification is derived from fixed text matching rules applied to school names across all observed years.
+- The network enrollment table aggregates active schools only, assigning zero counts when a network has no schools in the municipality.
 """
 
+from collections.abc import Sequence
+import io
 from pathlib import Path
-import zipfile
+import re
 import tempfile
+import unicodedata
+import zipfile
 import polars as pl
 
 from brmunipanel.inep.connection import create_session
@@ -23,6 +30,72 @@ from brmunipanel.core import Request, InvalidResponse, download_batch
 
 CURRENT_YEARS = list(range(2007, 2024))
 ALL_YEARS = list(range(2006, 2024))
+NETWORK_YEARS = list(range(2007, 2025))
+NETWORKS = ("federal_network", "federal_other", "state", "municipal", "private")
+OPERATING_STATUS = {"1": "active", "2": "paused", "3": "closed", "4": "closed_earlier"}
+
+FEDERAL_SCHOOL_RULES = [
+    (
+        "military",
+        [r"\bMILITAR\b", r"\bNAVAL\b", r"AERONAUTICA", r"CADETES", r"EPCAR"],
+    ),
+    (
+        "laboratory_school",
+        [r"APLICACAO", r"\bCAP\b", r"CENTRO PEDAGOGICO", r"NUCLEO DE DESENVOLVIMENTO INFANTIL", r"\bESEBA\b"],
+    ),
+    (
+        "federal_network",
+        [
+            r"INSTITUTO FEDERAL",
+            r"^IF[A-Z]{1,6}\b",
+            r"\bIF [A-Z]",
+            r"CEFET",
+            r"CENTRO FEDERAL DE EDUCACAO TECNOLOGICA",
+            r"PEDRO II",
+            r"AGROTECNICA FEDERAL",
+            r"TECNICA FEDERAL",
+            r"\bUNED\b",
+            r"DESCENTRALIZADA",
+            r"\bAGROTECNICA F\b",
+            r"\bUTFPR\b",
+            r"UNIVERSIDADE TEC[A-Z]* FED",
+            r"\bINST FED\b",
+        ],
+    ),
+    (
+        "university_linked",
+        [
+            r"UNIVERSIDADE",
+            r"COLEGIO TECNICO",
+            r"COLEGIO AGRICOLA",
+            r"ESCOLA AGRICOLA",
+            r"ESCOLA TECNICA",
+            r"ESCOLA DE MUSICA",
+            r"SAUDE",
+            r"ENFERMAGEM",
+            r"TEATRO",
+            r"DANCA",
+        ],
+    ),
+    (
+        "federal_network",
+        [r"\bCAMPUS\b"],
+    ),
+]
+
+NETWORK_COLUMNS = [
+    "CO_MUNICIPIO",
+    "CO_ENTIDADE",
+    "NO_ENTIDADE",
+    "TP_DEPENDENCIA",
+    "TP_SITUACAO_FUNCIONAMENTO",
+    "QT_MAT_BAS",
+    "QT_MAT_MED",
+    "QT_MAT_FUND_AF",
+    "QT_MAT_PROF",
+    "QT_MAT_PROF_TEC",
+    "QT_MAT_EJA_MED",
+]
 
 STAGES = [
     ("BAS", "basic_edu"),
@@ -449,3 +522,277 @@ def harmonize(folder: Path | str, municipalities: pl.DataFrame) -> pl.DataFrame:
     df_final = df_final.select(col_order)
     
     return df_final
+
+
+def download_network(folder: Path | str, **options) -> None:
+    """Downloads School Census microdata ZIP files (2007–2024) into `folder`."""
+    folder = Path(folder)
+    reqs = []
+    for year in NETWORK_YEARS:
+        reqs.append(
+            Request(
+                key=f"school-census/{year}",
+                url=f"https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_{year}.zip",
+                file=f"school-census/school-census_{year}.zip",
+                method="GET",
+                compress=False,
+            )
+        )
+    session = options.pop("session", None) or create_session()
+    download_batch(reqs, folder, session=session, validate=validate_zip, interval=1.0, **options)
+
+
+def normalize_school_name(name: str) -> str:
+    """Normalizes a school name by removing accents, punctuation, and extra whitespace."""
+    decomposed = unicodedata.normalize("NFKD", name)
+    without_accents = "".join(c for c in decomposed if not unicodedata.combining(c))
+    upper = without_accents.upper()
+    no_punct = re.sub(r"[^\w\s]", " ", upper)
+    return re.sub(r"\s+", " ", no_punct).strip()
+
+
+def classify_federal_school(names: Sequence[str]) -> str:
+    """Classifies a federal school into a category based on fixed regex rules over observed names."""
+    if not names:
+        raise ValueError("Names sequence cannot be empty")
+
+    norm_names = [normalize_school_name(n) for n in names]
+    for school_type, patterns in FEDERAL_SCHOOL_RULES:
+        for pat in patterns:
+            for norm_name in norm_names:
+                if re.search(pat, norm_name):
+                    return school_type
+    return "other_federal"
+
+
+def read_network_year(folder: Path | str, year: int, valid_municipalities: set[str]) -> pl.DataFrame:
+    """Reads school-level data for network classification from the annual ZIP file for `year`."""
+    zip_path = Path(folder) / f"school-census/school-census_{year}.zip"
+
+    with zipfile.ZipFile(zip_path, "r") as z:
+        candidates = [
+            info
+            for info in z.infolist()
+            if "microdados_ed_basica" in info.filename.lower() and info.filename.lower().endswith(".csv")
+        ]
+        if len(candidates) != 1:
+            raise ValueError(
+                f"Year {year}: expected exactly 1 CSV file of microdados_ed_basica in the ZIP, found {len(candidates)}"
+            )
+
+        member = candidates[0]
+        raw_bytes = z.read(member)
+        text = raw_bytes.decode("latin-1")
+
+    first_line = text.split("\n", 1)[0].rstrip("\r")
+    header_cols = [c.strip() for c in first_line.split(";")]
+
+    for col in NETWORK_COLUMNS:
+        if col not in header_cols:
+            raise ValueError(f"Year {year}: required column {col} missing from header")
+
+    columns_to_read = list(NETWORK_COLUMNS)
+    if "NU_ANO_CENSO" in header_cols:
+        columns_to_read.append("NU_ANO_CENSO")
+
+    df = pl.read_csv(
+        io.BytesIO(text.encode("utf-8")),
+        separator=";",
+        infer_schema_length=0,
+        columns=columns_to_read,
+    )
+
+    if "NU_ANO_CENSO" in df.columns:
+        wrong_year = df.filter(pl.col("NU_ANO_CENSO") != str(year))
+        if len(wrong_year) > 0:
+            raise ValueError(
+                f"Year {year}: there are records with NU_ANO_CENSO other than {year}. Example: {wrong_year.head(3)}"
+            )
+        df = df.drop("NU_ANO_CENSO")
+
+    dep_map = {"1": "federal", "2": "state", "3": "municipal", "4": "private"}
+
+    invalid_admin = df.filter(~pl.col("TP_DEPENDENCIA").is_in(dep_map.keys()) | pl.col("TP_DEPENDENCIA").is_null())
+    if len(invalid_admin) > 0:
+        raise ValueError(f"Year {year}: invalid values in TP_DEPENDENCIA. Example: {invalid_admin.head(3)}")
+
+    invalid_status = df.filter(
+        ~pl.col("TP_SITUACAO_FUNCIONAMENTO").is_in(OPERATING_STATUS.keys())
+        | pl.col("TP_SITUACAO_FUNCIONAMENTO").is_null()
+    )
+    if len(invalid_status) > 0:
+        raise ValueError(
+            f"Year {year}: invalid values in TP_SITUACAO_FUNCIONAMENTO. Example: {invalid_status.head(3)}"
+        )
+
+    invalid_muni = df.filter(
+        ~pl.col("CO_MUNICIPIO").is_in(valid_municipalities) | pl.col("CO_MUNICIPIO").is_null()
+    )
+    if len(invalid_muni) > 0:
+        raise ValueError(
+            f"Year {year}: invalid or null municipalities in CO_MUNICIPIO. Example: {invalid_muni.head(3)}"
+        )
+
+    qt_cols = [
+        "QT_MAT_BAS",
+        "QT_MAT_MED",
+        "QT_MAT_FUND_AF",
+        "QT_MAT_PROF",
+        "QT_MAT_PROF_TEC",
+        "QT_MAT_EJA_MED",
+    ]
+    exprs = []
+    for orig in qt_cols:
+        invalid_qt = df.filter(
+            ~pl.col(orig).is_null() & (pl.col(orig) != "") & ~pl.col(orig).str.contains(r"^\d+$")
+        )
+        if len(invalid_qt) > 0:
+            raise ValueError(
+                f"Year {year}: non-integer or negative values in column {orig}. Example: {invalid_qt.head(3)}"
+            )
+        exprs.append(
+            pl.when(pl.col(orig) == "").then(None).otherwise(pl.col(orig)).cast(pl.Int64).alias(orig)
+        )
+
+    df = df.with_columns(exprs)
+
+    df = df.select([
+        pl.col("CO_ENTIDADE").str.strip_chars().alias("school_code"),
+        pl.lit(year).cast(pl.Int16).alias("year"),
+        pl.col("CO_MUNICIPIO").str.strip_chars().alias("municipality_code"),
+        pl.col("NO_ENTIDADE").str.strip_chars().alias("school_name"),
+        pl.col("TP_DEPENDENCIA").replace_strict(dep_map).alias("admin_dependency"),
+        pl.col("TP_SITUACAO_FUNCIONAMENTO").replace_strict(OPERATING_STATUS).alias("operating_status"),
+        pl.col("QT_MAT_BAS").alias("enroll_basic_edu"),
+        pl.col("QT_MAT_MED").alias("enroll_secondary"),
+        pl.col("QT_MAT_FUND_AF").alias("enroll_elementary_final_years"),
+        pl.col("QT_MAT_PROF").alias("enroll_vocational"),
+        pl.col("QT_MAT_PROF_TEC").alias("enroll_vocational_technical"),
+        pl.col("QT_MAT_EJA_MED").alias("enroll_eja_secondary"),
+    ])
+
+    return df.sort("school_code")
+
+
+def harmonize_network(folder: Path | str, municipalities: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Harmonizes School Census data into federal schools and network enrollment tables (2007–2024)."""
+    folder = Path(folder)
+    valid_municipalities = set(municipalities["municipality_code"].to_list())
+
+    yearly_dfs = []
+    for year in NETWORK_YEARS:
+        yearly_dfs.append(read_network_year(folder, year, valid_municipalities))
+
+    all_df = pl.concat(yearly_dfs) if yearly_dfs else pl.DataFrame()
+
+    all_federal = all_df.filter(pl.col("admin_dependency") == "federal")
+
+    school_names_map: dict[str, list[str]] = {}
+    for row in all_federal.select(["school_code", "school_name", "year"]).sort("year").iter_rows(named=True):
+        sc = row["school_code"]
+        sn = row["school_name"]
+        if sc not in school_names_map:
+            school_names_map[sc] = []
+        if sn not in school_names_map[sc]:
+            school_names_map[sc].append(sn)
+
+    school_class_map = {
+        sc: classify_federal_school(names)
+        for sc, names in school_names_map.items()
+    }
+
+    federal_schools = all_federal.with_columns(
+        pl.col("school_code").replace_strict(school_class_map).alias("school_class")
+    )
+
+    federal_cols = [
+        "school_code",
+        "year",
+        "municipality_code",
+        "school_name",
+        "school_class",
+        "operating_status",
+        "enroll_basic_edu",
+        "enroll_secondary",
+        "enroll_vocational",
+        "enroll_vocational_technical",
+        "enroll_eja_secondary",
+    ]
+    federal_schools = federal_schools.select(federal_cols)
+    if federal_schools.select(["school_code", "year"]).is_duplicated().any():
+        raise ValueError("Duplicate key (school_code, year) found in federal_schools")
+    federal_schools = federal_schools.sort(["school_code", "year"])
+
+    grid_rows = []
+    for df_year in yearly_dfs:
+        if df_year.height == 0:
+            continue
+        y = int(df_year["year"][0])
+        munis_in_year = df_year.select("municipality_code").unique()
+        grid_year = munis_in_year.join(
+            pl.DataFrame({"network": list(NETWORKS)}),
+            how="cross",
+        ).with_columns(pl.lit(y).cast(pl.Int16).alias("year"))
+        grid_rows.append(grid_year)
+
+    full_grid = pl.concat(grid_rows) if grid_rows else pl.DataFrame()
+
+    active_df = all_df.filter(pl.col("operating_status") == "active")
+
+    active_df = active_df.with_columns(
+        pl.col("school_code").replace_strict(school_class_map, default="other_federal").alias("school_class")
+    )
+
+    active_df = active_df.with_columns(
+        pl.when(pl.col("admin_dependency") == "federal")
+        .then(
+            pl.when(pl.col("school_class") == "federal_network")
+            .then(pl.lit("federal_network"))
+            .otherwise(pl.lit("federal_other"))
+        )
+        .otherwise(pl.col("admin_dependency"))
+        .alias("network")
+    )
+
+    active_agg = (
+        active_df
+        .group_by(["municipality_code", "year", "network"])
+        .agg([
+            pl.when(pl.col("enroll_secondary").fill_null(0) > 0)
+            .then(1)
+            .otherwise(0)
+            .sum()
+            .cast(pl.Int64)
+            .alias("secondary_schools"),
+            pl.col("enroll_secondary").fill_null(0).sum().cast(pl.Int64).alias("enroll_secondary"),
+            pl.col("enroll_elementary_final_years").fill_null(0).sum().cast(pl.Int64).alias("enroll_elementary_final_years"),
+            pl.col("enroll_vocational_technical").fill_null(0).sum().cast(pl.Int64).alias("enroll_vocational_technical"),
+        ])
+    )
+
+    enrollment_network = full_grid.join(
+        active_agg,
+        on=["municipality_code", "year", "network"],
+        how="left",
+    ).with_columns([
+        pl.col("secondary_schools").fill_null(0).cast(pl.Int64),
+        pl.col("enroll_secondary").fill_null(0).cast(pl.Int64),
+        pl.col("enroll_elementary_final_years").fill_null(0).cast(pl.Int64),
+        pl.col("enroll_vocational_technical").fill_null(0).cast(pl.Int64),
+    ])
+
+    enrollment_cols = [
+        "municipality_code",
+        "year",
+        "network",
+        "secondary_schools",
+        "enroll_secondary",
+        "enroll_elementary_final_years",
+        "enroll_vocational_technical",
+    ]
+    enrollment_network = enrollment_network.select(enrollment_cols)
+    if enrollment_network.select(["municipality_code", "year", "network"]).is_duplicated().any():
+        raise ValueError("Duplicate key (municipality_code, year, network) found in enrollment_network")
+    enrollment_network = enrollment_network.sort(["municipality_code", "year", "network"])
+
+    return federal_schools, enrollment_network

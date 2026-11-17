@@ -139,9 +139,9 @@
     "institution": "INEP",
     "product": "School Census microdata",
     "access": "File, INEP download server",
-    "period": "2006–2023",
+    "period": "2006–2024",
     "raw_folder": "inep",
-    "manifest_keys": "^school-census/(200[6-9]|201\\d|202[0-3])$"
+    "manifest_keys": "^school-census/(200[6-9]|201\\d|202[0-4])$"
   },
   {
     "id": "inep_censo_superior",

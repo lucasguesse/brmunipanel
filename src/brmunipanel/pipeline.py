@@ -160,6 +160,13 @@ def _harmonize_siconfi_api(paths: Paths) -> None:
     _write(siconfi.harmonize(paths.siconfi_api, municipalities, source="api"), "tesouro_expenditure_by_function_siconfi", paths.intermediate_dir)
 
 
+def _harmonize_school_census_network(paths: Paths) -> None:
+    municipalities = pl.read_parquet(paths.intermediate_dir / "ibge_municipalities.parquet")
+    federal_schools, enrollment_network = school_census.harmonize_network(paths.inep, municipalities)
+    _write(federal_schools, "inep_federal_schools", paths.intermediate_dir)
+    _write(enrollment_network, "inep_enrollment_network", paths.intermediate_dir)
+
+
 SOURCES: dict[str, tuple[Callable[..., Any], Callable[..., Any] | None]] = {
     "territory": (lambda paths: territory.download(paths.territory), _harmonize_territory),
     "school_census": (
@@ -214,6 +221,10 @@ SOURCES: dict[str, tuple[Callable[..., Any], Callable[..., Any] | None]] = {
             "inep_pass_rates",
             paths.intermediate_dir,
         ),
+    ),
+    "school_census_network": (
+        lambda paths: school_census.download_network(paths.inep),
+        _harmonize_school_census_network,
     ),
 }
 
