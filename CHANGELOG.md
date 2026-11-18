@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0
+
+This release adds four education tables by school network, the 2011 mesoregions and microregions in the municipalities table, and two raw sources. Code written for 0.3.0 keeps working, and the six tables of 0.3.0 keep their contents, apart from four new columns in `municipalities`.
+
+### Added
+
+INEP school performance rates. The new module `inep.pass_rates` downloads the municipal pass, failure and dropout rates published by INEP for 2007 to 2025 (`download`, one file per year, with keys `pass-rates/<year>` in the folder `inep/pass-rates`) and harmonizes the rates of the final years of elementary education and of upper secondary education by municipality, year, location and school network (`harmonize`, also exported as `inep.harmonize_pass_rates`). Rates are kept as published, with null where the file shows `--`.
+
+School Census by school network. `inep.school_census.harmonize_network` (exported as `inep.harmonize_school_census_network`) reads the School Census from 2007 to 2024 school by school, decoding the files as Latin-1 so that school names keep their accents. It returns one row per federal school and year, with a type of school derived from its names (`federal_network`, `military`, `laboratory_school`, `university_linked` and `other_federal`), and the enrolments of active schools by municipality, year and network (`federal_network`, `federal_other`, `state`, `municipal` and `private`). `inep.school_census.download_network` downloads the 2007–2024 files; `download` is unchanged.
+
+IDEB by school network. `inep.ideb.harmonize_final_years_network` (exported as `inep.harmonize_ideb_final_years_network`) reads the state, municipal, public and federal results of the final years of elementary education from the 2025 municipal release, for the editions from 2005 to 2025.
+
+Territorial division of 2011. `ibge.territory.download` also downloads the 2011 Brazilian Territorial Division (key `dtb_2011` in the folder `ibge/territory`), and `ibge.territory.harmonize_municipalities` adds `mesoregion_2011_code`, `mesoregion_2011_name`, `microregion_2011_code` and `microregion_2011_name`, the geographic mesoregions and microregions of the 1990 regional division, to the municipalities table. They are null for the six municipalities installed after 2011, and the codes identify the microregions, since four microregion names repeat across states.
+
+Consolidation, audit and package. `panel.build_keyed_table` validates a table by its keys and sorts it. The consolidation writes `federal_schools`, `enrollment_network`, `pass_rates` and `ideb_final_years_network` next to the six tables of 0.3.0, with contracts and dictionary entries in English and Portuguese, and the final package carries the ten tables in Parquet and CSV. The audit checks that the three rates of a stage add up to 100, that rates lie between 0 and 100 and the IDEB between 0 and 10, that the upper secondary enrolment of the five networks adds up to `enroll_secondary` in `education`, that the federal networks match `federal_schools`, and that the IDEB of the public network matches `education`, with control totals for 2023, and it counts the 2011 mesoregions and microregions of the municipalities table. The pipeline gains the sources `pass_rates`, `school_census_network` and `ideb_network`, and `metadata/raw_sources.json` lists the pass rates and the 2011 Brazilian Territorial Division as new raw sources, twenty in all, and the School Census up to 2024.
+
 ## 0.3.0
 
 This release names the whole public interface in English: modules, functions, parameters, table and column names, category values, messages and the fields of the download manifest. Official acronyms and the labels published by the sources (column names of the INEP microdata, TabNet headers, API fields, budget function names in FINBRA and SICONFI, and file names chosen by the sources) are kept as published.

@@ -18,7 +18,8 @@ def fake_environment(tmp_path):
 
     tables = [
         "municipalities", "socioeconomic", "public_finance",
-        "health", "neighboring_municipalities", "education"
+        "health", "neighboring_municipalities", "education",
+        "federal_schools", "enrollment_network", "pass_rates", "ideb_final_years_network"
     ]
 
     # Mock data slightly realistic to test CSV typing and null handling
@@ -72,6 +73,10 @@ def test_packaging_files_and_manifest(fake_environment):
         "health.parquet", "health.csv",
         "neighboring_municipalities.parquet", "neighboring_municipalities.csv",
         "education.parquet", "education.csv",
+        "federal_schools.parquet", "federal_schools.csv",
+        "enrollment_network.parquet", "enrollment_network.csv",
+        "pass_rates.parquet", "pass_rates.csv",
+        "ideb_final_years_network.parquet", "ideb_final_years_network.csv",
         "dictionary.csv", "quality_summary.csv", "quality_checks.csv",
         "manifest.json", "checksums.sha256", "README.md"
     ])
@@ -87,12 +92,12 @@ def test_packaging_files_and_manifest(fake_environment):
     assert manifest["package_version"] == "0.1.0"
     assert manifest["git_package_commit"] == "hash1"
     assert manifest["git_project_commit"] == "hash2"
-    assert len(manifest["files"]) == 16 # 6 parquet + 6 csv + 3 docs + 1 readme
+    assert len(manifest["files"]) == 24 # 10 parquet + 10 csv + 3 docs + 1 readme
 
     # Metadata per data table in the manifest
     data_table_names = {
         f"{t}.{fmt}"
-        for t in ["municipalities", "socioeconomic", "public_finance", "health", "neighboring_municipalities", "education"]
+        for t in ["municipalities", "socioeconomic", "public_finance", "health", "neighboring_municipalities", "education", "federal_schools", "enrollment_network", "pass_rates", "ideb_final_years_network"]
         for fmt in ("parquet", "csv")
     }
     for item in manifest["files"]:
@@ -115,7 +120,8 @@ def test_packaging_files_and_manifest(fake_environment):
     # Check Parquet == Processed, reread CSV == Parquet
     for t in [
         "municipalities", "socioeconomic", "public_finance",
-        "health", "neighboring_municipalities", "education"
+        "health", "neighboring_municipalities", "education",
+        "federal_schools", "enrollment_network", "pass_rates", "ideb_final_years_network"
     ]:
         pq_final = final_dir / f"{t}.parquet"
         pq_processed = data_dir / "processed" / f"{t}.parquet"
@@ -135,7 +141,7 @@ def test_packaging_files_and_manifest(fake_environment):
     checksum_file = final_dir / "checksums.sha256"
     assert checksum_file.exists()
     rows_chk = checksum_file.read_text("utf-8").strip().split("\n")
-    assert len(rows_chk) == 17
+    assert len(rows_chk) == 25
 
     for line in rows_chk:
         h, name = line.split(" *")

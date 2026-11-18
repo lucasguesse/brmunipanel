@@ -7,12 +7,16 @@ from pathlib import Path
 import polars as pl
 
 METADATA_TABLES = {
-    "municipalities": {"time_window": "DTB 2025, Area 2025, Coordinates 2022", "keys": ["municipality_code"]},
+    "municipalities": {"time_window": "DTB 2025, DTB 2011 regions, Area 2025, Coordinates 2022", "keys": ["municipality_code"]},
     "socioeconomic": {"time_window": "2006-2023", "keys": ["municipality_code", "year"]},
     "public_finance": {"time_window": "2006-2023", "keys": ["municipality_code", "year"]},
     "health": {"time_window": "2006-2023", "keys": ["municipality_code", "year"]},
     "neighboring_municipalities": {"time_window": "2024", "keys": ["municipality_code", "neighbor_municipality_code"]},
     "education": {"time_window": "2006-2023", "keys": ["municipality_code", "year"]},
+    "federal_schools": {"time_window": "2007-2024", "keys": ["school_code", "year"]},
+    "enrollment_network": {"time_window": "2007-2024", "keys": ["municipality_code", "year", "network"]},
+    "pass_rates": {"time_window": "2007-2025", "keys": ["municipality_code", "year", "location", "network"]},
+    "ideb_final_years_network": {"time_window": "2005-2025", "keys": ["municipality_code", "year", "network"]},
 }
 
 def write_csv(parquet_path: Path, csv_path: Path) -> None:
@@ -83,7 +87,9 @@ def build_final_package(
     try:
         expected_tables = [
             "municipalities", "socioeconomic", "public_finance",
-            "health", "neighboring_municipalities", "education"
+            "health", "neighboring_municipalities", "education",
+            "federal_schools", "enrollment_network", "pass_rates",
+            "ideb_final_years_network"
         ]
 
         files_manifest = []
@@ -165,24 +171,32 @@ def build_final_package(
         readme_content = """# BRMuniPanel: Brazilian Municipalities Panel, 2006-2023
 
 ## Overview
-This dataset provides a harmonized panel of Brazilian municipalities, covering the period from 2006 to 2023. It integrates data from various official sources to provide demographic, economic, social, public finance, health, and education indicators at the municipal level.
+This dataset provides a harmonized panel of Brazilian municipalities, covering the period from 2006 to 2023, with education tables by school network that cover 2005 to 2025. It integrates data from various official sources to provide demographic, economic, social, public finance, health, and education indicators at the municipal level.
 
 ## Files and Formats
-The dataset includes 6 canonical tables, provided in both Parquet (canonical) and uncompressed CSV formats:
-- `municipalities`: Territorial base and coordinates (Keys: municipality_code; Period: DTB 2025, Area 2025, Coordinates 2022).
+The dataset includes 10 canonical tables, provided in both Parquet (canonical) and uncompressed CSV formats:
+- `municipalities`: Territorial base, coordinates, and 2011 mesoregions and microregions (Keys: municipality_code; Period: DTB 2025, DTB 2011 regions, Area 2025, Coordinates 2022).
 - `socioeconomic`: Population, GDP, formal employment, and Bolsa Família beneficiaries (Keys: municipality_code, year; Period: 2006-2023).
 - `public_finance`: Municipal budgetary expenditure by function and budget revenue (Keys: municipality_code, year; Period: 2006-2023).
 - `health`: Installed health capacity and basic mortality indicators (Keys: municipality_code, year; Period: 2006-2023).
 - `education`: Basic and higher education aggregates, including IDEB (Keys: municipality_code, year; Period: 2006-2023).
 - `neighboring_municipalities`: Geographic adjacency matrix between municipalities (Keys: municipality_code, neighbor_municipality_code; Period: 2024 adjacency).
+- `federal_schools`: Federal schools from the School Census, with the type of school and its enrolments (Keys: school_code, year; Period: 2007-2024).
+- `enrollment_network`: Enrolments by school network, with the Federal Network campuses apart from other federal schools (Keys: municipality_code, year, network; Period: 2007-2024).
+- `pass_rates`: Pass, failure and dropout rates by location and school network (Keys: municipality_code, year, location, network; Period: 2007-2025).
+- `ideb_final_years_network`: Observed IDEB of the final years of elementary education by school network (Keys: municipality_code, year, network; Period: 2005-2025).
 
 Lines and Columns (Parquet/CSV):
-- `municipalities`: 5,571 lines, 12 columns
+- `municipalities`: 5,571 lines, 16 columns
 - `socioeconomic`: 100,278 lines, 11 columns
 - `public_finance`: 100,278 lines, 38 columns
 - `health`: 100,278 lines, 11 columns
 - `education`: 100,222 lines, 12 columns
 - `neighboring_municipalities`: 32,952 lines, 3 columns
+- `federal_schools`: 10,393 lines, 11 columns
+- `enrollment_network`: 501,140 lines, 7 columns
+- `pass_rates`: 1,248,066 lines, 10 columns
+- `ideb_final_years_network`: 158,543 lines, 4 columns
 
 Files are encoded in UTF-8. CSV files use `,` as delimiter and empty strings for missing (null) values.
 Monetary values are in Brazilian Reais (BRL), mostly nominal (refer to the documentation for specific indicators).
@@ -208,7 +222,10 @@ Source code repository: https://github.com/lucasguesse/brmunipanel
 - From 2018 on, municipal taxes and fees include fines, interest and overdue tax collection, which earlier years record separately; revenue deductions keep the sign declared by the municipality.
 - CEMPRE structural breaks occurred in 2022.
 - Bolsa Familia values in 2013 and 2016 have municipal anomalies.
+- Pass rates rose in 2020 and 2021, years of curricular adjustments during the pandemic, and the rate files do not separate integrated technical courses from regular upper secondary education.
+- The type of each federal school is derived from its names by fixed text rules.
 - Geographic areas and borders are based on the IBGE 2025 territorial division.
+- The 2011 mesoregions and microregions are missing for the six municipalities installed after 2011.
 See the paper for a full discussion of limitations.
 
 ## Citation
@@ -307,6 +324,10 @@ See the paper for a full discussion of limitations.
             "health.parquet", "health.csv",
             "neighboring_municipalities.parquet", "neighboring_municipalities.csv",
             "education.parquet", "education.csv",
+            "federal_schools.parquet", "federal_schools.csv",
+            "enrollment_network.parquet", "enrollment_network.csv",
+            "pass_rates.parquet", "pass_rates.csv",
+            "ideb_final_years_network.parquet", "ideb_final_years_network.csv",
             "dictionary.csv", "quality_summary.csv", "quality_checks.csv",
             "manifest.json", "checksums.sha256", "README.md"
         ])

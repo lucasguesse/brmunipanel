@@ -2,25 +2,29 @@
 
 [![CI](https://github.com/lucasguesse/brmunipanel/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasguesse/brmunipanel/actions/workflows/ci.yml)
 
-**A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023).**
+**A Python ETL library and data access tool for the Harmonized Suite of Tables of Socioeconomic, Fiscal, Territorial, Health, and Educational Indicators for Brazilian Municipalities (2006–2023, with education tables by school network from 2005 to 2025).**
 
 ## Overview
 `brmunipanel` is an open-source Python library designed to fully automate the extraction, transformation, and loading (ETL) of public administrative records from multiple Brazilian federal agencies. It solves the massive structural burden of dealing with fragmented, historically inconsistent, and undocumented municipal data in Brazil.
 
-By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across six standardized tables: two territorial tables and four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education).
+By standardizing the 7-digit IBGE municipality code as the primary join key and freezing the territorial division to the 2025 canonical grid, this library allows researchers and data scientists to easily build and consume a longitudinal structural database of 5,571 municipalities, structured across ten standardized tables: two territorial tables, four longitudinal thematic tables (Demographics/Economy/Social, Public Finances, Health, and Education), and four education tables by school network.
 
 This library provides the reproducible scientific protocol and supporting codebase for building the harmonized dataset of Brazilian municipal indicators.
 
 ## Key Features
 - **Fully Reproducible ETL:** Transparent code that downloads raw data directly from official sources (IBGE, Tesouro Nacional/SICONFI, DATASUS, IPEA Data, INEP) and processes it systematically.
 - **Harmonized Joins:** Automatically aligns historical data (2006–2023) against the most recent and stable territorial division grid (DTB 2025).
-- **Thematic Modularity:** Provides six standardized tables:
-  - `municipalities`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators).
+- **Thematic Modularity:** Provides ten standardized tables:
+  - `municipalities`: Canonical territorial crosswalk and municipal metadata (DTB 2025, territorial area in km², coordinates of municipal seat, border and coastal indicators, and the 2011 mesoregions and microregions).
   - `socioeconomic`: Longitudinal panel covering population estimates, municipal GDP, formal employment from CEMPRE, and Bolsa Família beneficiaries and transfers.
   - `public_finance`: Longitudinal panel covering municipal budgetary expenditures by functional classification (28 functions) and budget revenue (gross current revenue and its deductions, IPTU, ISS, ITBI, fees, and the FPM and ICMS shares), combining FINBRA (2006–2012) and SICONFI (2013–2023).
   - `health`: Longitudinal panel covering health infrastructure, human resources, mortality, and live births from DATASUS (CNES, SIM, Sinasc).
   - `neighboring_municipalities`: Adjacency pairs identifying contiguous neighbor municipalities across Brazil.
   - `education`: Observed municipal panel aggregating microdata from School Census (Censo Escolar), Higher Education Census (Censo da Educação Superior), and observed public school IDEB scores across primary, lower secondary, and upper secondary education.
+  - `federal_schools`: One row per federal school and year from the School Census (2007–2024), with the type of school (units of the Federal Network of Professional, Scientific and Technological Education, military, laboratory, university-linked, and other federal schools) and its enrollments.
+  - `enrollment_network`: Upper secondary, lower secondary (final years), and technical enrollments by municipality, year, and school network (2007–2024), with the Federal Network campuses apart from other federal schools.
+  - `pass_rates`: INEP pass, failure, and dropout rates for lower secondary (final years) and upper secondary education by municipality, year, location, and school network (2007–2025).
+  - `ideb_final_years_network`: Observed IDEB of lower secondary education (final years) by municipality, edition, and school network (2005–2025).
 - **Extensive Metadata & Data Dictionaries:** Exposes variables with explicitly documented domain rules, missing value tracking, and schema changes over the years.
 - **Performance:** Built on `polars`, which reads and aggregates the large municipal microdata files in memory.
 
@@ -49,6 +53,9 @@ from brmunipanel.inep import (
     harmonize_school_census,
     harmonize_higher_education_census,
     harmonize_ideb,
+    harmonize_pass_rates,
+    harmonize_school_census_network,
+    harmonize_ideb_final_years_network,
 )
 from brmunipanel.tesouro import siconfi, finbra
 from brmunipanel.datasus import health
@@ -66,6 +73,10 @@ print(bmp.__version__)
 # Example: Harmonize public school IDEB scores with municipal crosswalk
 # df_ideb = harmonize_ideb(Path("raw/inep/ideb"), municipalities_df)
 ```
+
+## Changes in 0.4.0
+
+Version 0.4.0 adds four education tables by school network (`federal_schools`, `enrollment_network`, `pass_rates`, and `ideb_final_years_network`) and two new raw sources: the INEP school performance rates and the 2011 Brazilian Territorial Division, whose mesoregions and microregions enter the `municipalities` table. Code written for 0.3.0 keeps working. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Changes in 0.3.0
 
@@ -87,7 +98,7 @@ The pipeline executes four sequential stages (which can also be executed individ
 4. `finalize`: builds the public release package in `<output folder>/final` (Parquet, uncompressed CSV, dictionaries, quality summaries, checksums, and manifest).
 
 The `--raw-dir` directory is organized into the following subfolders:
-- `ibge/territory`: DTB 2025, neighboring municipalities, territorial areas, and municipal seat localities.
+- `ibge/territory`: DTB 2025, DTB 2011, neighboring municipalities, territorial areas, and municipal seat localities.
 - `ibge/sidra`: SIDRA tables for population estimates (6579), municipal GDP (5938), and CEMPRE (1685, 9509).
 - `datasus/health-regions`: health regions and macro-regions.
 - `datasus/tabnet`: CNES, SIM, and Sinasc tabulations.
@@ -97,6 +108,7 @@ The `--raw-dir` directory is organized into the following subfolders:
 - `tesouro/siconfi-api-revenue`: SICONFI budget revenue API files (2013–2023).
 - `inep`: School Census and Higher Education Census microdata.
 - `inep/ideb`: public school IDEB results.
+- `inep/pass-rates`: school pass, failure, and dropout rates (2007–2025).
 
 ## Data Sources Handled
 The library currently wraps and harmonizes the following official sources:
@@ -104,7 +116,7 @@ The library currently wraps and harmonizes the following official sources:
   * Population estimates (SIDRA Table 6579)
   * Municipal GDP (PIB Municipal, SIDRA Table 5938)
   * Central Register of Enterprises (CEMPRE, SIDRA Tables 1685 and 9509)
-  * Territorial grids (DTB 2025, Area, Municipal Seat Coordinates, Adjacency matrices)
+  * Territorial grids (DTB 2025, DTB 2011 mesoregions and microregions, Area, Municipal Seat Coordinates, Adjacency matrices)
 * **Tesouro Nacional (STN):**
   * FINBRA (2006–2012, budgetary expenditure by function)
   * SICONFI (2013–2023, budgetary expenditure by function)
@@ -116,9 +128,10 @@ The library currently wraps and harmonizes the following official sources:
   * Sinasc: Live births
   * Health Regions and Macro-regions
 * **INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira):**
-  * Censo Escolar: Active schools, enrollments, and teachers across basic education stages
+  * Censo Escolar: Active schools, enrollments, and teachers across basic education stages, plus federal schools and enrollments by school network
   * Censo da Educação Superior: In-person higher education institutions and enrollments
-  * IDEB: Observed public school scores across primary (anos iniciais), lower secondary (anos finais), and upper secondary (ensino médio) education
+  * IDEB: Observed public school scores across primary (anos iniciais), lower secondary (anos finais), and upper secondary (ensino médio) education, and lower secondary scores by school network
+  * Taxas de rendimento: Pass, failure, and dropout rates by municipality, location, and school network
 
 The INEP download server (`download.inep.gov.br`) sends its certificate without the intermediate certificate that signed it, which makes the default verification of `requests` fail. The package ships that intermediate certificate (RNP ICPEdu GR46 OV TLS CA 2025, issued by GlobalSign Root R46 and valid until November 2030) and uses it only for requests to that server. Certificate verification stays on.
 

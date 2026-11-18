@@ -130,6 +130,18 @@ def generate_dictionaries(
             else:
                 global_summary = pl.concat([global_summary, summary_df])
 
+    ed_path = processed_dir / "education.parquet"
+    en_path = processed_dir / "enrollment_network.parquet"
+    fs_path = processed_dir / "federal_schools.parquet"
+    id_path = processed_dir / "ideb_final_years_network.parquet"
+    if ed_path.exists() and en_path.exists() and fs_path.exists() and id_path.exists():
+        auditor.audit_education_by_network(
+            pl.read_parquet(ed_path),
+            pl.read_parquet(en_path),
+            pl.read_parquet(fs_path),
+            pl.read_parquet(id_path),
+        )
+
     if global_summary is not None:
         global_summary = global_summary.sort(["stage", "file"])
         global_summary.write_csv(results_dir / "quality_summary.csv")

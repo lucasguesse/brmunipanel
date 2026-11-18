@@ -188,6 +188,218 @@ class QualityAuditor:
             self.add_check(table, "IDEB public early not null", "OK" if nn_ini == 48097 else "FAIL", str(nn_ini), "48097")
             self.add_check(table, "IDEB public final not null", "OK" if nn_fin == 47897 else "FAIL", str(nn_fin), "47897")
             self.add_check(table, "IDEB public secondary not null", "OK" if nn_med == 18493 else "FAIL", str(nn_med), "18493")
+
+        elif clean_name == "enrollment_network":
+            df_2023 = df.filter(pl.col("year") == 2023)
+            for net, expected in [
+                ("federal_network", 220760),
+                ("federal_other", 15387),
+                ("state", 6415026),
+                ("municipal", 39223),
+                ("private", 986347),
+            ]:
+                obs = int(df_2023.filter(pl.col("network") == net)["enroll_secondary"].sum() or 0)
+                self.add_check(
+                    table,
+                    f"enrollment_network 2023 secondary {net}",
+                    "OK" if obs == expected else "FAIL",
+                    str(obs),
+                    str(expected),
+                )
+
+        elif clean_name == "federal_schools":
+            df_2023_active_fed = df.filter(
+                (pl.col("year") == 2023)
+                & (pl.col("operating_status") == "active")
+                & (pl.col("school_class") == "federal_network")
+            )
+            obs = df_2023_active_fed.height
+            self.add_check(
+                table,
+                "federal_schools 2023 active federal_network schools",
+                "OK" if obs == 627 else "FAIL",
+                str(obs),
+                "627",
+            )
+
+        elif clean_name == "pass_rates":
+            df_fy = df.filter(
+                pl.col("pass_rate_final_years").is_not_null()
+                & pl.col("failure_rate_final_years").is_not_null()
+                & pl.col("dropout_rate_final_years").is_not_null()
+            )
+            sum_fy = (
+                pl.col("pass_rate_final_years")
+                + pl.col("failure_rate_final_years")
+                + pl.col("dropout_rate_final_years")
+            )
+            diff_fy = df_fy.filter((sum_fy - 100.0).abs() > 0.5).height
+            self.add_check(
+                table,
+                "pass_rates final years rates add up to 100",
+                "OK" if diff_fy == 0 else "FAIL",
+                str(diff_fy),
+                "0",
+            )
+
+            df_sec = df.filter(
+                pl.col("pass_rate_secondary").is_not_null()
+                & pl.col("failure_rate_secondary").is_not_null()
+                & pl.col("dropout_rate_secondary").is_not_null()
+            )
+            sum_sec = (
+                pl.col("pass_rate_secondary")
+                + pl.col("failure_rate_secondary")
+                + pl.col("dropout_rate_secondary")
+            )
+            diff_sec = df_sec.filter((sum_sec - 100.0).abs() > 0.5).height
+            self.add_check(
+                table,
+                "pass_rates secondary rates add up to 100",
+                "OK" if diff_sec == 0 else "FAIL",
+                str(diff_sec),
+                "0",
+            )
+
+            rate_cols = [
+                "pass_rate_final_years",
+                "failure_rate_final_years",
+                "dropout_rate_final_years",
+                "pass_rate_secondary",
+                "failure_rate_secondary",
+                "dropout_rate_secondary",
+            ]
+            cols_present = [c for c in rate_cols if c in df.columns]
+            if cols_present:
+                out_bounds = pl.any_horizontal(
+                    [((pl.col(c) < 0.0) | (pl.col(c) > 100.0)).fill_null(False) for c in cols_present]
+                )
+                rates_invalid = df.filter(out_bounds).height
+            else:
+                rates_invalid = 0
+            self.add_check(
+                table,
+                "pass_rates rates within 0-100",
+                "OK" if rates_invalid == 0 else "FAIL",
+                str(rates_invalid),
+                "0",
+            )
+
+            df_sp_2023 = df.filter(
+                (pl.col("municipality_code") == "3550308")
+                & (pl.col("year") == 2023)
+                & (pl.col("location") == "total")
+                & (pl.col("network") == "total")
+            )
+            if df_sp_2023.height > 0:
+                val_fy = df_sp_2023["pass_rate_final_years"][0]
+                val_sec = df_sp_2023["pass_rate_secondary"][0]
+                self.add_check(
+                    table,
+                    "pass_rates SP 2023 pass rate final years",
+                    "OK" if val_fy is not None and abs(val_fy - 97.5) < 0.01 else "FAIL",
+                    str(val_fy),
+                    "97.5",
+                )
+                self.add_check(
+                    table,
+                    "pass_rates SP 2023 pass rate secondary",
+                    "OK" if val_sec is not None and abs(val_sec - 91.0) < 0.01 else "FAIL",
+                    str(val_sec),
+                    "91.0",
+                )
+
+        elif clean_name == "ideb_final_years_network":
+            nn_df = df.filter(pl.col("ideb_final_years").is_not_null())
+            out_bounds = nn_df.filter(
+                (pl.col("ideb_final_years") < 0.0) | (pl.col("ideb_final_years") > 10.0)
+            ).height
+            self.add_check(
+                table,
+                "ideb_final_years_network values within 0-10",
+                "OK" if out_bounds == 0 else "FAIL",
+                str(out_bounds),
+                "0",
+            )
+
+            nn_count = nn_df.height
+            self.add_check(
+                table,
+                "ideb_final_years_network not null",
+                "OK" if nn_count == 136167 else "FAIL",
+                str(nn_count),
+                "136167",
+            )
+
+            df_sp_2023 = df.filter(
+                (pl.col("municipality_code") == "3550308") & (pl.col("year") == 2023)
+            )
+            for net, exp_val, exp_str in [
+                ("state", 4.9, "4.9"),
+                ("municipal", 4.8, "4.8"),
+                ("public", 4.8, "4.8"),
+            ]:
+                row = df_sp_2023.filter(pl.col("network") == net)
+                if row.height > 0:
+                    val = row["ideb_final_years"][0]
+                    status = "OK" if val is not None and abs(val - exp_val) < 0.01 else "FAIL"
+                    self.add_check(
+                        table,
+                        f"ideb_final_years_network SP 2023 {net}",
+                        status,
+                        str(val),
+                        exp_str,
+                    )
+
+        elif clean_name == "municipalities":
+            n_meso = (
+                df["mesoregion_2011_code"].drop_nulls().n_unique()
+                if "mesoregion_2011_code" in df.columns
+                else 0
+            )
+            self.add_check(
+                table,
+                "municipalities 2011 mesoregions",
+                "OK" if n_meso == 137 else "FAIL",
+                str(n_meso),
+                "137",
+            )
+
+            n_micro = (
+                df["microregion_2011_code"].drop_nulls().n_unique()
+                if "microregion_2011_code" in df.columns
+                else 0
+            )
+            self.add_check(
+                table,
+                "municipalities 2011 microregions",
+                "OK" if n_micro == 558 else "FAIL",
+                str(n_micro),
+                "558",
+            )
+
+            reg_cols = [
+                "mesoregion_2011_code",
+                "mesoregion_2011_name",
+                "microregion_2011_code",
+                "microregion_2011_name",
+            ]
+            if all(c in df.columns for c in reg_cols):
+                without_2011 = df.filter(
+                    pl.col("mesoregion_2011_code").is_null()
+                    & pl.col("mesoregion_2011_name").is_null()
+                    & pl.col("microregion_2011_code").is_null()
+                    & pl.col("microregion_2011_name").is_null()
+                ).height
+            else:
+                without_2011 = 0
+            self.add_check(
+                table,
+                "municipalities without 2011 regions",
+                "OK" if without_2011 == 6 else "FAIL",
+                str(without_2011),
+                "6",
+            )
         
     def audit_keys(self, df: pl.DataFrame, table: str, key_cols: List[str]):
         """Audits that primary key columns `key_cols` have neither nulls nor duplicate rows."""
@@ -265,6 +477,128 @@ class QualityAuditor:
                 self.add_check(table, "non-negative lengths", "OK", "Correct", "Correct")
             else:
                 self.add_check(table, "non-negative lengths", "FAIL", f"{comp_inv} < 0", "0", "Length must be >= 0")
+
+    def audit_education_by_network(
+        self,
+        education: pl.DataFrame,
+        enrollment_network: pl.DataFrame,
+        federal_schools: pl.DataFrame,
+        ideb_network: pl.DataFrame,
+    ) -> None:
+        """Audits consistency between education table and network-disaggregated tables."""
+        table = "[processed] education by network"
+
+        # 1. secondary enrolment by network equals education
+        en_sub = (
+            enrollment_network.filter(
+                (pl.col("year") >= 2007) & (pl.col("year") <= 2023)
+            )
+            .group_by(["municipality_code", "year"])
+            .agg(pl.col("enroll_secondary").fill_null(0).sum().alias("en_sec"))
+        )
+        ed_sub = (
+            education.filter((pl.col("year") >= 2007) & (pl.col("year") <= 2023))
+            .select([
+                "municipality_code",
+                "year",
+                pl.col("enroll_secondary").fill_null(0).alias("ed_sec"),
+            ])
+        )
+        joined1 = en_sub.join(ed_sub, on=["municipality_code", "year"], how="full", coalesce=True)
+        diff1 = joined1.filter(
+            pl.col("en_sec").fill_null(0) != pl.col("ed_sec").fill_null(0)
+        ).height
+
+        rule1 = "secondary enrolment by network equals education"
+        status1 = "OK" if diff1 == 0 else "FAIL"
+        detail1 = "" if diff1 == 0 else "Critical: secondary enrolment by network does not equal education"
+        self.add_check(table, rule1, status1, str(diff1), "0", detail1)
+
+        # 2. federal enrolment equals federal_schools
+        fs_active = federal_schools.filter(pl.col("operating_status") == "active")
+        fs_grouped = fs_active.group_by(["municipality_code", "year"]).agg([
+            pl.col("enroll_secondary").fill_null(0).sum().alias("fs_all_sec"),
+            pl.col("enroll_vocational_technical").fill_null(0).sum().alias("fs_all_voc"),
+            pl.when(pl.col("school_class") == "federal_network")
+            .then(pl.col("enroll_secondary").fill_null(0))
+            .otherwise(0)
+            .sum()
+            .alias("fs_fed_sec"),
+            pl.when(pl.col("school_class") == "federal_network")
+            .then(pl.col("enroll_vocational_technical").fill_null(0))
+            .otherwise(0)
+            .sum()
+            .alias("fs_fed_voc"),
+        ])
+
+        en_fed = enrollment_network.filter(
+            pl.col("network").is_in(["federal_network", "federal_other"])
+        )
+        en_fed_grouped = en_fed.group_by(["municipality_code", "year"]).agg([
+            pl.col("enroll_secondary").fill_null(0).sum().alias("en_all_sec"),
+            pl.col("enroll_vocational_technical").fill_null(0).sum().alias("en_all_voc"),
+            pl.when(pl.col("network") == "federal_network")
+            .then(pl.col("enroll_secondary").fill_null(0))
+            .otherwise(0)
+            .sum()
+            .alias("en_fed_sec"),
+            pl.when(pl.col("network") == "federal_network")
+            .then(pl.col("enroll_vocational_technical").fill_null(0))
+            .otherwise(0)
+            .sum()
+            .alias("en_fed_voc"),
+        ])
+
+        joined2 = fs_grouped.join(en_fed_grouped, on=["municipality_code", "year"], how="full", coalesce=True)
+        diff2 = joined2.filter(
+            (pl.col("fs_all_sec").fill_null(0) != pl.col("en_all_sec").fill_null(0))
+            | (pl.col("fs_all_voc").fill_null(0) != pl.col("en_all_voc").fill_null(0))
+            | (pl.col("fs_fed_sec").fill_null(0) != pl.col("en_fed_sec").fill_null(0))
+            | (pl.col("fs_fed_voc").fill_null(0) != pl.col("en_fed_voc").fill_null(0))
+        ).height
+
+        rule2 = "federal enrolment equals federal_schools"
+        status2 = "OK" if diff2 == 0 else "FAIL"
+        detail2 = "" if diff2 == 0 else "Critical: federal enrolment does not equal federal_schools"
+        self.add_check(table, rule2, status2, str(diff2), "0", detail2)
+
+        # 3. IDEB public by network equals education
+        id_sub = (
+            ideb_network.filter(
+                (pl.col("network") == "public")
+                & (pl.col("year") >= 2007)
+                & (pl.col("year") <= 2023)
+                & pl.col("ideb_final_years").is_not_null()
+            )
+            .select([
+                "municipality_code",
+                "year",
+                pl.col("ideb_final_years").alias("ideb_net"),
+            ])
+        )
+        ed_ideb = (
+            education.filter(
+                (pl.col("year") >= 2007)
+                & (pl.col("year") <= 2023)
+                & pl.col("ideb_final_years_public").is_not_null()
+            )
+            .select([
+                "municipality_code",
+                "year",
+                pl.col("ideb_final_years_public").alias("ideb_ed"),
+            ])
+        )
+        joined3 = id_sub.join(ed_ideb, on=["municipality_code", "year"], how="full", coalesce=True)
+        diff3 = joined3.filter(
+            pl.col("ideb_net").is_null()
+            | pl.col("ideb_ed").is_null()
+            | ((pl.col("ideb_net") - pl.col("ideb_ed")).abs() > 1e-9)
+        ).height
+
+        rule3 = "IDEB public by network equals education"
+        status3 = "OK" if diff3 == 0 else "FAIL"
+        detail3 = "" if diff3 == 0 else "Critical: IDEB public by network does not equal education"
+        self.add_check(table, rule3, status3, str(diff3), "0", detail3)
 
     def get_checks_df(self) -> pl.DataFrame:
         """Returns recorded check results as a Polars DataFrame with the audit schema."""
