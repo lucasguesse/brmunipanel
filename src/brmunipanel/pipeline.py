@@ -253,6 +253,10 @@ def _consolidate(paths: Paths, dict_generator: Callable[..., bool] | None = None
         "school_census": "inep_school_census.parquet",
         "higher_education_census": "inep_higher_education_census.parquet",
         "ideb": "inep_ideb.parquet",
+        "federal_schools": "inep_federal_schools.parquet",
+        "enrollment_network": "inep_enrollment_network.parquet",
+        "pass_rates": "inep_pass_rates.parquet",
+        "ideb_final_years_network": "inep_ideb_final_years_network.parquet",
     }
 
     tables = {}
@@ -300,6 +304,27 @@ def _consolidate(paths: Paths, dict_generator: Callable[..., bool] | None = None
         tables["ideb"],
     )
     _write(education, "education", paths.processed_dir)
+
+    _write(
+        panel.build_keyed_table(municipalities, tables["federal_schools"], ["school_code", "year"], "federal_schools"),
+        "federal_schools",
+        paths.processed_dir,
+    )
+    _write(
+        panel.build_keyed_table(municipalities, tables["enrollment_network"], ["municipality_code", "year", "network"], "enrollment_network"),
+        "enrollment_network",
+        paths.processed_dir,
+    )
+    _write(
+        panel.build_keyed_table(municipalities, tables["pass_rates"], ["municipality_code", "year", "location", "network"], "pass_rates"),
+        "pass_rates",
+        paths.processed_dir,
+    )
+    _write(
+        panel.build_keyed_table(municipalities, tables["ideb_final_years_network"], ["municipality_code", "year", "network"], "ideb_final_years_network"),
+        "ideb_final_years_network",
+        paths.processed_dir,
+    )
 
     gen = dict_generator or document.generate_dictionaries
     success = gen(paths.intermediate_dir, paths.processed_dir, paths.results)

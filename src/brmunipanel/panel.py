@@ -1,8 +1,9 @@
-"""Consolidation of the dataset into six tables.
+"""Consolidation of the dataset into ten tables.
 
-The consolidated dataset has six tables: the central municipalities table, three thematic
-longitudinal tables (socioeconomic, public_finance, health), the 
-neighboring_municipalities table, and the education table.
+The consolidated dataset has ten tables: the central municipalities table, three thematic
+longitudinal tables (socioeconomic, public_finance, health), the
+neighboring_municipalities table, the education table, and four education tables by school
+network (federal_schools, enrollment_network, pass_rates, ideb_final_years_network).
 No function here fills nulls, removes rows, modifies values, or calculates derived columns.
 """
 
@@ -239,3 +240,31 @@ def consolidate_education(school_census: pl.DataFrame, higher_education_census: 
         "ideb_early_years_public", "ideb_final_years_public", "ideb_secondary_public"
     ]
     return output.select(order).sort(["municipality_code", "year"])
+
+
+def build_keyed_table(
+    municipalities: pl.DataFrame,
+    table: pl.DataFrame,
+    keys: Sequence[str],
+    table_name: str,
+) -> pl.DataFrame:
+    """Validates and sorts a table by its primary keys against the municipalities registry."""
+    cols_to_check = list(keys) + (["municipality_code"] if "municipality_code" not in keys else [])
+    for col in cols_to_check:
+        if col not in table.columns:
+            raise ValueError(f"{table_name}: Missing column {col}")
+
+    if table.select(keys).null_count().sum_horizontal().sum() > 0:
+        raise ValueError(f"{table_name}: null keys")
+
+    dups = table.filter(table.select(keys).is_duplicated())
+    if not dups.is_empty():
+        raise ValueError(f"{table_name}: {dups.select(keys).n_unique()} repeated keys. Examples: {dups.select(keys).head(3).to_dicts()}")
+
+    valid_codes = set(municipalities["municipality_code"])
+    invalid = [c for c in set(table["municipality_code"]) if c not in valid_codes]
+    if invalid:
+        raise ValueError(f"{table_name}: {len(invalid)} codes not in the municipalities table. Examples: {invalid[:3]}")
+
+    return table.sort(list(keys))
+

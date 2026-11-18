@@ -1605,6 +1605,366 @@
         "period": "2006-2023",
         "methodological_note_pt": "Despesas orçamentárias empenhadas."
       }
+    },
+    "inep_federal_schools": {
+      "school_code": {
+        "description_pt": "Código INEP da escola",
+        "description_en": "INEP school code",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "CO_ENTIDADE do Censo Escolar.",
+        "methodological_note_en": "CO_ENTIDADE of the School Census."
+      },
+      "year": {
+        "description_pt": "Ano de referência do Censo Escolar",
+        "description_en": "School Census reference year",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2024",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "school_name": {
+        "description_pt": "Nome da escola no ano do censo",
+        "description_en": "School name in the census year",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "NO_ENTIDADE, lido em Latin-1 como registrado em cada ano.",
+        "methodological_note_en": "NO_ENTIDADE, read in Latin-1 as recorded in each year."
+      },
+      "school_class": {
+        "description_pt": "Tipo de escola federal",
+        "description_en": "Type of federal school",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Classificado por todos os nomes que a escola teve de 2007 a 2024, por regras fixas de texto tentadas em ordem: military, laboratory_school, federal_network, university_linked, federal_network (nomes com CAMPUS); nos demais casos, other_federal. federal_network identifica as unidades da Rede Federal de Educação Profissional, Científica e Tecnológica.",
+        "methodological_note_en": "Classified from all the names the school had from 2007 to 2024 by fixed text rules tried in order: military, laboratory_school, federal_network, university_linked, federal_network (names with CAMPUS); otherwise other_federal. federal_network marks the units of the Federal Network of Professional, Scientific and Technological Education."
+      },
+      "operating_status": {
+        "description_pt": "Situação de funcionamento no ano do censo",
+        "description_en": "Operating status in the census year",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "TP_SITUACAO_FUNCIONAMENTO: active (1, em atividade), paused (2, paralisada), closed (3, extinta no ano), closed_earlier (4, extinta em anos anteriores).",
+        "methodological_note_en": "TP_SITUACAO_FUNCIONAMENTO: active (1), paused (2), closed in the year (3), closed in earlier years (4)."
+      },
+      "enroll_basic_edu": {
+        "description_pt": "Matrículas na educação básica",
+        "description_en": "Enrolments in basic education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_BAS; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_BAS; missing when the cell is empty."
+      },
+      "enroll_secondary": {
+        "description_pt": "Matrículas no ensino médio",
+        "description_en": "Enrolments in upper secondary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_MED, que inclui o curso técnico integrado; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_MED, which includes integrated technical courses; missing when the cell is empty."
+      },
+      "enroll_vocational": {
+        "description_pt": "Matrículas na educação profissional",
+        "description_en": "Enrolments in vocational education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_PROF; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_PROF; missing when the cell is empty."
+      },
+      "enroll_vocational_technical": {
+        "description_pt": "Matrículas na educação profissional técnica de nível médio",
+        "description_en": "Enrolments in upper secondary technical education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_PROF_TEC, em todas as formas (integrada, concomitante e subsequente); nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_PROF_TEC, in all forms (integrated, concurrent and subsequent); missing when the cell is empty."
+      },
+      "enroll_eja_secondary": {
+        "description_pt": "Matrículas na educação de jovens e adultos, nível médio",
+        "description_en": "Enrolments in youth and adult education, upper secondary level",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_EJA_MED; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_EJA_MED; missing when the cell is empty."
+      }
+    },
+    "inep_enrollment_network": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2024",
+        "methodological_note_pt": "Código IBGE de 7 dígitos. Todos os municípios do arquivo do Censo Escolar do ano, com uma linha por rede.",
+        "methodological_note_en": "Seven-digit IBGE code. Every municipality in the School Census file of the year, with one row per network."
+      },
+      "year": {
+        "description_pt": "Ano de referência do Censo Escolar",
+        "description_en": "School Census reference year",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "federal_network: unidades da Rede Federal de Educação Profissional, Científica e Tecnológica; federal_other: demais escolas federais; state, municipal e private: dependência administrativa (TP_DEPENDENCIA).",
+        "methodological_note_en": "federal_network: units of the Federal Network of Professional, Scientific and Technological Education; federal_other: other federal schools; state, municipal and private: administrative dependency (TP_DEPENDENCIA)."
+      },
+      "secondary_schools": {
+        "description_pt": "Escolas em atividade com matrículas no ensino médio",
+        "description_en": "Active schools with upper secondary enrolments",
+        "unit_pt": "Escolas",
+        "unit_en": "Schools",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Escolas em atividade com QT_MAT_MED maior que zero.",
+        "methodological_note_en": "Active schools with QT_MAT_MED greater than zero."
+      },
+      "enroll_secondary": {
+        "description_pt": "Matrículas no ensino médio",
+        "description_en": "Enrolments in upper secondary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_MED, que inclui o curso técnico integrado, nas escolas em atividade; zero quando o município não tem escola em atividade da rede. Somada nas cinco redes, é igual a enroll_secondary da tabela education.",
+        "methodological_note_en": "Sum of QT_MAT_MED, which includes integrated technical courses, over active schools; zero when the municipality has no active school of the network. Added over the five networks, it equals enroll_secondary in the education table."
+      },
+      "enroll_elementary_final_years": {
+        "description_pt": "Matrículas nos anos finais do ensino fundamental",
+        "description_en": "Enrolments in the final years of elementary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_FUND_AF nas escolas em atividade; zero quando o município não tem escola em atividade da rede.",
+        "methodological_note_en": "Sum of QT_MAT_FUND_AF over active schools; zero when the municipality has no active school of the network."
+      },
+      "enroll_vocational_technical": {
+        "description_pt": "Matrículas na educação profissional técnica de nível médio",
+        "description_en": "Enrolments in upper secondary technical education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_PROF_TEC, em todas as formas, nas escolas em atividade; zero quando o município não tem escola em atividade da rede.",
+        "methodological_note_en": "Sum of QT_MAT_PROF_TEC, in all forms, over active schools; zero when the municipality has no active school of the network."
+      }
+    },
+    "inep_pass_rates": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2025",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "year": {
+        "description_pt": "Ano de referência das taxas",
+        "description_en": "Reference year of the rates",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "location": {
+        "description_pt": "Localização",
+        "description_en": "Location",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "total, urban ou rural, como publicado (Total, Urbana, Rural).",
+        "methodological_note_en": "total, urban or rural, as published (Total, Urbana, Rural)."
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "total, public, federal, state, municipal ou private, como publicado (Publico e Pública são public; Particular e Privada são private).",
+        "methodological_note_en": "total, public, federal, state, municipal or private, as published (Publico and Pública are public; Particular and Privada are private)."
+      },
+      "pass_rate_final_years": {
+        "description_pt": "Taxa de aprovação, anos finais do ensino fundamental",
+        "description_en": "Pass rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. As taxas de aprovação, reprovação e abandono de uma etapa somam 100. A aprovação subiu em 2020 e 2021, anos de ajustes curriculares na pandemia.",
+        "methodological_note_en": "As published; missing where the file shows --. The pass, failure and dropout rates of a stage add up to 100. Pass rates rose in 2020 and 2021, years of curricular adjustments during the pandemic."
+      },
+      "failure_rate_final_years": {
+        "description_pt": "Taxa de reprovação, anos finais do ensino fundamental",
+        "description_en": "Failure rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --.",
+        "methodological_note_en": "As published; missing where the file shows --."
+      },
+      "dropout_rate_final_years": {
+        "description_pt": "Taxa de abandono, anos finais do ensino fundamental",
+        "description_en": "Dropout rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --.",
+        "methodological_note_en": "As published; missing where the file shows --."
+      },
+      "pass_rate_secondary": {
+        "description_pt": "Taxa de aprovação, ensino médio (total)",
+        "description_en": "Pass rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular. A aprovação subiu em 2020 e 2021, anos de ajustes curriculares na pandemia.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education. Pass rates rose in 2020 and 2021, years of curricular adjustments during the pandemic."
+      },
+      "failure_rate_secondary": {
+        "description_pt": "Taxa de reprovação, ensino médio (total)",
+        "description_en": "Failure rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education."
+      },
+      "dropout_rate_secondary": {
+        "description_pt": "Taxa de abandono, ensino médio (total)",
+        "description_en": "Dropout rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education."
+      }
+    },
+    "inep_ideb_final_years_network": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2005-2025",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "year": {
+        "description_pt": "Edição do IDEB",
+        "description_en": "IDEB edition",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "Somente anos ímpares.",
+        "methodological_note_en": "Odd years only."
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "state, municipal, public ou federal, como publicado (Estadual, Municipal, Pública, Federal). public reúne as escolas federais, estaduais e municipais.",
+        "methodological_note_en": "state, municipal, public or federal, as published (Estadual, Municipal, Pública, Federal). public covers the federal, state and municipal schools together."
+      },
+      "ideb_final_years": {
+        "description_pt": "IDEB observado, anos finais do ensino fundamental",
+        "description_en": "Observed IDEB, final years of elementary education",
+        "unit_pt": "Índice (0-10)",
+        "unit_en": "Index (0-10)",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "VL_OBSERVADO da divulgação municipal de 2025; nulo onde o resultado não é divulgado. Na rede public, é igual a ideb_final_years_public da tabela education.",
+        "methodological_note_en": "VL_OBSERVADO of the 2025 municipal release; missing where the result is not released. For the public network it equals ideb_final_years_public in the education table."
+      }
     }
   },
   "processed": {
@@ -2575,6 +2935,366 @@
         "period": "2006-2023",
         "methodological_note_pt": "Por município de residência da mãe.",
         "methodological_note_en": "By municipality of residence of the mother."
+      }
+    },
+    "federal_schools": {
+      "school_code": {
+        "description_pt": "Código INEP da escola",
+        "description_en": "INEP school code",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "CO_ENTIDADE do Censo Escolar.",
+        "methodological_note_en": "CO_ENTIDADE of the School Census."
+      },
+      "year": {
+        "description_pt": "Ano de referência do Censo Escolar",
+        "description_en": "School Census reference year",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2024",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "school_name": {
+        "description_pt": "Nome da escola no ano do censo",
+        "description_en": "School name in the census year",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "NO_ENTIDADE, lido em Latin-1 como registrado em cada ano.",
+        "methodological_note_en": "NO_ENTIDADE, read in Latin-1 as recorded in each year."
+      },
+      "school_class": {
+        "description_pt": "Tipo de escola federal",
+        "description_en": "Type of federal school",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Classificado por todos os nomes que a escola teve de 2007 a 2024, por regras fixas de texto tentadas em ordem: military, laboratory_school, federal_network, university_linked, federal_network (nomes com CAMPUS); nos demais casos, other_federal. federal_network identifica as unidades da Rede Federal de Educação Profissional, Científica e Tecnológica.",
+        "methodological_note_en": "Classified from all the names the school had from 2007 to 2024 by fixed text rules tried in order: military, laboratory_school, federal_network, university_linked, federal_network (names with CAMPUS); otherwise other_federal. federal_network marks the units of the Federal Network of Professional, Scientific and Technological Education."
+      },
+      "operating_status": {
+        "description_pt": "Situação de funcionamento no ano do censo",
+        "description_en": "Operating status in the census year",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "TP_SITUACAO_FUNCIONAMENTO: active (1, em atividade), paused (2, paralisada), closed (3, extinta no ano), closed_earlier (4, extinta em anos anteriores).",
+        "methodological_note_en": "TP_SITUACAO_FUNCIONAMENTO: active (1), paused (2), closed in the year (3), closed in earlier years (4)."
+      },
+      "enroll_basic_edu": {
+        "description_pt": "Matrículas na educação básica",
+        "description_en": "Enrolments in basic education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_BAS; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_BAS; missing when the cell is empty."
+      },
+      "enroll_secondary": {
+        "description_pt": "Matrículas no ensino médio",
+        "description_en": "Enrolments in upper secondary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_MED, que inclui o curso técnico integrado; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_MED, which includes integrated technical courses; missing when the cell is empty."
+      },
+      "enroll_vocational": {
+        "description_pt": "Matrículas na educação profissional",
+        "description_en": "Enrolments in vocational education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_PROF; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_PROF; missing when the cell is empty."
+      },
+      "enroll_vocational_technical": {
+        "description_pt": "Matrículas na educação profissional técnica de nível médio",
+        "description_en": "Enrolments in upper secondary technical education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_PROF_TEC, em todas as formas (integrada, concomitante e subsequente); nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_PROF_TEC, in all forms (integrated, concurrent and subsequent); missing when the cell is empty."
+      },
+      "enroll_eja_secondary": {
+        "description_pt": "Matrículas na educação de jovens e adultos, nível médio",
+        "description_en": "Enrolments in youth and adult education, upper secondary level",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "QT_MAT_EJA_MED; nulo quando a célula está vazia.",
+        "methodological_note_en": "QT_MAT_EJA_MED; missing when the cell is empty."
+      }
+    },
+    "enrollment_network": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2024",
+        "methodological_note_pt": "Código IBGE de 7 dígitos. Todos os municípios do arquivo do Censo Escolar do ano, com uma linha por rede.",
+        "methodological_note_en": "Seven-digit IBGE code. Every municipality in the School Census file of the year, with one row per network."
+      },
+      "year": {
+        "description_pt": "Ano de referência do Censo Escolar",
+        "description_en": "School Census reference year",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "federal_network: unidades da Rede Federal de Educação Profissional, Científica e Tecnológica; federal_other: demais escolas federais; state, municipal e private: dependência administrativa (TP_DEPENDENCIA).",
+        "methodological_note_en": "federal_network: units of the Federal Network of Professional, Scientific and Technological Education; federal_other: other federal schools; state, municipal and private: administrative dependency (TP_DEPENDENCIA)."
+      },
+      "secondary_schools": {
+        "description_pt": "Escolas em atividade com matrículas no ensino médio",
+        "description_en": "Active schools with upper secondary enrolments",
+        "unit_pt": "Escolas",
+        "unit_en": "Schools",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Escolas em atividade com QT_MAT_MED maior que zero.",
+        "methodological_note_en": "Active schools with QT_MAT_MED greater than zero."
+      },
+      "enroll_secondary": {
+        "description_pt": "Matrículas no ensino médio",
+        "description_en": "Enrolments in upper secondary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_MED, que inclui o curso técnico integrado, nas escolas em atividade; zero quando o município não tem escola em atividade da rede. Somada nas cinco redes, é igual a enroll_secondary da tabela education.",
+        "methodological_note_en": "Sum of QT_MAT_MED, which includes integrated technical courses, over active schools; zero when the municipality has no active school of the network. Added over the five networks, it equals enroll_secondary in the education table."
+      },
+      "enroll_elementary_final_years": {
+        "description_pt": "Matrículas nos anos finais do ensino fundamental",
+        "description_en": "Enrolments in the final years of elementary education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_FUND_AF nas escolas em atividade; zero quando o município não tem escola em atividade da rede.",
+        "methodological_note_en": "Sum of QT_MAT_FUND_AF over active schools; zero when the municipality has no active school of the network."
+      },
+      "enroll_vocational_technical": {
+        "description_pt": "Matrículas na educação profissional técnica de nível médio",
+        "description_en": "Enrolments in upper secondary technical education",
+        "unit_pt": "Matrículas",
+        "unit_en": "Enrolments",
+        "source_pt": "INEP - Censo Escolar",
+        "source_en": "INEP - School Census",
+        "period": "2007-2024",
+        "methodological_note_pt": "Soma de QT_MAT_PROF_TEC, em todas as formas, nas escolas em atividade; zero quando o município não tem escola em atividade da rede.",
+        "methodological_note_en": "Sum of QT_MAT_PROF_TEC, in all forms, over active schools; zero when the municipality has no active school of the network."
+      }
+    },
+    "pass_rates": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2007-2025",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "year": {
+        "description_pt": "Ano de referência das taxas",
+        "description_en": "Reference year of the rates",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "",
+        "methodological_note_en": ""
+      },
+      "location": {
+        "description_pt": "Localização",
+        "description_en": "Location",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "total, urban ou rural, como publicado (Total, Urbana, Rural).",
+        "methodological_note_en": "total, urban or rural, as published (Total, Urbana, Rural)."
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "total, public, federal, state, municipal ou private, como publicado (Publico e Pública são public; Particular e Privada são private).",
+        "methodological_note_en": "total, public, federal, state, municipal or private, as published (Publico and Pública are public; Particular and Privada are private)."
+      },
+      "pass_rate_final_years": {
+        "description_pt": "Taxa de aprovação, anos finais do ensino fundamental",
+        "description_en": "Pass rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. As taxas de aprovação, reprovação e abandono de uma etapa somam 100. A aprovação subiu em 2020 e 2021, anos de ajustes curriculares na pandemia.",
+        "methodological_note_en": "As published; missing where the file shows --. The pass, failure and dropout rates of a stage add up to 100. Pass rates rose in 2020 and 2021, years of curricular adjustments during the pandemic."
+      },
+      "failure_rate_final_years": {
+        "description_pt": "Taxa de reprovação, anos finais do ensino fundamental",
+        "description_en": "Failure rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --.",
+        "methodological_note_en": "As published; missing where the file shows --."
+      },
+      "dropout_rate_final_years": {
+        "description_pt": "Taxa de abandono, anos finais do ensino fundamental",
+        "description_en": "Dropout rate, final years of elementary education",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --.",
+        "methodological_note_en": "As published; missing where the file shows --."
+      },
+      "pass_rate_secondary": {
+        "description_pt": "Taxa de aprovação, ensino médio (total)",
+        "description_en": "Pass rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular. A aprovação subiu em 2020 e 2021, anos de ajustes curriculares na pandemia.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education. Pass rates rose in 2020 and 2021, years of curricular adjustments during the pandemic."
+      },
+      "failure_rate_secondary": {
+        "description_pt": "Taxa de reprovação, ensino médio (total)",
+        "description_en": "Failure rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education."
+      },
+      "dropout_rate_secondary": {
+        "description_pt": "Taxa de abandono, ensino médio (total)",
+        "description_en": "Dropout rate, upper secondary education (total)",
+        "unit_pt": "Percentual (0-100)",
+        "unit_en": "Percentage (0-100)",
+        "source_pt": "INEP - Taxas de rendimento escolar",
+        "source_en": "INEP - School performance rates",
+        "period": "2007-2025",
+        "methodological_note_pt": "Como publicada; nula onde o arquivo mostra --. Os arquivos não separam o curso técnico integrado do ensino médio regular.",
+        "methodological_note_en": "As published; missing where the file shows --. The files do not separate integrated technical courses from regular upper secondary education."
+      }
+    },
+    "ideb_final_years_network": {
+      "municipality_code": {
+        "description_pt": "Código do Município (7 dígitos)",
+        "description_en": "Municipality code (7 digits)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2005-2025",
+        "methodological_note_pt": "Código IBGE de 7 dígitos (CO_MUNICIPIO).",
+        "methodological_note_en": "Seven-digit IBGE code (CO_MUNICIPIO)."
+      },
+      "year": {
+        "description_pt": "Edição do IDEB",
+        "description_en": "IDEB edition",
+        "unit_pt": "Ano",
+        "unit_en": "Year",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "Somente anos ímpares.",
+        "methodological_note_en": "Odd years only."
+      },
+      "network": {
+        "description_pt": "Rede de ensino",
+        "description_en": "School network",
+        "unit_pt": "Categoria",
+        "unit_en": "Category",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "state, municipal, public ou federal, como publicado (Estadual, Municipal, Pública, Federal). public reúne as escolas federais, estaduais e municipais.",
+        "methodological_note_en": "state, municipal, public or federal, as published (Estadual, Municipal, Pública, Federal). public covers the federal, state and municipal schools together."
+      },
+      "ideb_final_years": {
+        "description_pt": "IDEB observado, anos finais do ensino fundamental",
+        "description_en": "Observed IDEB, final years of elementary education",
+        "unit_pt": "Índice (0-10)",
+        "unit_en": "Index (0-10)",
+        "source_pt": "INEP - IDEB",
+        "source_en": "INEP - IDEB",
+        "period": "2005-2025",
+        "methodological_note_pt": "VL_OBSERVADO da divulgação municipal de 2025; nulo onde o resultado não é divulgado. Na rede public, é igual a ideb_final_years_public da tabela education.",
+        "methodological_note_en": "VL_OBSERVADO of the 2025 municipal release; missing where the result is not released. For the public network it equals ideb_final_years_public in the education table."
       }
     }
   }
