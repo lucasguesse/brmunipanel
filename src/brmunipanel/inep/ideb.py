@@ -12,6 +12,7 @@ from brmunipanel.core import Request, InvalidResponse, download_batch
 EDITION = 2025
 STAGES = {"anos_iniciais": "early_years", "anos_finais": "final_years", "ensino_medio": "secondary"}
 BASE_URL = "https://download.inep.gov.br/ideb/resultados"
+NETWORKS = {"Estadual": "state", "Municipal": "municipal", "Pública": "public", "Federal": "federal"}
 
 
 def package_name(stage: str) -> str:
@@ -166,3 +167,86 @@ def harmonize(folder: Union[Path, str], municipalities: pl.DataFrame) -> pl.Data
         raise ValueError("Duplicate municipality_code-year key in the harmonized final panel")
     
     return df_final
+
+
+def _read_final_years_network(path: Path, valid_municipalities: set) -> pl.DataFrame:
+    """Reads final years IDEB data across school networks from an Excel spreadsheet.
+
+    Extracts observed scores across networks, validates municipality codes,
+    and returns a long-format DataFrame.
+    """
+    row_hdr = _find_header_row(path)
+    df_pd = pd.read_excel(path, header=row_hdr, dtype=str)
+    df = pl.from_pandas(df_pd)
+
+    required_columns = ["CO_MUNICIPIO", "REDE"]
+    for col in required_columns:
+        if col not in df.columns:
+            raise ValueError(f"Column {col} missing in {path}")
+
+    df = df.filter(pl.col("CO_MUNICIPIO").is_not_null() & pl.col("REDE").is_not_null())
+    df = df.with_columns(
+        pl.col("CO_MUNICIPIO").cast(pl.Utf8).str.strip_chars(),
+        pl.col("REDE").cast(pl.Utf8).str.strip_chars(),
+    )
+
+    unknown_networks = df.filter(~pl.col("REDE").is_in(list(NETWORKS.keys())))
+    if unknown_networks.height > 0:
+        bad_val = unknown_networks["REDE"][0]
+        raise ValueError(f"Unknown REDE '{bad_val}' found in {path}")
+
+    invalid_codes = df.filter(~pl.col("CO_MUNICIPIO").is_in(valid_municipalities))
+    if invalid_codes.height > 0:
+        raise ValueError(f"There are codes outside the municipal registry in {path}")
+
+    columns_obs = [c for c in df.columns if re.match(r"^VL_OBSERVADO_\d{4}$", c)]
+    if not columns_obs:
+        raise ValueError(f"No VL_OBSERVADO_AAAA column found in {path}")
+
+    df_sel = df.select(["CO_MUNICIPIO", "REDE"] + columns_obs)
+
+    df_long = df_sel.unpivot(
+        index=["CO_MUNICIPIO", "REDE"],
+        on=columns_obs,
+        variable_name="year_column",
+        value_name="ideb_final_years",
+    )
+
+    df_long = df_long.with_columns(
+        pl.col("CO_MUNICIPIO").alias("municipality_code"),
+        pl.col("year_column").str.replace("VL_OBSERVADO_", "").cast(pl.Int16).alias("year"),
+        pl.col("REDE").replace_strict(NETWORKS).alias("network"),
+        pl.col("ideb_final_years").cast(pl.Utf8).str.strip_chars().str.replace(",", ".").cast(pl.Float64, strict=False),
+    ).select(["municipality_code", "year", "network", "ideb_final_years"])
+
+    duplicates = df_long.group_by(["municipality_code", "year", "network"]).len().filter(pl.col("len") > 1)
+    if duplicates.height > 0:
+        raise ValueError(f"Duplicate municipality_code-year-network key in {path}")
+
+    return df_long
+
+
+def harmonize_final_years_network(folder: Union[Path, str], municipalities: pl.DataFrame) -> pl.DataFrame:
+    """Harmonizes IDEB final years scores across school networks.
+
+    Reads the final years package and extracts scores for state, municipal, public, and federal networks,
+    returning a DataFrame sorted by `municipality_code`, `year`, and `network`.
+    """
+    folder = Path(folder)
+    package = folder / package_name("anos_finais")
+    if not package.exists():
+        raise FileNotFoundError(f"Package not found: {package}")
+
+    valid_municipalities = set(municipalities["municipality_code"].to_list())
+
+    with zipfile.ZipFile(package) as z:
+        spreadsheets = [m for m in z.namelist() if m.lower().endswith(".xlsx")]
+        if len(spreadsheets) != 1:
+            raise ValueError(f"Package {package} should have one spreadsheet (.xlsx) and has {len(spreadsheets)}")
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(z.extract(spreadsheets[0], temp))
+            df = _read_final_years_network(path, valid_municipalities)
+
+    return df.sort(["municipality_code", "year", "network"]).select(
+        ["municipality_code", "year", "network", "ideb_final_years"]
+    )

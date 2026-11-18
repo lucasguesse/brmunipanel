@@ -226,6 +226,14 @@ SOURCES: dict[str, tuple[Callable[..., Any], Callable[..., Any] | None]] = {
         lambda paths: school_census.download_network(paths.inep),
         _harmonize_school_census_network,
     ),
+    "ideb_network": (
+        lambda paths: ideb.download(paths.ideb),
+        lambda paths: _write(
+            ideb.harmonize_final_years_network(paths.ideb, pl.read_parquet(paths.intermediate_dir / "ibge_municipalities.parquet")),
+            "inep_ideb_final_years_network",
+            paths.intermediate_dir,
+        ),
+    ),
 }
 
 
