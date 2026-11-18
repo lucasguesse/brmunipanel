@@ -108,6 +108,15 @@
     "manifest_keys": "^dtb_2025$"
   },
   {
+    "id": "ibge_dtb_2011",
+    "institution": "IBGE",
+    "product": "Brazilian Territorial Division (DTB) 2011, mesoregions and microregions",
+    "access": "File, IBGE geosciences server",
+    "period": "2011",
+    "raw_folder": "ibge/territory",
+    "manifest_keys": "^dtb_2011$"
+  },
+  {
     "id": "ibge_municipios_limitrofes_2024",
     "institution": "IBGE",
     "product": "Neighbouring municipalities 2024",

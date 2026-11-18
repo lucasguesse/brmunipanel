@@ -146,7 +146,7 @@ def test_variables_json_processed_is_bilingual():
                 assert variable_meta[field], (table, name, field)
             if variable_meta["methodological_note_pt"]:
                 assert variable_meta["methodological_note_en"], (table, name)
-    assert count == 119
+    assert count == 123
     education = meta["processed"]["education"]
     assert education["ideb_early_years_public"]["period"] == "2007-2023"
     assert education["ideb_final_years_public"]["period"] == "2007-2023"

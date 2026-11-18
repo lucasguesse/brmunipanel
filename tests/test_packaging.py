@@ -244,7 +244,7 @@ def test_packaging_raw_sources_default_keys(fake_environment):
     data_dir, results_dir, _ = fake_environment
     packaging.build_final_package("1.0.0", "2026-10-10", "0.1.0", "hash1", "hash2", data_dir, results_dir)
     manifest = json.loads((data_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
-    assert len(manifest["raw_sources"]) == 19
+    assert len(manifest["raw_sources"]) == 20
     expected_keys = {"id", "institution", "product", "access", "period"}
     for source in manifest["raw_sources"]:
         assert set(source.keys()) == expected_keys

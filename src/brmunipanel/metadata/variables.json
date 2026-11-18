@@ -229,6 +229,50 @@
         "period": "N/A",
         "methodological_note_pt": ""
       },
+      "mesoregion_2011_code": {
+        "description_pt": "Código da mesorregião geográfica (DTB 2011)",
+        "description_en": "Geographic mesoregion code (DTB 2011)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Código de quatro dígitos da mesorregião da divisão regional de 1990, como listado na Divisão Territorial Brasileira de 2011. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Four-digit code of the mesoregion of the 1990 regional division, as listed in the 2011 Brazilian Territorial Division. Missing for the six municipalities installed after 2011."
+      },
+      "mesoregion_2011_name": {
+        "description_pt": "Nome da mesorregião geográfica (DTB 2011)",
+        "description_en": "Geographic mesoregion name (DTB 2011)",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Missing for the six municipalities installed after 2011."
+      },
+      "microregion_2011_code": {
+        "description_pt": "Código da microrregião geográfica (DTB 2011)",
+        "description_en": "Geographic microregion code (DTB 2011)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Código de cinco dígitos da microrregião da divisão regional de 1990, como listado na Divisão Territorial Brasileira de 2011. Quatro nomes de microrregião se repetem entre estados, e por isso é o código que identifica a microrregião. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Five-digit code of the microregion of the 1990 regional division, as listed in the 2011 Brazilian Territorial Division. Four microregion names repeat across states, so the code identifies the microregion. Missing for the six municipalities installed after 2011."
+      },
+      "microregion_2011_name": {
+        "description_pt": "Nome da microrregião geográfica (DTB 2011)",
+        "description_en": "Geographic microregion name (DTB 2011)",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Cascavel, Gurupi, Litoral Sul e Rio Negro nomeiam microrregiões em dois estados cada. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Cascavel, Gurupi, Litoral Sul and Rio Negro name microregions in two states each. Missing for the six municipalities installed after 2011."
+      },
       "international_border": {
         "description_pt": "Fronteira internacional",
         "description_en": "International border",
@@ -2722,6 +2766,50 @@
         "period": "N/A",
         "methodological_note_pt": "",
         "methodological_note_en": ""
+      },
+      "mesoregion_2011_code": {
+        "description_pt": "Código da mesorregião geográfica (DTB 2011)",
+        "description_en": "Geographic mesoregion code (DTB 2011)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Código de quatro dígitos da mesorregião da divisão regional de 1990, como listado na Divisão Territorial Brasileira de 2011. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Four-digit code of the mesoregion of the 1990 regional division, as listed in the 2011 Brazilian Territorial Division. Missing for the six municipalities installed after 2011."
+      },
+      "mesoregion_2011_name": {
+        "description_pt": "Nome da mesorregião geográfica (DTB 2011)",
+        "description_en": "Geographic mesoregion name (DTB 2011)",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Missing for the six municipalities installed after 2011."
+      },
+      "microregion_2011_code": {
+        "description_pt": "Código da microrregião geográfica (DTB 2011)",
+        "description_en": "Geographic microregion code (DTB 2011)",
+        "unit_pt": "Código",
+        "unit_en": "Code",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Código de cinco dígitos da microrregião da divisão regional de 1990, como listado na Divisão Territorial Brasileira de 2011. Quatro nomes de microrregião se repetem entre estados, e por isso é o código que identifica a microrregião. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Five-digit code of the microregion of the 1990 regional division, as listed in the 2011 Brazilian Territorial Division. Four microregion names repeat across states, so the code identifies the microregion. Missing for the six municipalities installed after 2011."
+      },
+      "microregion_2011_name": {
+        "description_pt": "Nome da microrregião geográfica (DTB 2011)",
+        "description_en": "Geographic microregion name (DTB 2011)",
+        "unit_pt": "Texto",
+        "unit_en": "Text",
+        "source_pt": "IBGE",
+        "source_en": "IBGE",
+        "period": "2011",
+        "methodological_note_pt": "Cascavel, Gurupi, Litoral Sul e Rio Negro nomeiam microrregiões em dois estados cada. Nulo nos seis municípios instalados depois de 2011.",
+        "methodological_note_en": "Cascavel, Gurupi, Litoral Sul and Rio Negro name microregions in two states each. Missing for the six municipalities installed after 2011."
       },
       "international_border": {
         "description_pt": "Fronteira internacional",

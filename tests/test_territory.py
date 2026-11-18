@@ -169,10 +169,11 @@ def test_process_dtb_df() -> None:
     expected_columns = [
         "municipality_code", "municipality_code_6", "municipality_name", "state_code", "state_abbr", "state_name",
         "intermediate_region_code", "intermediate_region_name", "immediate_region_code", "immediate_region_name",
+        "mesoregion_2011_code", "mesoregion_2011_name", "microregion_2011_code", "microregion_2011_name",
         "international_border", "coastal", "area_km2", "latitude", "longitude"
     ]
     assert res.columns == expected_columns
-    assert res.columns[12] == "area_km2"
+    assert res.columns[16] == "area_km2"
     assert res.schema == {
         "municipality_code": pl.String,
         "municipality_code_6": pl.String,
@@ -184,6 +185,10 @@ def test_process_dtb_df() -> None:
         "intermediate_region_name": pl.String,
         "immediate_region_code": pl.String,
         "immediate_region_name": pl.String,
+        "mesoregion_2011_code": pl.String,
+        "mesoregion_2011_name": pl.String,
+        "microregion_2011_code": pl.String,
+        "microregion_2011_name": pl.String,
         "international_border": pl.Boolean,
         "coastal": pl.Boolean,
         "area_km2": pl.Float64,
@@ -222,6 +227,8 @@ def test_process_dtb_df() -> None:
     assert res.filter(pl.col("municipality_code") == "5300108")["longitude"][0] is None
     assert res_sem_area["latitude"].null_count() == 3
     assert res_sem_area["longitude"].null_count() == 3
+    for column in territory.REGIONS_2011_COLUMNS:
+        assert res[column].null_count() == 3
 
 
 def test_process_neighboring_df() -> None:
@@ -274,3 +281,91 @@ def test_read_geoloc(tmp_path) -> None:
         
     geoloc = territory.read_geoloc(tmp_path)
     assert geoloc == {"1100015": (-11.933, -62.0037), "2605459": (-3.8413, -32.4109)}
+
+
+SMALL_COUNTS = {"rows": 3, "states": 3, "mesoregions": 3, "microregions": 3}
+
+
+def _dtb_2011_sheet() -> pd.DataFrame:
+    return pd.DataFrame({
+        "UF": ["53", "35", "41"],
+        "Nome_UF": ["Distrito Federal", "São Paulo", "Paraná"],
+        "Mesorregião": ["5301", "3515", "4106"],
+        "Nome_Meso": ["Distrito Federal", "Metropolitana de São Paulo", "Oeste Paranaense"],
+        "Microrregião": ["53001", "35061", "41023"],
+        "Nome_Micro": ["Brasília", "São Paulo", "Cascavel"],
+        "Munic": ["00108", "50308", "04808"],
+        "Nome_Munic": ["Brasília", "São Paulo", "Cascavel"],
+    })
+
+
+def test_validate_dtb_2011() -> None:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("dtb_2011.xls", b"dados falsos")
+    territory.validate_dtb_2011(buf.getvalue())
+
+    with pytest.raises(InvalidResponse, match="Invalid DTB 2011"):
+        territory.validate_dtb_2011(b"conteudo nao zip")
+
+    empty_buf = io.BytesIO()
+    with zipfile.ZipFile(empty_buf, "w") as zf:
+        zf.writestr("other_file.txt", b"foo")
+    with pytest.raises(InvalidResponse, match="not found"):
+        territory.validate_dtb_2011(empty_buf.getvalue())
+
+
+def test_process_dtb_2011_df() -> None:
+    res = territory.process_dtb_2011_df(_dtb_2011_sheet(), expected_counts=SMALL_COUNTS)
+    assert res.columns == ["municipality_code", *territory.REGIONS_2011_COLUMNS]
+    assert res.rows() == [
+        ("3550308", "3515", "Metropolitana de São Paulo", "35061", "São Paulo"),
+        ("4104808", "4106", "Oeste Paranaense", "41023", "Cascavel"),
+        ("5300108", "5301", "Distrito Federal", "53001", "Brasília"),
+    ]
+
+
+def test_process_dtb_2011_df_errors() -> None:
+    with pytest.raises(ValueError, match="Unexpected DTB 2011 columns"):
+        territory.process_dtb_2011_df(_dtb_2011_sheet().drop(columns=["Nome_Micro"]), expected_counts=SMALL_COUNTS)
+
+    with pytest.raises(ValueError, match="DTB 2011 counts"):
+        territory.process_dtb_2011_df(_dtb_2011_sheet())
+
+    sheet = _dtb_2011_sheet()
+    sheet.loc[2, "Microrregião"] = "35061"
+    with pytest.raises(ValueError, match="more than one mesoregion"):
+        territory.process_dtb_2011_df(sheet, expected_counts={"rows": 3, "states": 3, "mesoregions": 3, "microregions": 2})
+
+
+def test_process_dtb_df_with_regions_2011() -> None:
+    df_raw = pd.DataFrame({
+        "UF": ["11", "35", "53"],
+        "Nome_UF": ["Rondônia", "São Paulo", "Distrito Federal"],
+        "Região Geográfica Intermediária": ["1101", "3501", "5301"],
+        "Nome Região Geográfica Intermediária": ["Porto Velho", "São Paulo", "Distrito Federal"],
+        "Região Geográfica Imediata": ["110001", "350001", "530001"],
+        "Nome Região Geográfica Imediata": ["Porto Velho", "São Paulo", "Distrito Federal"],
+        "Município": ["00015", "50308", "0108"],
+        "Código Município Completo": ["1100015", "3550308", "5300108"],
+        "Nome_Município": ["Alta Floresta D'Oeste", "São Paulo", "Brasília"],
+    })
+    regions = territory.process_dtb_2011_df(
+        _dtb_2011_sheet().iloc[:2],
+        expected_counts={"rows": 2, "states": 2, "mesoregions": 2, "microregions": 2},
+    )
+
+    res = territory.process_dtb_df(df_raw, set(), set(), regions_2011=regions)
+    assert res.columns[10:14] == territory.REGIONS_2011_COLUMNS
+    assert res.select("municipality_code", *territory.REGIONS_2011_COLUMNS).rows() == [
+        ("1100015", None, None, None, None),
+        ("3550308", "3515", "Metropolitana de São Paulo", "35061", "São Paulo"),
+        ("5300108", "5301", "Distrito Federal", "53001", "Brasília"),
+    ]
+
+    extra = pl.concat([
+        regions,
+        pl.DataFrame({"municipality_code": ["9999999"], **{column: ["x"] for column in territory.REGIONS_2011_COLUMNS}}),
+    ])
+    with pytest.raises(ValueError, match="not in the DTB 2025"):
+        territory.process_dtb_df(df_raw, set(), set(), regions_2011=extra)

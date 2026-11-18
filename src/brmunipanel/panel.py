@@ -26,7 +26,9 @@ def build_municipalities(municipalities: pl.DataFrame) -> pl.DataFrame:
         
     cols = [
         "municipality_code", "municipality_name", "state_code", "state_abbr", "state_name",
-        "intermediate_region_name", "immediate_region_name", "international_border",
+        "intermediate_region_name", "immediate_region_name",
+        "mesoregion_2011_code", "mesoregion_2011_name", "microregion_2011_code", "microregion_2011_name",
+        "international_border",
         "coastal", "area_km2", "latitude", "longitude"
     ]
     for c in cols:

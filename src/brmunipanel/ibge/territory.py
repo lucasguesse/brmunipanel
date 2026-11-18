@@ -1,7 +1,9 @@
-"""IBGE territorial tables: Divisão Territorial Brasileira (DTB 2025), Municípios Limítrofes (2024), Áreas Territoriais (2025), and Localidades do Brasil (2022).
+"""IBGE territorial tables: Divisão Territorial Brasileira (DTB 2025 and DTB 2011), Municípios Limítrofes (2024), Áreas Territoriais (2025), and Localidades do Brasil (2022).
 
 DTB 2025: canonical list of municipalities (5,571 municipalities plus DF) and regionalization
 (Intermediate and Immediate Geographic Regions).
+DTB 2011: geographic mesoregions and microregions of the 1990 regional division, for the
+5,565 municipalities that existed in 2011.
 Municípios Limítrofes 2024: pairs of municipalities that share a physical border and
 indicators of international border and Atlantic coast.
 Áreas Territoriais 2025: territorial area of each municipality in km².
@@ -29,6 +31,15 @@ DTB_KEY = "dtb_2025"
 DTB_URL = "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/divisao_territorial/2025/DTB_2025.zip"
 DTB_FILE = "DTB_2025.zip"
 DTB_XLS_NAME = "RELATORIO_DTB_BRASIL_2025_MUNICIPIOS.xls"
+
+DTB_2011_KEY = "dtb_2011"
+DTB_2011_URL = "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/divisao_territorial/2011/dtb_2011.zip"
+DTB_2011_FILE = "dtb_2011.zip"
+DTB_2011_XLS_NAME = "dtb_2011.xls"
+DTB_2011_SHEET = "DTB_2011"
+DTB_2011_COLUMNS = ["UF", "Nome_UF", "Mesorregião", "Nome_Meso", "Microrregião", "Nome_Micro", "Munic", "Nome_Munic"]
+DTB_2011_COUNTS = {"rows": 5565, "states": 27, "mesoregions": 137, "microregions": 558}
+REGIONS_2011_COLUMNS = ["mesoregion_2011_code", "mesoregion_2011_name", "microregion_2011_code", "microregion_2011_name"]
 
 NEIGHBORING_KEY = "neighboring_2024"
 NEIGHBORING_URL = "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/municipios_limitrofes/2024/BR_Municipios_2024_LIMITROFES.xls"
@@ -84,6 +95,16 @@ def validate_dtb(content: bytes) -> None:
         raise InvalidResponse(f"Invalid DTB zip file: {error}") from error
 
 
+def validate_dtb_2011(content: bytes) -> None:
+    """Checks if the content is an intact zip containing the DTB 2011 spreadsheet."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(content)) as zf:
+            if DTB_2011_XLS_NAME not in zf.namelist():
+                raise InvalidResponse(f"{DTB_2011_XLS_NAME} not found inside the zip")
+    except (zipfile.BadZipFile, InvalidResponse) as error:
+        raise InvalidResponse(f"Invalid DTB 2011 zip file: {error}") from error
+
+
 def validate_localities(content: bytes) -> None:
     """Checks if the content is an intact zip containing the localities geopackage."""
     try:
@@ -101,7 +122,7 @@ def validate_neighboring(content: bytes) -> None:
 
 
 def download(folder: Path, **options) -> list[dict]:
-    """Downloads the DTB 2025 zip, the 2024 neighboring municipalities spreadsheet, the 2025 areas spreadsheet, and 2022 localities."""
+    """Downloads the DTB 2025 and DTB 2011 zips, the 2024 neighboring municipalities spreadsheet, the 2025 areas spreadsheet, and 2022 localities."""
     folder = Path(folder)
     req_dtb = Request(
         key=DTB_KEY,
@@ -127,6 +148,12 @@ def download(folder: Path, **options) -> list[dict]:
         file=LOCALITIES_FILE,
         compress=False,
     )
+    req_dtb_2011 = Request(
+        key=DTB_2011_KEY,
+        url=DTB_2011_URL,
+        file=DTB_2011_FILE,
+        compress=False,
+    )
 
     session = options.pop("session", None) or requests.Session()
     interval = options.pop("interval", 0.0)
@@ -143,9 +170,12 @@ def download(folder: Path, **options) -> list[dict]:
     if downloaded_areas and interval:
         time.sleep(interval)
         
-    reg_loc, _ = core.download(req_loc, folder, session=session, validate=validate_localities, **options)
+    reg_loc, downloaded_loc = core.download(req_loc, folder, session=session, validate=validate_localities, **options)
+    if downloaded_loc and interval:
+        time.sleep(interval)
+    reg_dtb_2011, _ = core.download(req_dtb_2011, folder, session=session, validate=validate_dtb_2011, **options)
     
-    return [reg_dtb, reg_lim, reg_areas, reg_loc]
+    return [reg_dtb, reg_lim, reg_areas, reg_loc, reg_dtb_2011]
 
 
 def read_border_and_coastal(folder: Path) -> tuple[set[str], set[str]]:
@@ -269,14 +299,67 @@ def read_geoloc(folder: Path) -> dict[str, tuple[float, float]]:
     return process_geoloc_df(df)
 
 
+def process_dtb_2011_df(df: pd.DataFrame, expected_counts: dict[str, int] | None = None) -> pl.DataFrame:
+    """Transforms the DTB 2011 sheet into one row per municipality with its 1990 mesoregion and microregion."""
+    counts = DTB_2011_COUNTS if expected_counts is None else expected_counts
+    if list(df.columns) != DTB_2011_COLUMNS:
+        raise ValueError(f"Unexpected DTB 2011 columns: {list(df.columns)}")
+    cells = df.astype(str).apply(lambda column: column.str.strip())
+    code = cells["UF"] + cells["Munic"]
+    if not code.str.fullmatch(r"\d{7}").all():
+        raise ValueError("DTB 2011 municipality codes must have 7 digits")
+    if code.duplicated().any():
+        raise ValueError(f"DTB 2011 repeated codes: {code[code.duplicated()].tolist()[:3]}")
+    observed = {
+        "rows": len(cells),
+        "states": cells["UF"].nunique(),
+        "mesoregions": cells["Mesorregião"].nunique(),
+        "microregions": cells["Microrregião"].nunique(),
+    }
+    if observed != counts:
+        raise ValueError(f"DTB 2011 counts {observed} differ from the expected {counts}")
+    mesoregions_per_microregion = cells.groupby("Microrregião")["Mesorregião"].nunique()
+    if (mesoregions_per_microregion > 1).any():
+        examples = mesoregions_per_microregion[mesoregions_per_microregion > 1].index.tolist()[:3]
+        raise ValueError(f"DTB 2011 microregions in more than one mesoregion: {examples}")
+    table = pl.DataFrame(
+        {
+            "municipality_code": code.tolist(),
+            "mesoregion_2011_code": cells["Mesorregião"].tolist(),
+            "mesoregion_2011_name": cells["Nome_Meso"].tolist(),
+            "microregion_2011_code": cells["Microrregião"].tolist(),
+            "microregion_2011_name": cells["Nome_Micro"].tolist(),
+        },
+        schema={column: pl.String for column in ["municipality_code", *REGIONS_2011_COLUMNS]},
+    )
+    return table.sort("municipality_code")
+
+
+def read_dtb_2011(folder: Path) -> pl.DataFrame:
+    """Reads the DTB 2011 spreadsheet, discarding the xlrd warnings about the legacy file structure."""
+    content = core.read_raw(folder, DTB_2011_FILE)
+    with zipfile.ZipFile(io.BytesIO(content)) as zf:
+        xls = zf.read(DTB_2011_XLS_NAME)
+    df = pd.read_excel(
+        io.BytesIO(xls),
+        sheet_name=DTB_2011_SHEET,
+        header=0,
+        dtype=str,
+        engine="xlrd",
+        engine_kwargs={"logfile": io.StringIO()},
+    )
+    return process_dtb_2011_df(df)
+
+
 def process_dtb_df(
     df: pd.DataFrame,
     border_codes: set[str],
     coastal_codes: set[str],
     areas: dict[str, float] | None = None,
     geoloc: dict[str, tuple[float, float]] | None = None,
+    regions_2011: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
-    """Transforms the raw DTB DataFrame into the standardized municipalities table."""
+    """Transforms the raw DTB DataFrame into the standardized municipalities table; the 2011 region columns are null for municipalities absent from `regions_2011`."""
     code_m = df["Código Município Completo"].astype(str).str.strip()
     code_state = df["UF"].astype(str).str.strip()
 
@@ -297,7 +380,16 @@ def process_dtb_df(
         "latitude": pl.Series([geoloc.get(c, (None, None))[0] if geoloc is not None else None for c in code_m], dtype=pl.Float64),
         "longitude": pl.Series([geoloc.get(c, (None, None))[1] if geoloc is not None else None for c in code_m], dtype=pl.Float64),
     })
-    return table.sort("municipality_code")
+    if regions_2011 is None:
+        regions_2011 = pl.DataFrame(schema={column: pl.String for column in ["municipality_code", *REGIONS_2011_COLUMNS]})
+    missing = sorted(set(regions_2011["municipality_code"]) - set(table["municipality_code"]))
+    if missing:
+        raise ValueError(f"{len(missing)} DTB 2011 codes not in the DTB 2025. Examples: {missing[:3]}")
+    table = table.join(regions_2011.select(["municipality_code", *REGIONS_2011_COLUMNS]), on="municipality_code", how="left")
+    base = [column for column in table.columns if column not in REGIONS_2011_COLUMNS]
+    position = base.index("immediate_region_name") + 1
+    order = base[:position] + REGIONS_2011_COLUMNS + base[position:]
+    return table.select(order).sort("municipality_code")
 
 
 def harmonize_municipalities(
@@ -305,7 +397,7 @@ def harmonize_municipalities(
     border_codes: Iterable[str] | None = None,
     coastal_codes: Iterable[str] | None = None,
 ) -> pl.DataFrame:
-    """Harmonizes the canonical municipalities table from DTB 2025 and the border/coastal tabs."""
+    """Harmonizes the canonical municipalities table from DTB 2025, the border/coastal tabs and the DTB 2011 regions."""
     folder = Path(folder)
     if border_codes is None or coastal_codes is None:
         border, coastal = read_border_and_coastal(folder)
@@ -314,13 +406,14 @@ def harmonize_municipalities(
 
     areas = read_areas(folder)
     geoloc = read_geoloc(folder)
+    regions_2011 = read_dtb_2011(folder)
 
     content_zip = core.read_raw(folder, DTB_FILE)
     with zipfile.ZipFile(io.BytesIO(content_zip)) as zf:
         with zf.open(DTB_XLS_NAME) as f_xls:
             df_raw = pd.read_excel(f_xls, header=6, dtype=str)
 
-    return process_dtb_df(df_raw, set(border_codes), set(coastal_codes), areas, geoloc)
+    return process_dtb_df(df_raw, set(border_codes), set(coastal_codes), areas, geoloc, regions_2011)
 
 
 def process_neighboring_df(
