@@ -8,7 +8,7 @@ import tempfile
 import polars as pl
 import pytest
 
-from brmunipanel.inep import school_census
+from brmunipanel.inep import harmonize_school_census, school_census
 from brmunipanel.core import InvalidResponse, download_batch as core_download_batch
 
 DATA = Path(__file__).parent / "data"
@@ -58,9 +58,11 @@ def test_school_census_schema(raw_folder_2007, municipalities_mock, monkeypatch)
     for c in col_order[5:]:
         assert df.schema[c] == pl.Int64
 
-def test_school_census_count_schools_activity(raw_folder_2023, municipalities_mock, monkeypatch):
-    monkeypatch.setattr(school_census, "ALL_YEARS", [2023])
-    df = school_census.harmonize(raw_folder_2023, municipalities_mock)
+def test_school_census_count_schools_activity(raw_folder_2023, municipalities_mock):
+    default_years = tuple(school_census.ALL_YEARS)
+    df = harmonize_school_census(raw_folder_2023, municipalities_mock, years=[2023])
+    assert df["year"].unique().to_list() == [2023]
+    assert tuple(school_census.ALL_YEARS) == default_years
     
     raw = pl.read_csv(DATA / "school_census_2023_sample.csv", separator=";", encoding="utf8-lossy", infer_schema_length=0)
     active = raw.filter(pl.col("TP_SITUACAO_FUNCIONAMENTO") == "1").shape[0]
@@ -95,22 +97,35 @@ def test_school_census_aggregation_and_empty(raw_folder_2007, municipalities_moc
     assert row_p_u["classes_basic_edu"][0] == 1
 
 def test_school_census_sorting_and_unique_key(raw_folder_2007, raw_folder_2023, tmp_path, municipalities_mock, monkeypatch):
-    file23 = tmp_path / "school-census" / "school-census_2023.zip"
-    file23.parent.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(file23, "w") as z:
-        z.write(DATA / "school_census_2023_sample.csv", "MICRODADOS_ED_BASICA_2023.CSV")
-        
-    file07 = tmp_path / "school-census" / "school-census_2007.zip"
-    with zipfile.ZipFile(file07, "w") as z:
-        z.write(DATA / "school_census_2007_sample.csv", "microdados_ed_basica_2007.csv")
+    df = harmonize_school_census(tmp_path, municipalities_mock, years=[2023, 2007])
+    assert sorted(df["year"].unique().to_list()) == [2007, 2023]
 
     monkeypatch.setattr(school_census, "ALL_YEARS", [2007, 2023])
-    df = school_census.harmonize(tmp_path, municipalities_mock)
-    
+    default = harmonize_school_census(tmp_path, municipalities_mock)
+    assert df.schema == default.schema
+    assert df.equals(default)
+
     assert df.shape[0] == df.select(["municipality_code", "year", "admin_dependency", "location"]).unique().shape[0]
     
     df_sorted = df.sort(["municipality_code", "year", "admin_dependency", "location"])
     assert df.equals(df_sorted)
+
+@pytest.mark.parametrize(
+    ("years", "error"),
+    [
+        ([], "nonempty sequence"),
+        (2007, "nonempty sequence"),
+        ("2007", "nonempty sequence"),
+        ([2007.0], "only integers"),
+        ([True], "only integers"),
+        ([2005, 2024], "unsupported School Census years"),
+        ([2007, 2007], "duplicates"),
+    ],
+)
+def test_school_census_invalid_year_selection(tmp_path, municipalities_mock, years, error):
+    with pytest.raises(ValueError, match=error):
+        harmonize_school_census(tmp_path, municipalities_mock, years=years)
+
 
 def test_school_census_errors(raw_folder_2007, municipalities_mock, monkeypatch, tmp_path):
     monkeypatch.setattr(school_census, "ALL_YEARS", [2007])

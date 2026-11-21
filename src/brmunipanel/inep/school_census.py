@@ -480,17 +480,39 @@ def read_current_year(folder: Path, year: int, valid_municipalities: set[str]) -
             
             return df
 
-def harmonize(folder: Path | str, municipalities: pl.DataFrame) -> pl.DataFrame:
-    """Harmonizes School Census microdata (2006–2023) across all covered years.
+def harmonize(
+    folder: Path | str,
+    municipalities: pl.DataFrame,
+    *,
+    years: Sequence[int] | None = None,
+) -> pl.DataFrame:
+    """Harmonize School Census microdata for all years or a selected subset.
 
-    Aggregates active schools, enrollments, teachers, and classes by `municipality_code`, `year`,
-    `admin_dependency`, and `location`.
+    By default, process 2006–2023. Pass a nonempty sequence of distinct integer
+    years within that range to read only the corresponding local census archives.
+    Invalid selections raise `ValueError` before reading files.
+
+    Aggregate active schools, enrollments, teachers, and classes by municipality,
+    year, administrative dependency, and location, in that sort order.
     """
+    selected_years = ALL_YEARS
+    if years is not None:
+        if not isinstance(years, Sequence) or isinstance(years, (str, bytes)) or not years:
+            raise ValueError("years must be a nonempty sequence of integers")
+        selected_years = tuple(years)
+        if any(type(year) is not int for year in selected_years):
+            raise ValueError("years must contain only integers")
+        unsupported = sorted(set(selected_years).difference(ALL_YEARS))
+        if unsupported:
+            raise ValueError(f"unsupported School Census years: {unsupported}")
+        if len(set(selected_years)) != len(selected_years):
+            raise ValueError("years must not contain duplicates")
+
     folder = Path(folder)
     valid_municipalities = set(municipalities["municipality_code"].to_list())
-    
+
     dfs = []
-    for year in ALL_YEARS:
+    for year in selected_years:
         if year == 2006:
             df_year = read_year_2006(folder, valid_municipalities)
         else:
