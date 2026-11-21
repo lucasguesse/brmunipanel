@@ -72,7 +72,21 @@ print(bmp.__version__)
 
 # Example: Harmonize public school IDEB scores with municipal crosswalk
 # df_ideb = harmonize_ideb(Path("raw/inep/ideb"), municipalities_df)
+
+# Example: Harmonize only selected School Census years
+# df_school = harmonize_school_census(Path("raw/inep"), municipalities_df, years=[2007, 2023])
+
+# Example: Harmonize SICONFI expenditures by function for selected fiscal years
+# df_exp = siconfi.harmonize(Path("raw/tesouro/siconfi-api"), municipalities_df, source="api", years=[2018, 2019])
+
+# Example: Join municipality-year tables on the full 2006-2023 grid
+# from brmunipanel.panel import build_longitudinal_table
+# df_panel = build_longitudinal_table(municipalities_df, [df_pop])
 ```
+
+## Changes in 0.4.1
+
+Version 0.4.1 adds an optional `years` argument to the School Census and SICONFI expenditure harmonizers and documents `panel.build_longitudinal_table`. Code written for 0.4.0 keeps working and returns the same tables. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Changes in 0.4.0
 
