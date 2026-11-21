@@ -79,7 +79,44 @@ def build_revenue(finbra: pl.DataFrame, siconfi: pl.DataFrame) -> pl.DataFrame:
     return pl.concat([finbra, siconfi]).sort(["municipality_code", "year"])
 
 def build_longitudinal_table(municipalities: pl.DataFrame, sources: list[pl.DataFrame], years: Sequence[int] = PANEL_YEARS, table_name: str = "longitudinal_table") -> pl.DataFrame:
-    """Builds a longitudinal panel on a municipality-year grid by sequentially left-joining source tables."""
+    """Build a panel on the Cartesian product of municipalities and years.
+
+    Args:
+        municipalities: Polars table with a String `municipality_code` column
+            containing one non-null row per municipality. Other columns are ignored.
+        sources: Polars tables keyed by `municipality_code` (String, matching
+            the reference table) and `year` (Int16). Each key must be unique,
+            belong to the supplied grid, and have at most one observation per
+            source. Non-key column names must be distinct across sources.
+        years: Distinct years representable as Int16. Defaults to 2006–2023.
+        table_name: Label included in validation errors.
+
+    Returns:
+        A Polars table sorted by municipality code and year. Sequential left joins
+        keep the entire grid. Unmatched values are null and source nulls are
+        preserved. This function performs no aggregation or interpolation.
+
+    Raises:
+        ValueError: A source year column is missing or has the wrong type,
+            a source key is repeated or outside the grid, or source value
+            columns overlap.
+        polars.exceptions.ColumnNotFoundError: A required municipality code
+            column is missing.
+
+    The caller supplies a valid municipal reference and distinct years. The
+    function does not validate reference uniqueness or reconcile historical
+    changes in municipal boundaries.
+
+    Example:
+        >>> municipalities = pl.DataFrame({"municipality_code": ["1100015"]})
+        >>> population = pl.DataFrame(
+        ...     {"municipality_code": ["1100015"], "year": [2007], "population": [26699]},
+        ...     schema_overrides={"year": pl.Int16},
+        ... )
+        >>> panel = build_longitudinal_table(municipalities, [population], years=[2007, 2023])
+        >>> panel["population"].to_list()
+        [26699, None]
+    """
     valid_codes = set(municipalities["municipality_code"])
     
     # Grid of municipalities and years
