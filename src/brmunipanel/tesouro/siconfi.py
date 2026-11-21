@@ -347,17 +347,43 @@ def process_statement(items: list[dict]) -> tuple[dict | None, list[str]]:
     return ret, warnings
 
 
-def harmonize(folder: Path, municipalities: pl.DataFrame, report: list[dict] | None = None, source: str = "portal") -> pl.DataFrame:
-    """Harmonizes SICONFI municipal expenditures by function for 2013–2023 from portal or API sources."""
+def harmonize(
+    folder: Path,
+    municipalities: pl.DataFrame,
+    report: list[dict] | None = None,
+    source: str = "portal",
+    *,
+    years: Sequence[int] | None = None,
+) -> pl.DataFrame:
+    """Harmonize municipal expenditures by function from the portal or API.
+
+    Omit years or pass None to process all exercises from 2013 through 2023.
+    A selection must be a nonempty sequence of distinct supported Python ints.
+    Invalid selections raise ValueError. Each selected exercise needs its own
+    manifest entry and source file. Results are sorted by municipality and year.
+    """
     if source not in ("portal", "api"):
         raise ValueError(f"Unknown source: {source}")
+    selected_years = YEARS
+    if years is not None:
+        if not isinstance(years, Sequence) or isinstance(years, (str, bytes)) or not years:
+            raise ValueError("years must be a nonempty sequence of integers")
+        selected_years = tuple(years)
+        if any(type(year) is not int for year in selected_years):
+            raise ValueError("years must contain only integers")
+        unsupported = sorted(set(selected_years).difference(YEARS))
+        if unsupported:
+            raise ValueError(f"unsupported SICONFI years: {unsupported}")
+        if len(set(selected_years)) != len(selected_years):
+            raise ValueError("years must not contain duplicates")
+
     folder = Path(folder)
     manifest = core.read_manifest(folder)
     
     rows = []
     valid_codes = set(municipalities.select("municipality_code").to_series().to_list())
     
-    for year in YEARS:
+    for year in selected_years:
         key = f"dca_{year}" if source == "api" else f"annual_accounts_{year}"
         if key not in manifest:
             raise FileNotFoundError(f"Key {key} not found in the manifest. Run the download first")

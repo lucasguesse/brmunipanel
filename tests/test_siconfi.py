@@ -498,8 +498,50 @@ def test_harmonize_api_equals_portal(tmp_path):
     df_api = siconfi.harmonize(folder_api, municipalities, source="api")
 
     assert df_api.equals(df_portal)
+    for folder, source in ((folder_portal, "portal"), (folder_api, "api")):
+        assert siconfi.harmonize(folder, municipalities, None, source, years=None).equals(df_portal)
+        assert siconfi.harmonize(folder, municipalities, source=source, years=[2022, 2013]).equals(df_portal)
+        selected = siconfi.harmonize(folder, municipalities, source=source, years=[2022])
+        assert selected.equals(df_portal.filter(pl.col("year") == 2022))
+
 
     with pytest.raises(ValueError, match="Unknown source"):
         siconfi.harmonize(folder_api, municipalities, source="other")
 
 
+
+
+@pytest.mark.parametrize(("years", "message"), [
+    ([], "nonempty sequence"),
+    ("2018", "nonempty sequence"),
+    (2018, "nonempty sequence"),
+    ([True], "only integers"),
+    (["2018"], "only integers"),
+    ([2018.0], "only integers"),
+    ([2012], "unsupported SICONFI years"),
+    ([2024], "unsupported SICONFI years"),
+    ([2018, 2018], "duplicates"),
+])
+def test_harmonize_invalid_year_selection(tmp_path, years, message):
+    municipalities = pl.DataFrame({"municipality_code": ["1100205"]})
+    with pytest.raises(ValueError, match=message):
+        siconfi.harmonize(tmp_path, municipalities, years=years)
+
+
+def test_harmonize_selected_year_files(tmp_path):
+    municipalities = pl.DataFrame({"municipality_code": ["1100205"]})
+    manifest = {f"dca_{year}": {"file": siconfi.api_file(year)} for year in (2018, 2019)}
+    core._write_manifest(tmp_path, manifest)
+    for year in (2018, 2019):
+        items = [{"cod_ibge": 1100205, "coluna": "Despesas Empenhadas",
+                  "conta": "12 - Educação", "valor": float(year)}]
+        record = {"body": json.dumps({"items": items})}
+        (tmp_path / siconfi.api_file(year)).write_bytes(gzip.compress(json.dumps(record).encode()))
+
+    panel = siconfi.harmonize(tmp_path, municipalities, source="api", years=(2018, 2019))
+    assert panel.select("year", "exp_12_education").rows() == [(2018, 2018.0), (2019, 2019.0)]
+    with pytest.raises(FileNotFoundError, match="dca_2020"):
+        siconfi.harmonize(tmp_path, municipalities, source="api", years=[2020])
+    (tmp_path / siconfi.api_file(2019)).unlink()
+    with pytest.raises(FileNotFoundError, match=siconfi.api_file(2019)):
+        siconfi.harmonize(tmp_path, municipalities, source="api", years=[2019])
