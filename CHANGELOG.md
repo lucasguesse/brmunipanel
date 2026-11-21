@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.1
+
+This release adds optional year selection to two harmonizers and documents the panel builder. Calls written for 0.4.0 keep working and return the same tables.
+
+### Added
+
+School Census year selection. `inep.school_census.harmonize` (exported as `inep.harmonize_school_census`) takes a keyword-only `years` argument. Omitting it, or passing `None`, keeps the 2006–2023 window; a nonempty sequence of distinct integers within that window reads only those years. Invalid selections raise `ValueError` before any file is read.
+
+SICONFI year selection. `tesouro.siconfi.harmonize` takes a keyword-only `years` argument for the expenditures by function, read from the portal files or from the API. Omitting it, or passing `None`, keeps the 2013–2023 window; a selection must be a nonempty sequence of distinct integers within that window, and each selected year needs its manifest entry and its file. Invalid selections raise `ValueError`, and a missing entry or file still raises `FileNotFoundError`.
+
+### Documentation
+
+`panel.build_longitudinal_table` documents its inputs, key types, validations, left joins, null handling and exceptions, with a runnable example. The README shows year selection and the panel builder.
+
 ## 0.4.0
 
 This release adds four education tables by school network, the 2011 mesoregions and microregions in the municipalities table, and two raw sources. Code written for 0.3.0 keeps working, and the six tables of 0.3.0 keep their contents, apart from four new columns in `municipalities`.
